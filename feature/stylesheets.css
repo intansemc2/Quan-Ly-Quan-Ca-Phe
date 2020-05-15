@@ -1,0 +1,16 @@
+/*Tổng quan*/
+body {
+    background-repeat: no-repeat;
+}
+
+hr {
+    border-color: white;
+}
+
+a {
+    text-decoration: none;
+}
+
+.text-decoration-line-through {
+    text-decoration: line-through;
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Quán Coffee</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/add-cus.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  </head>
+  <body>
+    <input type="checkbox" id="check">
+    <label for="check">
+      <i class="fas fa-bars" id="btn"></i>
+      <i class="fas fa-times" id="cancel"></i>  
+    </label>
+    <div class="sidebar">
+      <header><div class="user"><span>Xin chào: </span>admin</div></header>
+      <ul>
+        <li><a href="home.html"><i class="fas fa-home"></i>Trang chủ</a></li>
+        <li><a href="customer.html"><i class="fas fa-users"></i>Khách hàng</a></li>
+        <li><a href="food.html"><i class="fas fa-utensils"></i>Thực phẩm</a></li>
+        <li><a href="table.html"><i class="fas fa-table"></i>Bàn</a></li>
+        <li><a href="history.html"><i class="fas fa-history"></i>Lịch sử giao dịch</a></li>
+        <li><a href="graph.html"><i class="fas fa-chart-line"></i>Biểu đồ thu nhập</a></li>
+        <li><a href="contact.html"><i class="far fa-envelope"></i>Liên hệ</a></li>
+        <li><a href="login.html"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a></li>
+      </ul>
+    </div>
+    <section>
+      <div class="body">
+        <a href="javascript:" class="btn-add-table" onclick="hien5()">Thêm bàn</a>
+        <a href="" class="btn-del-table">Xoá bàn</a>
+        <div class="wrapper">
+          <a href="#" class="button">Bàn 1</a>
+          <a href="#" class="button">Bàn 2</a>
+          <a href="#" class="button">Bàn 3</a>
+          <a href="#" class="button">Bàn 4</a>
+          <a href="#" class="button">Bàn 5</a>
+          <a href="#" class="button">Bàn 6</a>
+          <a href="#" class="button">Bàn 7</a>
+          <a href="#" class="button">Bàn 8</a>
+          <a href="#" class="button">Bàn 9</a>
+          <a href="#" class="button">Bàn 10</a>
+          <a href="#" class="button">Bàn 11</a>
+          <a href="#" class="button">Bàn 12</a>
+        </div>
+      </div>
+      <div id="add-table" class="frame-add-food" style="z-index: 2071;">
+      <div class="modal">
+        <span class="text-box">Thêm bàn</span>
+        <div class="out-add-cus">
+          <h3>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="an5()">×</button>
+          </h3>
+        </div>
+
+        <div class="body-box">
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Tên bàn
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Số bàn
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Giá bán
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Nơi sản xuất
+              </span>
+              </label>
+            </div>
+
+            <a href="" class="btn-box-add-cus"><i class="fas fa-check"></i>Xác nhận</a>
+            <a href="" class="btn-box-canl-cus"><i class="fas fa-times"></i>Huỷ bỏ</a>
+
+        </div>
+
+      </div>
+    </div>
+    </section>
+  </body>
+</html>

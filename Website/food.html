@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Quán Coffee</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/add-cus.js"></script>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  </head>
+  <body>
+    <input type="checkbox" id="check">
+    <label for="check">
+      <i class="fas fa-bars" id="btn"></i>
+      <i class="fas fa-times" id="cancel"></i>  
+    </label>
+    <div class="sidebar">
+    <header><div class="user"><span>Xin chào: </span>admin</div></header>
+      <ul>
+        <li><a href="home.html"><i class="fas fa-home"></i>Trang chủ</a></li>
+        <li><a href="customer.html"><i class="fas fa-users"></i>Khách hàng</a></li>
+        <li><a href="food.html"><i class="fas fa-utensils"></i>Thực phẩm</a></li>
+        <li><a href="table.html"><i class="fas fa-table"></i>Bàn</a></li>
+        <li><a href="history.html"><i class="fas fa-history"></i>Lịch sử giao dịch</a></li>
+        <li><a href="graph.html"><i class="fas fa-chart-line"></i>Biểu đồ thu nhập</a></li>
+        <li><a href="contact.html"><i class="far fa-envelope"></i>Liên hệ</a></li>
+        <li><a href="login.html"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a></li>
+      </ul>
+    </div>
+    <section>
+      <div class="body">
+        <a href="javascript:" class="btn-add-food" onclick="hien3()">Thêm món ăn</a>
+        <a href="" class="btn-del-food">Xoá món ăn</a>
+        <a href="javascript:" class="btn-upl-food" onclick="hien4()">Cập nhật món ăn</a>
+        <div class="main-width">
+          <div class="menu">
+
+            <div class="test">
+          <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">Giá: 10.000$</span>
+            <h2></h2>
+            <p>Coffee Đức</p>
+          </div>
+          <div class="card-stats">
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image card2"></div>
+          <div class="card-text card2">
+            <span class="date">Giá 20.000$</span>
+            <h2></h2>
+            <p>Cake</p>
+          </div>
+          <div class="card-stats card2">
+          </div>
+        </div>
+        <div class="card">
+            <div class="card-image card3"></div>
+            <div class="card-text card3">
+              <span class="date">Giá: 50.000$</span>
+              <h2></h2>
+              <p>Drink</p>
+            </div>
+            <div class="card-stats card3">
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image card3"></div>
+            <div class="card-text card3">
+              <span class="date">Giá: 50.000$</span>
+              <h2></h2>
+              <p>Drink</p>
+            </div>
+            <div class="card-stats card3">
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image card3"></div>
+            <div class="card-text card3">
+              <span class="date">Giá: 50.000$</span>
+              <h2></h2>
+              <p>Drink</p>
+            </div>
+            <div class="card-stats card3">
+            </div>
+          </div>
+    </div>
+
+        <div class="test">
+          <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">Giá: 10.000$</span>
+            <h2></h2>
+            <p>Coffee Đức</p>
+          </div>
+          <div class="card-stats">
+          </div>
+          </div>
+          <div class="card">
+          <div class="card-image card2"></div>
+          <div class="card-text card2">
+            <span class="date">Giá 20.000$</span>
+            <h2></h2>
+            <p>Cake</p>
+          </div>
+          <div class="card-stats card2">
+          </div>
+          </div>
+          <div class="card">
+            <div class="card-image card3"></div>
+            <div class="card-text card3">
+              <span class="date">Giá: 50.000$</span>
+              <h2></h2>
+              <p>Drink</p>
+            </div>
+            <div class="card-stats card3">
+            </div>
+          </div>
+        </div>
+
+        <div class="test">
+          <div class="card">
+          <div class="card-image"></div>
+          <div class="card-text">
+            <span class="date">Giá: 10.000$</span>
+            <h2></h2>
+            <p>Coffee Đức</p>
+          </div>
+          <div class="card-stats">
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-image card2"></div>
+          <div class="card-text card2">
+            <span class="date">Giá 20.000$</span>
+            <h2></h2>
+            <p>Cake</p>
+          </div>
+          <div class="card-stats card2">
+          </div>
+        </div>
+        <div class="card">
+            <div class="card-image card3"></div>
+            <div class="card-text card3">
+              <span class="date">Giá: 50.000$</span>
+              <h2></h2>
+              <p>Drink</p>
+            </div>
+            <div class="card-stats card3">
+            </div>
+          </div>
+        </div>
+        </div>
+
+        <div class="input-cus">
+          <input type="text" name="full-name" required >
+          <label for="full-name">
+              <span>
+                  Tên khách hàng
+              </span>
+          </label>
+        </div>
+
+        <div class="number-table">
+          <h2>Bàn: <span>1</span></h2>
+        </div>
+
+
+
+        <div class="menu-pay">
+          <div class="table-cus">
+           <table>
+            <thead>
+              <tr>
+                  <th>STT</th>
+                  <th>Tên sản phẩm</th>
+                  <th>Số lượng</th>
+                  <th>Giá bán</th>
+                  <th>Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                  <td>1</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>2</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+              <tr>
+                  <td>3</td>
+                  <td>Coffee Đức</td>
+                  <td>2</td>
+                  <td>10.000$</td>
+                  <td>20.000$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        </div>
+
+        <div class="pay">
+          <div class="button-pay">
+            <a href="" class="btn-pay"><i class="fas fa-shopping-cart"></i>Thanh toán</a>
+            <a href="" class="btn-save-pay"><i class="fas fa-save"></i>Lưu</a>
+          </div>
+          <div class="details-pay">
+            <div class="all-pay">
+              <h4>Tổng cộng: </h4>
+              <input type="text" class="input">
+            </div>
+            <div class="all-pay">
+              <h4>Khách đưa: </h4>
+              <input type="text" class="input">
+            </div>
+            <div class="all-pay">
+              <h4>Tiền thừa: </h4>
+              <input type="text" class="input">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="add-food" class="frame-add-food" style="z-index: 2071;">
+      <div class="modal">
+        <span class="text-box">Thêm món ăn</span>
+        <div class="out-add-cus">
+          <h3>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="an3()">×</button>
+          </h3>
+        </div>
+
+        <div class="body-box">
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Tên món ăn
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Số lượng
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Giá bán
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Nơi sản xuất
+              </span>
+              </label>
+            </div>
+
+            <a href="" class="btn-box-add-cus"><i class="fas fa-check"></i>Xác nhận</a>
+            <a href="" class="btn-box-canl-cus"><i class="fas fa-times"></i>Huỷ bỏ</a>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div id="upl-food" class="frame-upl-food" style="z-index: 2072;">
+      <div class="modal">
+        <span class="text-box">Cập nhật món ăn</span>
+        <div class="out-add-cus">
+          <h3>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="an4()">×</button>
+          </h3>
+        </div>
+
+        <div class="body-box">
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Tên món ăn
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Số lượng
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Giá bán
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Nới sản xuất
+              </span>
+              </label>
+            </div>
+
+            <a href="" class="btn-box-add-cus"><i class="fas fa-check"></i>Xác nhận</a>
+            <a href="" class="btn-box-canl-cus"><i class="fas fa-times"></i>Huỷ bỏ</a>
+        </div>
+      </div>
+    </div>
+
+    </section>
+  </body>
+</html>

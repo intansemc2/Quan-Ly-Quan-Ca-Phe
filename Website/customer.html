@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Quán Coffee</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script type="text/javascript" src="js/add-cus.js"></script>
+  </head>
+  <body>
+    <input type="checkbox" id="check">
+    <label for="check">
+      <i class="fas fa-bars" id="btn"></i>
+      <i class="fas fa-times" id="cancel"></i>  
+    </label>
+    <div class="sidebar">
+      <header><div class="user"><span>Xin chào: </span>admin</div></header>
+        <ul>
+          <li><a href="home.html"><i class="fas fa-home"></i>Trang chủ</a></li>
+          <li><a href="customer.html"><i class="fas fa-users"></i>Khách hàng</a></li>
+          <li><a href="food.html"><i class="fas fa-utensils"></i>Thực phẩm</a></li>
+          <li><a href="table.html"><i class="fas fa-table"></i>Bàn</a></li>
+          <li><a href="history.html"><i class="fas fa-history"></i>Lịch sử giao dịch</a></li>
+          <li><a href="graph.html"><i class="fas fa-chart-line"></i>Biểu đồ thu nhập</a></li>
+          <li><a href="contact.html"><i class="far fa-envelope"></i>Liên hệ</a></li>
+          <li><a href="login.html"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a></li>
+        </ul>
+    </div>
+    <section>
+    <div class="body">
+      <a href="javascript:" class="btn-add-cus" onclick="hien()">Thêm khách hàng</a>
+      <a href="" class="btn-del-cus">Xoá khách hàng</a>
+      <a href="javascript:" class="btn-upl-cus" onclick="hien2()">Cập nhật khách hàng</a>
+      <!-- Search -->
+      <div class="buscar-caja">
+        <input type="text" name="" class="buscar-txt" placeholder="Tìm kiếm..."/>
+        <a class="buscar-btn">
+        <i class="fas fa-search"></i>
+      </a>
+    </div>
+      <!-- end-search -->
+       <div class="table-cus">
+         <table>
+          <thead>
+            <tr>
+                <th>STT</th>
+                <th>Mã khách hàng</th>
+                <th>Họ&tên khách hàng</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td>1</td>
+                <td>MA001</td>
+                <td>Trần Anh Đức</td>
+                <td>03/08/1993</td>
+                <td>Nam</td>
+                <td>duccong@gmail.com</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>MA002</td>
+                <td>Kiều Thị Thu Hằng</td>
+                <td>04/09/1991</td>
+                <td>Nữ</td>
+                <td>hang19991@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>MA003</td>
+                <td>Vương Thị Lê Na</td>
+                <td>06/10/1991</td>
+                <td>Nữ</td>
+                <td>nalata@gmail.com</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>MA004</td>
+                <td>Dương Kim Thương</td>
+                <td>16/11/1990</td>
+                <td>Nam</td>
+                <td>thuong1611@gmail.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>MA005</td>
+                <td>Mai Đức Hiếu</td>
+                <td>18/06/1989</td>
+                <td>Nam</td>
+                <td>hieuthieuthieu@yahoo.com</td>
+            </tr>
+          </tbody>
+      </table>
+       </div>
+    </div>
+
+
+    <div id="add-cus" class="frame-add-cus" style="z-index: 2071;">
+      <div class="modal">
+        <span class="text-box">Thêm khách hàng</span>
+        <div class="out-add-cus">
+          <h3>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="an()">×</button>
+          </h3>
+        </div>
+
+        <div class="body-box">
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Họ && Tên khách hàng
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Ngày sinh
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Giới tính
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Email
+              </span>
+              </label>
+            </div>
+
+            <a href="" class="btn-box-add-cus"><i class="fas fa-check"></i>Xác nhận</a>
+            <a href="" class="btn-box-canl-cus"><i class="fas fa-times"></i>Huỷ bỏ</a>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div id="upl-cus" class="frame-upl-cus" style="z-index: 2072;">
+      <div class="modal">
+        <span class="text-box">Cập nhật khách hàng</span>
+        <div class="out-add-cus">
+          <h3>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="an2()">×</button>
+          </h3>
+        </div>
+
+        <div class="body-box">
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Họ && Tên khách hàng
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Ngày sinh
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Giới tính
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Email
+              </span>
+              </label>
+            </div>
+
+            <a href="" class="btn-box-add-cus"><i class="fas fa-check"></i>Xác nhận</a>
+            <a href="" class="btn-box-canl-cus"><i class="fas fa-times"></i>Huỷ bỏ</a>
+        </div>
+      </div>
+    </div>
+
+    </section>
+  </body>
+</html>

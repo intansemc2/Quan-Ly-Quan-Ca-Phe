@@ -48,13 +48,14 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Nội dung chính</div>
-                            <a class="nav-link" href="index.html"><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>Tổng quan</a>
-                            <a class="nav-link active " href="quanlydangnhap.html" ><div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Quản lý đăng nhập</a>
-                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-beer"></i></div>Quản lý đồ uống</a>
-                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-list-alt"></i></div>Quản lý loại đồ uống</a>
-                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>Quản lý bàn</a> 
-                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Quản lý thành viên</a>
-                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>Quản lý thanh toán</a>
+                            <a class="nav-link " href="index.html"><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>Tổng quan</a>
+                            <a class="nav-link active" href="quanlydangnhap.html" ><div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Quản lý tài khoản</a>
+                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-beer"></i></div>Quản lý nhân viên</a>
+                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>Quản lý hóa đơn và chi tiết hóa đơn</a>
+                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Quản lý khách hàng thành viên</a> 
+                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>Quản lý bàn và đặt bàn</a>
+                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-beer"></i></div>Quản lý đồ uống và loại đồ uống</a>
+                            <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>Quản lý loại khuyến mãi</a>
                             <a class="nav-link " href="#" ><div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>Xem thống kê</a>
 
                             <div class="sb-sidenav-menu-heading">Thông tin</div>
@@ -85,20 +86,31 @@
                         <div class="card mb-4">
                             <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
                             <div class="card-body">
-                                <div class="btn-group" role="group" aria-label="Thêm tài khoản">
-                                    <button type="button" class="btn btn-outline-primary">Thêm tài khoản</button>  
-                                </div>   
+                                <button type="button" class="btn btn-outline-primary" id="themTaiKhoan" data-toggle="modal" data-target="#modelThemTaiKhoan" modify="ThemTaiKhoan" >Thêm tài khoản</button>  
+
+                                <div class="btn-group" role="group" aria-label="Các nút chức năng xóa">
+                                    <button type="button" class="btn btn-outline-secondary" id="danhDauTatCa">Đánh dấu tất cả</button>  
+                                    <button type="button" class="btn btn-outline-secondary" id="boDanhDauTatCa">Bỏ đánh dấu tất cả</button>  
+                                </div>
+
+                                <div class="btn-group" role="group" aria-label="Các nút chức năng xóa">
+                                    <button type="button" class="btn btn-outline-danger" id="xoaDanhDau">Xóa đánh dấu</button>  
+                                    <button type="button" class="btn btn-outline-danger" id="xoaTatCa">Xóa tất cả</button>  
+                                </div>
+
+                                <button type="button" class="btn btn-outline-info" id="lamMoi" >Làm mới</button>  
                             </div>
                         </div>
 
                         <div class="card mb-4">
                             <div class="card-header"><i class="fas fa-table mr-1"></i>DataTable Example</div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-striped table-hover dataTable" width="100%" cellspacing="0">
+                            <div class="card-body">                                
+                                <div class="table-responsive" id="tableQuanLyTaiKhoanContainer">
+
+
+                                    <table class="table table-bordered table-striped table-hover" id="tableQuanLyTaiKhoan" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
                                                 <th>Tên đăng nhập</th>
                                                 <th>Mật khẩu</th>
                                                 <th>Loại</th>
@@ -107,7 +119,6 @@
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th>ID</th>
                                                 <th>Tên đăng nhập</th>
                                                 <th>Mật khẩu</th>
                                                 <th>Loại</th>
@@ -115,44 +126,110 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                            <tr>
-                                                <td>TK0</td><td>Username 0</td><td>Password 0</td><td>User</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-warning" ><i class="fas fa-edit"></i></button>
-                                                    <button type="button" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button> 
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td>TK0</td><td>Username 0</td><td>Password 0</td><td>User</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-warning" ><i class="fas fa-edit"></i></button>
-                                                    <button type="button" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button> 
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td>TK0</td><td>Username 0</td><td>Password 0</td><td>User</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-warning" ><i class="fas fa-edit"></i></button>
-                                                    <button type="button" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button> 
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td>TK0</td><td>Username 0</td><td>Password 0</td><td>User</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-warning" ><i class="fas fa-edit"></i></button>
-                                                    <button type="button" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button> 
-                                                </td>
-                                            </tr>
+                                            <!-- Nội dung bảng -->
                                         </tbody>   
                                     </table>
-                                </div>
+
+
+                                </div>                                
                             </div>
                         </div>
                     </div>
                 </main>
+
+                <!-- Model thêm tài khoản  -->
+                <div class="modal fade" id="modelThemTaiKhoan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Thêm tài khoản</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div id="themTaiKhoanAlerts">
+                                    <!-- Các alert của phần này -->
+                                </div>
+
+                                <form>
+                                    <div class="form-group"><label class="small mb-1" for="themTaiKhoanUsername">Tên đăng nhập</label><input class="form-control py-4" id="themTaiKhoanUsername" type="text"  placeholder="Nhập tên đăng nhập của bạn" /></div>
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group"><label class="small mb-1" for="themTaiKhoanPassword">Mật khẩu</label><input class="form-control py-4" id="themTaiKhoanPassword" type="password" placeholder="Nhập mật khẩu của bạn" /></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group"><label class="small mb-1" for="themTaiKhoanConfirmPassword">Nhập lại mậu khẩu</label><input class="form-control py-4" id="themTaiKhoanConfirmPassword" type="password" placeholder="Nhập lại mật khẩu của bạn" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="themTaiKhoanLoaiTaiKhoan">Chọn loại tài khoản</label>
+                                        <select class="form-control" id="themTaiKhoanLoaiTaiKhoan">
+                                            <option value="0">Người dùng</option>
+                                            <option value="1">Nhân viên</option>
+                                            <option value="2">Admin</option>
+                                        </select>
+                                    </div>
+                            </div>
+
+                            <div class="modal-footer">   
+                                <input type="button" class="btn btn-outline-primary" id="themTaiKhoanConfirm" value="Thêm Tài khoản">
+                                <input type="reset" class="btn btn-outline-secondary" id="themTaiKhoanReset" value="Cài lại">                         
+                            </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model sửa tài khoản  -->
+                <div class="modal fade" id="modelSuaTaiKhoan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Sửa tài khoản</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div id="suaTaiKhoanAlerts">
+                                    <!-- Các alert của phần này -->
+                                </div>
+
+                                <form>
+                                    <div class="form-group"><label class="small mb-1" for="suaTaiKhoanUsername">Tên đăng nhập</label><input class="form-control py-4" id="suaTaiKhoanUsername" type="text"  placeholder="Nhập tên đăng nhập của bạn" /></div>
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group"><label class="small mb-1" for="suaTaiKhoanPassword">Mật khẩu</label><input class="form-control py-4" id="suaTaiKhoanPassword" type="password" placeholder="Nhập mật khẩu của bạn" /></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group"><label class="small mb-1" for="suaTaiKhoanConfirmPassword">Nhập lại mậu khẩu</label><input class="form-control py-4" id="suaTaiKhoanConfirmPassword" type="password" placeholder="Nhập lại mật khẩu của bạn" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="suaTaiKhoanLoaiTaiKhoan">Chọn loại tài khoản</label>
+                                        <select class="form-control" id="suaTaiKhoanLoaiTaiKhoan">
+                                            <option value="0">Người dùng</option>
+                                            <option value="1">Nhân viên</option>
+                                            <option value="2">Admin</option>
+                                        </select>
+                                    </div>
+                            </div>
+
+                            <div class="modal-footer">   
+                                <input type="button" class="btn btn-outline-primary" id="suaTaiKhoanConfirm" value="Sửa Tài khoản">
+                                <input type="reset" class="btn btn-outline-secondary" id="suaTaiKhoanReset" value="Cài lại">                         
+                            </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Footer của content -->
                 <footer class="py-4 bg-light mt-auto">
@@ -187,8 +264,8 @@
 
         <!-- Custom JavaScript -->
         <script type="text/javascript" src="js/main.js"></script>
-
-        <!-- Data Table -->
-        <script type="text/javascript">$(".dataTable").dataTable();</script>
+        <script type="text/javascript" src="js/custom-toggle-button.js"></script>
+        <script type="text/javascript" src="js/quan-ly-dang-nhap.js"></script>
+        <script type="text/javascript" src="js/custom-alert.js"></script>
     </body>
 </html>

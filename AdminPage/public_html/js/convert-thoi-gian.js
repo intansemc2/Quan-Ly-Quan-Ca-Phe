@@ -2,6 +2,9 @@ const convertDateTimeToString = (datetime) => {
 	if (datetime === undefined) {
 		return "undefined";
 	}
+	if (typeof datetime === "string") {
+		datetime = new Date(datetime);
+	}
 	let yyyy = "" + (datetime.getYear()+1900); yyyy = yyyy.padStart(4, "0");
 	let MM = "" + (datetime.getMonth()+1); MM = MM.padStart(2, "0");
 	let dd = "" + (datetime.getDate()); dd = dd.padStart(2, "0");

@@ -116,9 +116,9 @@ $(document).ready(function () {
         let newHoaDon = modifyHoaDon;
         newHoaDon.id_hoa_don = -1;
         //Thêm xuống CSDL
-        let themNVResult = true;
+        let themHDResult = true;
         //Thêm thành công
-        if (themNVResult) {
+        if (themHDResult) {
             $("#modelThemHoaDon").find("#themHoaDonAlerts").append(createAlerts("success", "Thêm thành công"));
             //Thêm hoá đơn mới vào bảng
             $("#modelThemHoaDon").find(".close").trigger("click");
@@ -147,14 +147,14 @@ $(document).ready(function () {
 
         //Tạo hoá đơn mới 
         let newHoaDon = modifyHoaDon;
-        let oldUsername = $("#modelSuaHoaDon").attr("username");
-        let oldHoaDonRow = $("#tableQuanLyHoaDon").find("button[modify='" + modifyHoaDon.id_hoa_don + "']").parents("tr");
+        let old_id_hoa_don = $("#modelSuaHoaDon").attr("id_hoa_don");
+        let oldHoaDonRow = $("#tableQuanLyHoaDon").find("button[modify='" + old_id_hoa_don + "']").parents("tr");
 
         //Sửa xuống CSDL
-        let suaNVResult = true;
+        let suaHDResult = true;
 
         //Sửa thành công
-        if (suaNVResult) {
+        if (suaHDResult) {
             $("#modelSuaHoaDon").find("#suaHoaDonAlerts").append(createAlerts("success", "Sửa thành công"));
 
             //Sửa hoá đơn mới vào bảng
@@ -171,13 +171,39 @@ $(document).ready(function () {
         setModelSuaHoaDon({});
     });
 
+    $('#modelChiTietHoaDon').on('show.bs.modal', function (event) {
+        let suaHoaDonTriggered = $(event.relatedTarget); // Button that triggered the modal
+
+        let rowHoaDon = suaHoaDonTriggered.parents("tr");        
+
+        if ($(rowHoaDon).find("button[data-target='#modelChiTietHoaDon']").length) {
+            let modifyHoaDon = extractDataFromTableQLHDRow(rowHoaDon);
+            $(this).attr("id_hoa_don", modifyHoaDon.id_hoa_don);
+            setModelSuaHoaDon(modifyHoaDon);
+            $("#modelChiTietHoaDon").find("#hoaDonTitleInformation").text(`${$(rowHoaDon).find(".id_hoa_don").attr("data")}`);
+             refreshDataTableQLCTHD();
+         }
+    });
+
     $('#modelSuaHoaDon').on('show.bs.modal', function (event) {
         let suaHoaDonTriggered = $(event.relatedTarget); // Button that triggered the modal
 
         let modifyHoaDon = extractDataFromTableQLHDRow(suaHoaDonTriggered.parents("tr"));
 
         $(this).attr("id_hoa_don", modifyHoaDon.id_hoa_don);
-        setModelSuaHoaDon(modifyHoaDon);
+        setModelSuaHoaDon(modifyHoaDon);       
+    });
+
+    $("#modelThemHoaDon").find("#themHoaDonCurrentTime").click(function () {
+        let currentTimeParts = convertDateTimeToString(new Date()).split(" ");
+        $("#modelThemHoaDon").find(".thoi_gian[type='date']").val(currentTimeParts[0]);
+        $("#modelThemHoaDon").find(".thoi_gian[type='time']").val(currentTimeParts[1]);
+    });
+
+    $("#modelSuaHoaDon").find("#suaHoaDonCurrentTime").click(function () {
+        let currentTimeParts = convertDateTimeToString(new Date()).split(" ");
+        $("#modelSuaHoaDon").find(".thoi_gian[type='date']").val(currentTimeParts[0]);
+        $("#modelSuaHoaDon").find(".thoi_gian[type='time']").val(currentTimeParts[1]);
     });
 });
 
@@ -258,14 +284,14 @@ const deleteTableQLHDRow = (buttonInside) => {
 };
 
 const extractModelThemHoaDon = () => {
-    return extractFromModel($("#modelThemHoaDon"));
+    return extractFromModelHoaDon($("#modelThemHoaDon"));
 };
 
 const extractModelSuaHoaDon = () => {
-    return extractFromModel($("#modelSuaHoaDon"));
+    return extractFromModelHoaDon($("#modelSuaHoaDon"));
 };
 
-const extractFromModel = (model) => {
+const extractFromModelHoaDon = (model) => {
 //Lấy thông tin
     let id_hoa_don = $(model).find(".id_hoa_don").val();
     let id_khach_hang = $(model).find(".id_khach_hang").val();
@@ -276,7 +302,7 @@ const extractFromModel = (model) => {
     let thoi_gian_time = $(model).find(".thoi_gian[type='time']").val();
     let thoi_gian = undefined;
     if (thoi_gian_date !== "" && thoi_gian_time !== "") {
-        thoi_gian = new Date(`${thoi_gian_date} ${thoi_gian_time}:00`);
+        thoi_gian = new Date(`${thoi_gian_date} ${thoi_gian_time}`);
     }
 
     let phan_tram_tich_luy = $(model).find(".phan_tram_tich_luy").val();
@@ -287,14 +313,14 @@ const extractFromModel = (model) => {
 };
 
 const setModelThemHoaDon = (modifyHoaDon) => {
-    setToModel($("#modelThemHoaDon"), modifyHoaDon);
+    setToModelHoaDon($("#modelThemHoaDon"), modifyHoaDon);
 };
 
 const setModelSuaHoaDon = (modifyHoaDon) => {
-    setToModel($("#modelSuaHoaDon"), modifyHoaDon);
+    setToModelHoaDon($("#modelSuaHoaDon"), modifyHoaDon);
 };
 
-const setToModel = (model, hoadon) => {
+const setToModelHoaDon = (model, hoadon) => {
     $(model).find(".id_hoa_don").val(hoadon.id_hoa_don);
     $(model).find(".id_khach_hang").val(hoadon.id_khach_hang);
     $(model).find(".id_ban").val(hoadon.id_ban);
@@ -321,31 +347,31 @@ const validateHoaDonInformation = (alertContainer, hoadon) => {
     let ty_gia_diem_doi = hoadon.ty_gia_diem_doi;
 
     let numberValidateError = 0;
-    if (id_khach_hang === undefined || id_khach_hang === "") {
+    if (!id_khach_hang || id_khach_hang === "") {
         $(alertContainer).append(createAlerts("danger", "Khách hàng không được để trống"));
         numberValidateError += 1;
     }
-    if (id_ban === undefined || id_ban === "") {
+    if (!id_ban || id_ban === "") {
         $(alertContainer).append(createAlerts("danger", "Bàn không được để trống"));
         numberValidateError += 1;
     }
-    if (id_nhan_vien === undefined || id_nhan_vien === "") {
+    if (!id_nhan_vien || id_nhan_vien === "") {
         $(alertContainer).append(createAlerts("danger", "Nhân viên không được để trống"));
         numberValidateError += 1;
     }
-    if (thoi_gian === undefined || thoi_gian === "") {
+    if (!thoi_gian || thoi_gian === "") {
         $(alertContainer).append(createAlerts("danger", "Thời gian không được để trống"));
         numberValidateError += 1;
     }
-    if (phan_tram_tich_luy === undefined || phan_tram_tich_luy === "") {
+    if (!phan_tram_tich_luy || phan_tram_tich_luy === "") {
         $(alertContainer).append(createAlerts("danger", "Phần trăm tích lũy không được để trống"));
         numberValidateError += 1;
     }
-    if (so_luong_diem_doi === undefined || so_luong_diem_doi === "") {
+    if (!so_luong_diem_doi || so_luong_diem_doi === "") {
         $(alertContainer).append(createAlerts("danger", "Số điểm đổi không được để trống"));
         numberValidateError += 1;
     }
-    if (ty_gia_diem_doi === undefined || ty_gia_diem_doi === "") {
+    if (!ty_gia_diem_doi || ty_gia_diem_doi === "") {
         $(alertContainer).append(createAlerts("danger", "Tỷ lệ điểm đổi không được để trống"));
         numberValidateError += 1;
     }

@@ -1,5 +1,5 @@
 let tableQuanLyChiTietHoaDon;
-let chitiethoadonTypes = [];
+let sanphams = [];
 
 $(document).ready(function () {
 //Active dataTable
@@ -9,35 +9,36 @@ $(document).ready(function () {
                 "targets": 0,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="id_chitiethoadon">${renderData}</span>`;
+                    return `<span class="id_hoa_don" data="${data}">${renderData}</span>`;
                 }
             },            {
                 "targets": 1,
                 "render": function (data, type, row, meta) {
-                    let renderData = data;
-                    return `<span class="ten">${renderData}</span>`;
+                    let sanpham = sanphams.find(item => item.id_san_pham == data);
+                    if (!sanpham) { sanpham = {}; }
+                    let renderData = `${sanpham.id_san_pham} - ${sanpham.ten}`;
+                    return `<span class="id_san_pham" data="${data}">${renderData}</span>`;
                 }
             },
             {
                 "targets": 2,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="sdt">${renderData}</span>`;
+                    return `<span class="so_luong" data="${data}">${renderData}</span>`;
                 }
             },
             {
                 "targets": 3,
                 "render": function (data, type, row, meta) {
-                    let typeIndex = data;
-                    let renderData = chitiethoadonTypes[typeIndex] ? chitiethoadonTypes[typeIndex] : data;
-                    return `<span class="type">${renderData}</span>`;
+                    let renderData = data;
+                    return `<span class="don_gia" data="${data}">${renderData}</span>`;
                 }
             },
             {
                 "targets": 4,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="username">${renderData}</span>`;
+                    return `<span class="diem_tich_luy" data="${data}">${renderData}</span>`;
                 }
             },
             {
@@ -46,15 +47,12 @@ $(document).ready(function () {
                     let chitiethoadon = data;
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
-<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaChiTietHoaDon" modify="${chitiethoadon.id_chitiethoadon}"><i class="fas fa-edit"></i></button>
-<button type="button" class="btn btn-outline-dark m-1" data-toggle="modal" data-target="#modelChiTietChiTietHoaDon" modify="${chitiethoadon.id_chitiethoadon}"><i class="fas fa-cart-plus"></i></button>
+<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaChiTietHoaDon" modify="${chitiethoadon.id_hoa_don} ${chitiethoadon.id_san_pham}"><i class="fas fa-edit"></i></button>
 <button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLCTHDRow(this)"><i class="fas fa-trash"></i></button>`
                     return `${renderData}`;
                 }
             }]
     });
-
-    refreshDataTableQLCTHD();
 
     $("#danhDauTatCaChiTietHoaDon").click(function () {
         $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
@@ -86,7 +84,6 @@ $(document).ready(function () {
 
         //Tạo hoá đơn mới 
         let newChiTietHoaDon = modifyChiTietHoaDon;
-        newChiTietHoaDon.id_chitiethoadon = -1;
         //Thêm xuống CSDL
         let themNVResult = true;
         //Thêm thành công
@@ -110,8 +107,9 @@ $(document).ready(function () {
         //Xóa hết alert cũ
         $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonAlerts").html("");        
 
-        //Validate
         let modifyChiTietHoaDon = extractModelSuaChiTietHoaDon();
+
+        //Validate
         let numberValidateError = validateChiTietHoaDonInformation($("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonAlerts"), modifyChiTietHoaDon);
         if (numberValidateError > 0) {
             return;
@@ -119,8 +117,10 @@ $(document).ready(function () {
 
         //Tạo hoá đơn mới 
         let newChiTietHoaDon = modifyChiTietHoaDon;
-        let oldUsername = $("#modelSuaChiTietHoaDon").attr("username");
-        let oldChiTietHoaDonRow = $("#tableQuanLyChiTietHoaDon").find("button[modify='" + modifyChiTietHoaDon.id_chitiethoadon + "']").parents("tr");
+        let id_hoa_don = $(this).parents("#modelSuaChiTietHoaDon").attr("id_hoa_don");
+        let id_san_pham = $(this).parents("#modelSuaChiTietHoaDon").attr("id_san_pham");
+        let oldChiTietHoaDonRow = $("#tableQuanLyChiTietHoaDon").find(`button[modify='${id_hoa_don} ${id_san_pham}']`).parents("tr");
+        debugger;
 
         //Sửa xuống CSDL
         let suaNVResult = true;
@@ -148,67 +148,66 @@ $(document).ready(function () {
 
         let modifyChiTietHoaDon = extractDataFromTableQLCTHDRow(suaChiTietHoaDonTriggered.parents("tr"));
 
-        $(this).attr("id_chitiethoadon", modifyChiTietHoaDon.id_chitiethoadon);
+        $(this).attr("id_hoa_don", modifyChiTietHoaDon.id_hoa_don);
+        $(this).attr("id_san_pham", modifyChiTietHoaDon.id_san_pham);
         setModelSuaChiTietHoaDon(modifyChiTietHoaDon);
+    });
+
+    $("#modelThemChiTietHoaDon").find(".close").click(() => $("#modelThemChiTietHoaDon").trigger("click"));
+    $("#modelSuaChiTietHoaDon").find(".close").click(() => $("#modelSuaChiTietHoaDon").trigger("click"));
+
+    $("#themChiTietHoaDonSanPham").change(function () {        
+        let id_san_pham = $(this).val();
+        let sanpham = sanphams.find(item => item.id_san_pham == id_san_pham);
+        $(this).parents("#modelThemChiTietHoaDon").find(".don_gia").val(sanpham.gia);
+        $(this).parents("#modelThemChiTietHoaDon").find(".diem_tich_luy").val(sanpham.diem_tich_luy);
+    });
+
+    $("#themChiTietHoaDon").click(function () {
+        let id_hoa_don = $(this).parents("#modelChiTietHoaDon").attr("id_hoa_don");
+        $("#modelThemChiTietHoaDon").find(".id_hoa_don").val(id_hoa_don);
+        $("#modelThemChiTietHoaDon").find(".id_san_pham").val(sanphams[0].id_san_pham);
     });
 });
 
 const createTableQLCTHDArrayDataRow = (chitiethoadon) => {
-    return [chitiethoadon.id_chitiethoadon, chitiethoadon.ten, chitiethoadon.sdt, chitiethoadon.type, chitiethoadon.username, chitiethoadon];
+    return [chitiethoadon.id_hoa_don, chitiethoadon.id_san_pham, chitiethoadon.so_luong, chitiethoadon.don_gia, chitiethoadon.diem_tich_luy, chitiethoadon];
 };
 
 const extractDataFromTableQLCTHDRow = (tableRow) => {
-    let id_chitiethoadon = $(tableRow).find(".id_chitiethoadon").text();
-    let ten = $(tableRow).find(".ten").text();
-    let sdt = $(tableRow).find(".sdt").text();
-    let type = $(tableRow).find(".type").text();
-    let username = $(tableRow).find(".username").text();
-
-    type = chitiethoadonTypes.find(typename => typename === type);
-    return {id_chitiethoadon: id_chitiethoadon, ten: ten, sdt: sdt, type: type, username: username};
+    let id_hoa_don = $(tableRow).find(".id_hoa_don").attr("data");
+    let id_san_pham = $(tableRow).find(".id_san_pham").attr("data");
+    let so_luong = $(tableRow).find(".so_luong").attr("data");
+    let don_gia = $(tableRow).find(".don_gia").attr("data");
+    let diem_tich_luy = $(tableRow).find(".diem_tich_luy").attr("data");
+    return  {id_hoa_don:id_hoa_don, id_san_pham:id_san_pham, so_luong:so_luong, don_gia:don_gia, diem_tich_luy:diem_tich_luy};
 };
 
-const refreshDataTableQLCTHD = () => {
-    let n = Math.floor(Math.random() * 10);
+const refreshDataTableQLCTHD = () => {    
     //Lấy thông tin usernames
-    usernames = [];
-    for (let i = 0; i < n; i += 1) { usernames.push(`User${i.toString().padStart(3, "0")}`); }
-    //Lấy thông tin types
-    chitiethoadonTypes = ["Hoá đơn", "Admin"];
+    sanphams = [];
+    for (let i = 0; i < 10; i += 1) { sanphams.push({id_san_pham: i, ten: `Sản phẩm ${i}`, gia: Math.floor(Math.random()*1000)*1000, diem_tich_luy: Math.floor(Math.random()*1000)}); }
 
     //Thêm option username
-    $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonUsername").html("");
-    $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonUsername").html("");
-    for (let username of usernames) {
-        let newUsernameOption = `<option value="${username}">${username}</option>`;
-        $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonUsername").append(newUsernameOption);
-        $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonUsername").append(newUsernameOption);
-    }
-
-    //Thêm option type
-    $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonLoaiChiTietHoaDon").html("");
-    $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonLoaiChiTietHoaDon").html("");
-    for (let type of chitiethoadonTypes) {
-        let newLoaiOption = `<option value="${type}">${type}</option>`;
-        $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonLoaiChiTietHoaDon").append(newLoaiOption);
-        $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonLoaiChiTietHoaDon").append(newLoaiOption);
+    $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonSanPham").html("");
+    $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonSanPham").html("");
+    for (let sanpham of sanphams) {
+        let newUsernameOption = `<option value="${sanpham.id_san_pham}">${sanpham.id_san_pham} - ${sanpham.ten}</option>`;
+        $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonSanPham").append(newUsernameOption);
+        $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonSanPham").append(newUsernameOption);
     }
 
     tableQuanLyChiTietHoaDon.clear();
     //Lấy thông tin hoá đơn
-    let chitiethoadons = new Array();    
+    let n = Math.floor(Math.random() * 10);
+    let chitiethoadons =[];
     for (let i = 0; i < n; i += 1) {
-        let id_chitiethoadon = i;
-        let ten = `Nhân Văn Viên ${i.toString().padStart(3, "0")}`;
-
-        let sdt = "";
-        for(let sdtIndex=0; sdtIndex<10; sdtIndex+=1) {
-            sdt += Math.floor(Math.random()*10).toString();
-        }
-
-        let username = `User${i.toString().padStart(3, "0")}`;
-        let type = Math.floor(Math.random() * chitiethoadonTypes.length);
-        chitiethoadons.push({id_chitiethoadon: id_chitiethoadon, ten: ten, sdt: sdt, type: type, username: username});
+        let id_hoa_don = i;
+        let id_san_pham = sanphams[Math.floor(Math.random()*sanphams.length)].id_san_pham;
+        let so_luong = Math.floor(Math.random()*sanphams.length)
+        let don_gia = sanphams[Math.floor(Math.random()*sanphams.length)].gia;
+        let diem_tich_luy = sanphams[Math.floor(Math.random()*sanphams.length)].diem_tich_luy;
+        chitiethoadons.push({id_hoa_don:id_hoa_don, id_san_pham:id_san_pham, so_luong:so_luong, don_gia:don_gia, diem_tich_luy:diem_tich_luy});
     }
 
     //Thêm vào bảng
@@ -224,52 +223,62 @@ const deleteTableQLCTHDRow = (buttonInside) => {
 };
 
 const extractModelThemChiTietHoaDon = () => {
-    return extractFromModel($("#modelThemChiTietHoaDon"));
+    return extractFromModelChiTietHoaDon($("#modelThemChiTietHoaDon"));
 };
 
 const extractModelSuaChiTietHoaDon = () => {
-    return extractFromModel($("#modelSuaChiTietHoaDon"));
+    return extractFromModelChiTietHoaDon($("#modelSuaChiTietHoaDon"));
+};
+
+const extractFromModelChiTietHoaDon = (model) => {
+    //Lấy thông tin
+    let id_hoa_don = $(model).find(".id_hoa_don").val();
+    let id_san_pham = $(model).find(".id_san_pham").val();
+    let so_luong = $(model).find(".so_luong").val();
+    let don_gia = $(model).find(".don_gia").val();
+    let diem_tich_luy = $(model).find(".diem_tich_luy").val();
+    return  {id_hoa_don:id_hoa_don, id_san_pham:id_san_pham, so_luong:so_luong, don_gia:don_gia, diem_tich_luy:diem_tich_luy};
 };
 
 const setModelThemChiTietHoaDon = (modifyChiTietHoaDon) => {
-    setToModel($("#modelThemChiTietHoaDon"), modifyChiTietHoaDon);
+    setToModelChiTietHoaDon($("#modelThemChiTietHoaDon"), modifyChiTietHoaDon);
 };
 
 const setModelSuaChiTietHoaDon = (modifyChiTietHoaDon) => {
-    setToModel($("#modelSuaChiTietHoaDon"), modifyChiTietHoaDon);
+    setToModelChiTietHoaDon($("#modelSuaChiTietHoaDon"), modifyChiTietHoaDon);
+};
+
+const setToModelChiTietHoaDon = (model, chitiethoadon) => {
+    $(model).find(".id_hoa_don").val(chitiethoadon.id_hoa_don);
+    $(model).find(".id_san_pham").val(chitiethoadon.id_san_pham);
+    $(model).find(".so_luong").val(chitiethoadon.so_luong);
+    $(model).find(".don_gia").val(chitiethoadon.don_gia);
+    $(model).find(".diem_tich_luy").val(chitiethoadon.diem_tich_luy);
 };
 
 const validateChiTietHoaDonInformation = (alertContainer, chitiethoadon) => {
     //Validate
-    let id_chitiethoadon = chitiethoadon.id_chitiethoadon;
-    let ten = chitiethoadon.ten;
-    let sdt = chitiethoadon.sdt;
-    let type =chitiethoadon.type;
-    let username = chitiethoadon.username;
+    let id_hoa_don = chitiethoadon.id_hoa_don;
+    let id_san_pham = chitiethoadon.id_san_pham;
+    let so_luong = `${chitiethoadon.so_luong}`;
+    let don_gia = `${chitiethoadon.don_gia}`;
+    let diem_tich_luy = `${chitiethoadon.diem_tich_luy}`;
 
     let numberValidateError = 0;
-    if (ten === undefined || ten === "") {
-        $(alertContainer).append(createAlerts("danger", "Tên hoá đơn không được để trống"));
+    if (!id_san_pham || id_san_pham === "") {
+        $(alertContainer).append(createAlerts("danger", "Sản phẩm không được để trống"));
         numberValidateError += 1;
     }
-    if (sdt === undefined || sdt === "") {
-        $(alertContainer).append(createAlerts("danger", "Số điện thoại không được để trống"));
+    if (!so_luong || so_luong === "") {
+        $(alertContainer).append(createAlerts("danger", "Số luợng không được để trống"));
         numberValidateError += 1;
     }
-    else if (sdt.search(/^[0-9]+$/) < 0) {
-        $(alertContainer).append(createAlerts("danger", "Số điện thoại chỉ được có số"));
+    if (!don_gia || don_gia === "") {
+        $(alertContainer).append(createAlerts("danger", "Đơn giá không được để trống"));
         numberValidateError += 1;
     }
-    else if (0 > sdt.length || sdt.length > 15) {
-        $(alertContainer).append(createAlerts("danger", "Số điện thoại chỉ được có từ 1 đến 15 số"));
-        numberValidateError += 1;
-    }
-    if (type === undefined || type === "") {
-        $(alertContainer).append(createAlerts("danger", "Loại không được để trống"));
-        numberValidateError += 1;
-    }
-    if (username === undefined || username === "") {
-        $(alertContainer).append(createAlerts("danger", "Username không được để trống"));
+    if (!diem_tich_luy || diem_tich_luy === "") {
+        $(alertContainer).append(createAlerts("danger", "Điểm tích lũy không được để trống"));
         numberValidateError += 1;
     }
     return numberValidateError;

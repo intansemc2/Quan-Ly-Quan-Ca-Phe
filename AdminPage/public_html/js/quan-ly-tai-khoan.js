@@ -9,13 +9,13 @@ $(document).ready(function () {
                 "targets": 0,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="username">${renderData}</span>`;
+                    return `<span class="username" data="${data}">${renderData}</span>`;
                 }
             },            {
                 "targets": 1,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="password">${renderData}</span>`;
+                    return `<span class="password" data="${data}">${renderData}</span>`;
                 }
             },
             {
@@ -23,7 +23,7 @@ $(document).ready(function () {
                 "render": function (data, type, row, meta) {
                     let typeIndex = data;
                     let renderData = taikhoanTypes[typeIndex] ? taikhoanTypes[typeIndex] : data;
-                    return `<span class="type">${renderData}</span>`;
+                    return `<span class="type" data="${data}">${renderData}</span>`;
                 }
             },
             {
@@ -104,7 +104,7 @@ $(document).ready(function () {
         //Tạo tài khoản mới 
         let newTaiKhoan = modifyTaiKhoan;
         let oldUsername = $("#modelSuaTaiKhoan").attr("username");
-        let oldTaiKhoanRow = $("#tableQuanLyTaiKhoan").find("button[modify='" + modifyTaiKhoan.username + "']").parents("tr");
+        let oldTaiKhoanRow = $("#tableQuanLyTaiKhoan").find("button[modify='" + oldUsername + "']").parents("tr");
 
         //Sửa xuống CSDL
         let suaTKResult = true;
@@ -142,11 +142,9 @@ let createTableQLTKArrayDataRow = (taikhoan) => {
 };
 
 let extractDataFromTableQLTKRow = (tableRow) => {
-    let username = $(tableRow).find(".username").text();
-    let password = $(tableRow).find(".password").text();
-    let type = $(tableRow).find(".type").text();
-
-    type = taikhoanTypes.find(typename => typename === type);
+    let username = $(tableRow).find(".username").attr("data");
+    let password = $(tableRow).find(".password").attr("data");
+    let type = taikhoanTypes[$(tableRow).find(".type").attr("data")];
     return {username: username, password: password, re_password: password, type: type};
 };
 
@@ -226,11 +224,11 @@ let validateTaiKhoanInformation = (alertContainer, taikhoan) => {
     let type =taikhoan.type;
 
     let numberValidateError = 0;
-    if (password === undefined || password === "") {
+    if (!password || password === "") {
         $(alertContainer).append(createAlerts("danger", "Mật khẩu không được để trống"));
         numberValidateError += 1;
     }
-    if (re_password === undefined || re_password === "") {
+    if (!re_password || re_password === "") {
         $(alertContainer).append(createAlerts("danger", "Phần nhập lại Mật khẩu không được để trống"));
         numberValidateError += 1;
     }
@@ -238,11 +236,11 @@ let validateTaiKhoanInformation = (alertContainer, taikhoan) => {
         $(alertContainer).append(createAlerts("danger", "Phần nhập lại Mật khẩu phải giống Mật khẩu"));
         numberValidateError += 1;
     }
-    if (type === undefined || type === "") {
+    if (!type || type === "") {
         $(alertContainer).append(createAlerts("danger", "Loại không được để trống"));
         numberValidateError += 1;
     }
-    if (username === undefined || username === "") {
+    if (!username || username === "") {
         $(alertContainer).append(createAlerts("danger", "Username không được để trống"));
         numberValidateError += 1;
     }

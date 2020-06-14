@@ -10,20 +10,20 @@ $(document).ready(function () {
                 "targets": 0,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="id_khachhang">${renderData}</span>`;
+                    return `<span class="id_khach_hang" data="${data}">${renderData}</span>`;
                 }
             },            {
                 "targets": 1,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="ten">${renderData}</span>`;
+                    return `<span class="ten" data="${data}">${renderData}</span>`;
                 }
             },
             {
                 "targets": 2,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="sdt">${renderData}</span>`;
+                    return `<span class="sdt" data="${data}">${renderData}</span>`;
                 }
             },
             {
@@ -31,14 +31,14 @@ $(document).ready(function () {
                 "render": function (data, type, row, meta) {
                     let pointIndex = data;
                     let renderData = khachhangTypes[pointIndex] ? khachhangTypes[pointIndex] : data;
-                    return `<span class="point">${renderData}</span>`;
+                    return `<span class="point" data="${data}">${renderData}</span>`;
                 }
             },
             {
                 "targets": 4,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="username">${renderData}</span>`;
+                    return `<span class="username" data="${data}">${renderData}</span>`;
                 }
             },
             {
@@ -47,7 +47,7 @@ $(document).ready(function () {
                     let khachhang = data;
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
-<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaKhachHang" modify="${khachhang.id_khachhang}"><i class="fas fa-edit"></i></button>
+<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaKhachHang" modify="${khachhang.id_khach_hang}"><i class="fas fa-edit"></i></button>
 <button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLNVRow(this)"><i class="fas fa-trash"></i></button>`
                     return `${renderData}`;
                 }
@@ -86,7 +86,7 @@ $(document).ready(function () {
 
         //Tạo khách hàng mới 
         let newKhachHang = modifyKhachHang;
-        newKhachHang.id_khachhang = -1;
+        newKhachHang.id_khach_hang = -1;
         //Thêm xuống CSDL
         let themNVResult = true;
         //Thêm thành công
@@ -119,8 +119,8 @@ $(document).ready(function () {
 
         //Tạo khách hàng mới 
         let newKhachHang = modifyKhachHang;
-        let oldUsername = $("#modelSuaKhachHang").attr("username");
-        let oldKhachHangRow = $("#tableQuanLyKhachHang").find("button[modify='" + modifyKhachHang.id_khachhang + "']").parents("tr");
+        let oldIdkhachHang = $("#modelSuaKhachHang").attr("id_khach_hang");
+        let oldKhachHangRow = $("#tableQuanLyKhachHang").find("button[modify='" + oldIdkhachHang + "']").parents("tr");
 
         //Sửa xuống CSDL
         let suaNVResult = true;
@@ -148,23 +148,23 @@ $(document).ready(function () {
 
         let modifyKhachHang = extractDataFromTableQLNVRow(suaKhachHangTriggered.parents("tr"));
 
-        $(this).attr("id_khachhang", modifyKhachHang.id_khachhang);
+        $(this).attr("id_khach_hang", modifyKhachHang.id_khach_hang);
         setModelSuaKhachHang(modifyKhachHang);
     });
 });
 
 let createTableQLNVArrayDataRow = (khachhang) => {
-    return [khachhang.id_khachhang, khachhang.ten, khachhang.sdt, khachhang.point, khachhang.username, khachhang];
+    return [khachhang.id_khach_hang, khachhang.ten, khachhang.sdt, khachhang.point, khachhang.username, khachhang];
 };
 
 let extractDataFromTableQLNVRow = (tableRow) => {
-    let id_khachhang = $(tableRow).find(".id_khachhang").text();
-    let ten = $(tableRow).find(".ten").text();
-    let sdt = $(tableRow).find(".sdt").text();
-    let point = $(tableRow).find(".point").text();
-    let username = $(tableRow).find(".username").text();
+    let id_khach_hang = $(tableRow).find(".id_khach_hang").attr("data");
+    let ten = $(tableRow).find(".ten").attr("data");
+    let sdt = $(tableRow).find(".sdt").attr("data");
+    let point = $(tableRow).find(".point").attr("data");
+    let username = $(tableRow).find(".username").attr("data");
 
-    return {id_khachhang: id_khachhang, ten: ten, sdt: sdt, point: point, username: username};
+    return {id_khach_hang: id_khach_hang, ten: ten, sdt: sdt, point: point, username: username};
 };
 
 let refreshDataTableQLNV = () => {
@@ -186,7 +186,7 @@ let refreshDataTableQLNV = () => {
     //Lấy thông tin khách hàng
     let khachhangs = new Array();    
     for (let i = 0; i < n; i += 1) {
-        let id_khachhang = i;
+        let id_khach_hang = i;
         let ten = `Khách Văn Hàng ${i.toString().padStart(3, "0")}`;
 
         let sdt = "";
@@ -196,7 +196,7 @@ let refreshDataTableQLNV = () => {
 
         let username = `User${i.toString().padStart(3, "0")}`;
         let point = Math.floor(Math.random() * 1000);
-        khachhangs.push({id_khachhang: id_khachhang, ten: ten, sdt: sdt, point: point, username: username});
+        khachhangs.push({id_khach_hang: id_khach_hang, ten: ten, sdt: sdt, point: point, username: username});
     }
 
     //Thêm vào bảng
@@ -221,12 +221,12 @@ let extractModelSuaKhachHang = () => {
 
 let extractFromModel = (model) => {
 //Lấy thông tin
-    let id_khachhang = $(model).find(".id_khachhang").val();
+    let id_khach_hang = $(model).find(".id_khach_hang").val();
     let ten = $(model).find(".ten").val();
     let sdt = $(model).find(".sdt").val();
     let point = $(model).find(".point").val();
     let username = $(model).find(".username").val();
-    return {id_khachhang: id_khachhang, ten: ten, sdt: sdt, point: point, username: username};
+    return {id_khach_hang: id_khach_hang, ten: ten, sdt: sdt, point: point, username: username};
 };
 
 let setModelThemKhachHang = (modifyKhachHang) => {
@@ -238,7 +238,7 @@ let setModelSuaKhachHang = (modifyKhachHang) => {
 };
 
 let setToModel = (model, khachhang) => {
-    $(model).find(".id_khachhang").val(khachhang.id_khachhang);
+    $(model).find(".id_khach_hang").val(khachhang.id_khach_hang);
     $(model).find(".ten").val(khachhang.ten);
     $(model).find(".sdt").val(khachhang.sdt);
    $(model).find(".point").val(khachhang.point);
@@ -247,18 +247,18 @@ let setToModel = (model, khachhang) => {
 
 let validateKhachHangInformation = (alertContainer, khachhang) => {
     //Validate
-    let id_khachhang = khachhang.id_khachhang;
+    let id_khach_hang = khachhang.id_khach_hang;
     let ten = khachhang.ten;
     let sdt = khachhang.sdt;
     let point =khachhang.point;
     let username = khachhang.username;
 
     let numberValidateError = 0;
-    if (ten === undefined || ten === "") {
+    if (!ten || ten === "") {
         $(alertContainer).append(createAlerts("danger", "Tên khách hàng không được để trống"));
         numberValidateError += 1;
     }
-    if (sdt === undefined || sdt === "") {
+    if (!sdt || sdt === "") {
         $(alertContainer).append(createAlerts("danger", "Số điện thoại không được để trống"));
         numberValidateError += 1;
     }
@@ -270,7 +270,7 @@ let validateKhachHangInformation = (alertContainer, khachhang) => {
         $(alertContainer).append(createAlerts("danger", "Số điện thoại chỉ được có từ 1 đến 15 số"));
         numberValidateError += 1;
     }
-    if (point === undefined || point === "") {
+    if (!point || point === "") {
         $(alertContainer).append(createAlerts("danger", "Điểm tích lũy không được để trống"));
         numberValidateError += 1;
     }
@@ -282,7 +282,7 @@ let validateKhachHangInformation = (alertContainer, khachhang) => {
         $(alertContainer).append(createAlerts("danger", "Điểm tích lũy phải là số không âm"));
         numberValidateError += 1;
     }
-    if (username === undefined || username === "") {
+    if (!username || username === "") {
         $(alertContainer).append(createAlerts("danger", "Username không được để trống"));
         numberValidateError += 1;
     }

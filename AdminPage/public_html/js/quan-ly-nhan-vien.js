@@ -10,20 +10,20 @@ $(document).ready(function () {
                 "targets": 0,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="id_nhanvien">${renderData}</span>`;
+                    return `<span class="id_nhan_vien" data="${data}">${renderData}</span>`;
                 }
             },            {
                 "targets": 1,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="ten">${renderData}</span>`;
+                    return `<span class="ten" data="${data}">${renderData}</span>`;
                 }
             },
             {
                 "targets": 2,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="sdt">${renderData}</span>`;
+                    return `<span class="sdt" data="${data}">${renderData}</span>`;
                 }
             },
             {
@@ -31,14 +31,14 @@ $(document).ready(function () {
                 "render": function (data, type, row, meta) {
                     let typeIndex = data;
                     let renderData = nhanvienTypes[typeIndex] ? nhanvienTypes[typeIndex] : data;
-                    return `<span class="type">${renderData}</span>`;
+                    return `<span class="type" data="${data}">${renderData}</span>`;
                 }
             },
             {
                 "targets": 4,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="username">${renderData}</span>`;
+                    return `<span class="username" data="${data}">${renderData}</span>`;
                 }
             },
             {
@@ -47,7 +47,7 @@ $(document).ready(function () {
                     let nhanvien = data;
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
-<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaNhanVien" modify="${nhanvien.id_nhanvien}"><i class="fas fa-edit"></i></button>
+<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaNhanVien" modify="${nhanvien.id_nhan_vien}"><i class="fas fa-edit"></i></button>
 <button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLNVRow(this)"><i class="fas fa-trash"></i></button>`
                     return `${renderData}`;
                 }
@@ -86,7 +86,7 @@ $(document).ready(function () {
 
         //Tạo nhân viên mới 
         let newNhanVien = modifyNhanVien;
-        newNhanVien.id_nhanvien = -1;
+        newNhanVien.id_nhan_vien = -1;
         //Thêm xuống CSDL
         let themNVResult = true;
         //Thêm thành công
@@ -119,8 +119,8 @@ $(document).ready(function () {
 
         //Tạo nhân viên mới 
         let newNhanVien = modifyNhanVien;
-        let oldUsername = $("#modelSuaNhanVien").attr("username");
-        let oldNhanVienRow = $("#tableQuanLyNhanVien").find("button[modify='" + modifyNhanVien.id_nhanvien + "']").parents("tr");
+        let oldIdNhanVien = $("#modelSuaNhanVien").attr("id_nhan_vien");
+        let oldNhanVienRow = $("#tableQuanLyNhanVien").find("button[modify='" + oldIdNhanVien + "']").parents("tr");
 
         //Sửa xuống CSDL
         let suaNVResult = true;
@@ -148,24 +148,22 @@ $(document).ready(function () {
 
         let modifyNhanVien = extractDataFromTableQLNVRow(suaNhanVienTriggered.parents("tr"));
 
-        $(this).attr("id_nhanvien", modifyNhanVien.id_nhanvien);
+        $(this).attr("id_nhan_vien", modifyNhanVien.id_nhan_vien);
         setModelSuaNhanVien(modifyNhanVien);
     });
 });
 
 let createTableQLNVArrayDataRow = (nhanvien) => {
-    return [nhanvien.id_nhanvien, nhanvien.ten, nhanvien.sdt, nhanvien.type, nhanvien.username, nhanvien];
+    return [nhanvien.id_nhan_vien, nhanvien.ten, nhanvien.sdt, nhanvien.type, nhanvien.username, nhanvien];
 };
 
 let extractDataFromTableQLNVRow = (tableRow) => {
-    let id_nhanvien = $(tableRow).find(".id_nhanvien").text();
-    let ten = $(tableRow).find(".ten").text();
-    let sdt = $(tableRow).find(".sdt").text();
-    let type = $(tableRow).find(".type").text();
-    let username = $(tableRow).find(".username").text();
-
-    type = nhanvienTypes.find(typename => typename === type);
-    return {id_nhanvien: id_nhanvien, ten: ten, sdt: sdt, type: type, username: username};
+    let id_nhan_vien = $(tableRow).find(".id_nhan_vien").attr("data");
+    let ten = $(tableRow).find(".ten").attr("data");
+    let sdt = $(tableRow).find(".sdt").attr("data");
+    let username = $(tableRow).find(".username").attr("data");
+    let type = $(tableRow).find(".type").attr("data");
+    return {id_nhan_vien: id_nhan_vien, ten: ten, sdt: sdt, type: type, username: username};
 };
 
 let refreshDataTableQLNV = () => {
@@ -188,8 +186,9 @@ let refreshDataTableQLNV = () => {
     //Thêm option type
     $("#modelThemNhanVien").find("#themNhanVienLoaiNhanVien").html("");
     $("#modelSuaNhanVien").find("#suaNhanVienLoaiNhanVien").html("");
-    for (let type of nhanvienTypes) {
-        let newLoaiOption = `<option value="${type}">${type}</option>`;
+    for (let i=0; i<nhanvienTypes.length; i+=1) {
+        let type = nhanvienTypes[i];
+        let newLoaiOption = `<option value="${i}">${type}</option>`;
         $("#modelThemNhanVien").find("#themNhanVienLoaiNhanVien").append(newLoaiOption);
         $("#modelSuaNhanVien").find("#suaNhanVienLoaiNhanVien").append(newLoaiOption);
     }
@@ -198,7 +197,7 @@ let refreshDataTableQLNV = () => {
     //Lấy thông tin nhân viên
     let nhanviens = new Array();    
     for (let i = 0; i < n; i += 1) {
-        let id_nhanvien = i;
+        let id_nhan_vien = i;
         let ten = `Nhân Văn Viên ${i.toString().padStart(3, "0")}`;
 
         let sdt = "";
@@ -208,7 +207,7 @@ let refreshDataTableQLNV = () => {
 
         let username = `User${i.toString().padStart(3, "0")}`;
         let type = Math.floor(Math.random() * nhanvienTypes.length);
-        nhanviens.push({id_nhanvien: id_nhanvien, ten: ten, sdt: sdt, type: type, username: username});
+        nhanviens.push({id_nhan_vien: id_nhan_vien, ten: ten, sdt: sdt, type: type, username: username});
     }
 
     //Thêm vào bảng
@@ -233,12 +232,12 @@ let extractModelSuaNhanVien = () => {
 
 let extractFromModel = (model) => {
 //Lấy thông tin
-    let id_nhanvien = $(model).find(".id_nhanvien").val();
+    let id_nhan_vien = $(model).find(".id_nhan_vien").val();
     let ten = $(model).find(".ten").val();
     let sdt = $(model).find(".sdt").val();
     let type = $(model).find(".type").val();
     let username = $(model).find(".username").val();
-    return {id_nhanvien: id_nhanvien, ten: ten, sdt: sdt, type: type, username: username};
+    return {id_nhan_vien: id_nhan_vien, ten: ten, sdt: sdt, type: type, username: username};
 };
 
 let setModelThemNhanVien = (modifyNhanVien) => {
@@ -250,7 +249,7 @@ let setModelSuaNhanVien = (modifyNhanVien) => {
 };
 
 let setToModel = (model, nhanvien) => {
-    $(model).find(".id_nhanvien").val(nhanvien.id_nhanvien);
+    $(model).find(".id_nhan_vien").val(nhanvien.id_nhan_vien);
     $(model).find(".ten").val(nhanvien.ten);
     $(model).find(".sdt").val(nhanvien.sdt);
    $(model).find(".type").val(nhanvien.type);
@@ -259,18 +258,18 @@ let setToModel = (model, nhanvien) => {
 
 let validateNhanVienInformation = (alertContainer, nhanvien) => {
     //Validate
-    let id_nhanvien = nhanvien.id_nhanvien;
+    let id_nhan_vien = nhanvien.id_nhan_vien;
     let ten = nhanvien.ten;
     let sdt = nhanvien.sdt;
     let type =nhanvien.type;
     let username = nhanvien.username;
 
     let numberValidateError = 0;
-    if (ten === undefined || ten === "") {
+    if (!ten || ten === "") {
         $(alertContainer).append(createAlerts("danger", "Tên nhân viên không được để trống"));
         numberValidateError += 1;
     }
-    if (sdt === undefined || sdt === "") {
+    if (!sdt || sdt === "") {
         $(alertContainer).append(createAlerts("danger", "Số điện thoại không được để trống"));
         numberValidateError += 1;
     }
@@ -282,11 +281,11 @@ let validateNhanVienInformation = (alertContainer, nhanvien) => {
         $(alertContainer).append(createAlerts("danger", "Số điện thoại chỉ được có từ 1 đến 15 số"));
         numberValidateError += 1;
     }
-    if (type === undefined || type === "") {
+    if (!type || type === "") {
         $(alertContainer).append(createAlerts("danger", "Loại không được để trống"));
         numberValidateError += 1;
     }
-    if (username === undefined || username === "") {
+    if (!username || username === "") {
         $(alertContainer).append(createAlerts("danger", "Username không được để trống"));
         numberValidateError += 1;
     }

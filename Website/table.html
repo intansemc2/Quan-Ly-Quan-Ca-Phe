@@ -21,7 +21,7 @@
         <li><a href="food.html"><i class="fas fa-utensils"></i>Thực phẩm</a></li>
         <li><a href="table.html"><i class="fas fa-table"></i>Bàn</a></li>
         <li><a href="history.html"><i class="fas fa-history"></i>Lịch sử giao dịch</a></li>
-        <li><a href="graph.html"><i class="fas fa-chart-line"></i>Biểu đồ thu nhập</a></li>
+        <!-- <li><a href="graph.html"><i class="fas fa-chart-line"></i>Biểu đồ thu nhập</a></li> -->
         <li><a href="contact.html"><i class="far fa-envelope"></i>Liên hệ</a></li>
         <li><a href="login.html"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a></li>
       </ul>
@@ -30,21 +30,29 @@
       <div class="body">
         <a href="javascript:" class="btn-add-table" onclick="hien5()">Thêm bàn</a>
         <a href="" class="btn-del-table">Xoá bàn</a>
+        <a href="" class="btn-sel-table">Chọn bàn</a>
+        <div class="details"></div>
+        <div id="details-id">: Bàn đang chọn</div>
+        <div class="details2"></div>
+        <div id="details2-id">: Bàn còn trống</div>
+        <div class="details3"></div>
+        <div id="details3-id">: Bàn đang được sử dụng</div>    
         <div class="wrapper">
-          <a href="#" class="button">Bàn 1</a>
-          <a href="#" class="button">Bàn 2</a>
-          <a href="#" class="button">Bàn 3</a>
-          <a href="#" class="button">Bàn 4</a>
-          <a href="#" class="button">Bàn 5</a>
-          <a href="#" class="button">Bàn 6</a>
-          <a href="#" class="button">Bàn 7</a>
-          <a href="#" class="button">Bàn 8</a>
-          <a href="#" class="button">Bàn 9</a>
-          <a href="#" class="button">Bàn 10</a>
-          <a href="#" class="button">Bàn 11</a>
-          <a href="#" class="button">Bàn 12</a>
+          <a href="#" class="button" id="table">Bàn 1</a>
+          <a href="#" class="button" id="table">Bàn 2</a>
+          <a href="#" class="button" id="table">Bàn 3</a>
+          <a href="#" class="button" id="table">Bàn 4</a>
+          <a href="#" class="button" id="table">Bàn 5</a>
+          <a href="#" class="button" id="table">Bàn 6</a>
+          <a href="#" class="button" id="table">Bàn 7</a>
+          <a href="#" class="button" id="table">Bàn 8</a>
+          <a href="#" class="button" id="table">Bàn 9</a>
+          <a href="#" class="button" id="table">Bàn 10</a>
+          <a href="#" class="button" id="table">Bàn 11</a>
+          <a href="#" class="button" id="table">Bàn 12</a>
         </div>
       </div>
+      <!-- <script src="js/selected-button-table.js"></script> -->
       <div id="add-table" class="frame-add-food" style="z-index: 2071;">
       <div class="modal">
         <span class="text-box">Thêm bàn</span>

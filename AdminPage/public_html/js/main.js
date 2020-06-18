@@ -31,5 +31,12 @@ $(document).ready(function () {
             $(this).addClass("btn-outline-info");
         }
     });
+
+    $(".modal").on("hidden.bs.modal", function () {
+        $('.modal').css('overflow-y', 'auto');
+    });
+    $(".modal").on("shown.bs.modal", function () {
+        $('.modal').css('overflow-y', 'auto');
+    });
 });
 // })(jQuery);

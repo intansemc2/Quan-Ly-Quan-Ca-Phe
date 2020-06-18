@@ -33,7 +33,7 @@ $(document).ready(function () {
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
 <button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaTaiKhoan" modify="${taikhoan.username}"><i class="fas fa-edit"></i></button>
-<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLTKRow(this)"><i class="fas fa-trash"></i></button>`
+<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLTKRow(this)"><i class="fas fa-trash"></i></button>`;
                     return `${renderData}`;
                 }
             }]

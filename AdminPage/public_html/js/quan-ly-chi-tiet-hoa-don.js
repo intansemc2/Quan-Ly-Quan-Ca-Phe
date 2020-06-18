@@ -48,20 +48,20 @@ $(document).ready(function () {
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
 <button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaChiTietHoaDon" modify="${chitiethoadon.id_hoa_don} ${chitiethoadon.id_san_pham}"><i class="fas fa-edit"></i></button>
-<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLCTHDRow(this)"><i class="fas fa-trash"></i></button>`
+<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLCTHDRow(this)"><i class="fas fa-trash"></i></button>`;
                     return `${renderData}`;
                 }
             }]
     });
 
     $("#danhDauTatCaChiTietHoaDon").click(function () {
-        $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
+        $("#modelChiTietHoaDon").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
     });
     $("#boDanhDauTatCaChiTietHoaDon").click(function () {
-        $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
+        $("#modelChiTietHoaDon").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
     });
     $("#xoaDanhDauChiTietHoaDon").click(function () {
-        let markedRows = $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton))
+        let markedRows = $("#modelChiTietHoaDon").find(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton))
                 .map((index, toggleButton) => $(toggleButton).parents("tr"));
         tableQuanLyChiTietHoaDon.rows(markedRows).remove().draw();
     });

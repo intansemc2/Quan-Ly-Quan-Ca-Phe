@@ -46,20 +46,20 @@ $(document).ready(function () {
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
 <button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaChiTietDatBan" modify="${chitietdatban.id_ban}"><i class="fas fa-edit"></i></button>
-<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLCTBanRow(this)"><i class="fas fa-trash"></i></button>`
+<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLCTBanRow(this)"><i class="fas fa-trash"></i></button>`;
                     return `${renderData}`;
                 }
             }]
     });
 
     $("#danhDauTatCaChiTietDatBan").click(function () {
-        $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
+        $("#modelChiTietDatBan").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
     });
     $("#boDanhDauTatCaChiTietDatBan").click(function () {
-        $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
+        $("#modelChiTietDatBan").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
     });
     $("#xoaDanhDauChiTietDatBan").click(function () {
-        let markedRows = $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton))
+        let markedRows = $("#modelChiTietDatBan").find(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton))
                 .map((index, toggleButton) => $(toggleButton).parents("tr"));
         tableQuanLyChiTietDatBan.rows(markedRows).remove().draw();
     });

@@ -75,8 +75,8 @@ $(document).ready(function () {
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
 <button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaHoaDon" modify="${hoadon.id_hoa_don}"><i class="fas fa-edit"></i></button>
-<button type="button" class="btn btn-outline-dark m-1" data-toggle="modal" data-target="#modelChiTietHoaDon" modify="${hoadon.id_hoa_don}"><i class="fas fa-cart-plus"></i></button>
-<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLHDRow(this)"><i class="fas fa-trash"></i></button>`
+<button type="button" class="btn btn-outline-dark m-1 so_san_pham" data-toggle="modal" data-target="#modelChiTietHoaDon" modify="${hoadon.id_hoa_don}" data="${hoadon.so_san_pham}">${hoadon.so_san_pham}<i class="fas fa-cart-plus ml-2"></i></button>
+<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLHDRow(this)"><i class="fas fa-trash"></i></button>`;
                     return `${renderData}`;
                 }
             }]
@@ -115,6 +115,7 @@ $(document).ready(function () {
         //Tạo hoá đơn mới 
         let newHoaDon = modifyHoaDon;
         newHoaDon.id_hoa_don = -1;
+        newHoaDon.so_san_pham = 0;
         //Thêm xuống CSDL
         let themHDResult = true;
         //Thêm thành công
@@ -179,7 +180,7 @@ $(document).ready(function () {
         if ($(rowHoaDon).find("button[data-target='#modelChiTietHoaDon']").length) {
             let modifyHoaDon = extractDataFromTableQLHDRow(rowHoaDon);
             $(this).attr("id_hoa_don", modifyHoaDon.id_hoa_don);
-            setModelSuaHoaDon(modifyHoaDon);
+
             $("#modelChiTietHoaDon").find("#hoaDonTitleInformation").text(`${$(rowHoaDon).find(".id_hoa_don").attr("data")}`);
              refreshDataTableQLCTHD();
          }
@@ -220,8 +221,9 @@ let extractDataFromTableQLHDRow = (tableRow) => {
     let phan_tram_tich_luy = $(tableRow).find(".phan_tram_tich_luy").attr("data");
     let so_luong_diem_doi = $(tableRow).find(".so_luong_diem_doi").attr("data");
     let ty_gia_diem_doi = $(tableRow).find(".ty_gia_diem_doi").attr("data");
+    let so_san_pham = $(tableRow).find(".so_san_pham").attr("data");
 
-    return {id_hoa_don: id_hoa_don, id_khach_hang: id_khach_hang, id_ban: id_ban, id_nhan_vien: id_nhan_vien, thoi_gian: thoi_gian, phan_tram_tich_luy:phan_tram_tich_luy, so_luong_diem_doi:so_luong_diem_doi, ty_gia_diem_doi:ty_gia_diem_doi};
+    return {id_hoa_don: id_hoa_don, id_khach_hang: id_khach_hang, id_ban: id_ban, id_nhan_vien: id_nhan_vien, thoi_gian: thoi_gian, phan_tram_tich_luy:phan_tram_tich_luy, so_luong_diem_doi:so_luong_diem_doi, ty_gia_diem_doi:ty_gia_diem_doi, so_san_pham: so_san_pham};
 };
 
 let refreshDataTableQLHD = () => {
@@ -267,8 +269,8 @@ let refreshDataTableQLHD = () => {
     //Lấy thông tin hóa đơn
     let hoadons = [];
     let n = Math.floor(Math.random()*10);
-    for (let i=0; i<10; i+=1) {
-        hoadons.push( {id_hoa_don: i, id_khach_hang: Math.floor(Math.random()*10), id_ban: Math.floor(Math.random()*10), id_nhan_vien: Math.floor(Math.random()*10), thoi_gian: new Date(2020, 1, Math.random()*28), phan_tram_tich_luy:Math.floor(Math.random()*100)/100, so_luong_diem_doi:Math.floor(Math.random()*1000), ty_gia_diem_doi:Math.floor(Math.random()*100)/100});
+    for (let i=0; i<n; i+=1) {
+        hoadons.push( {id_hoa_don: i, id_khach_hang: Math.floor(Math.random()*10), id_ban: Math.floor(Math.random()*10), id_nhan_vien: Math.floor(Math.random()*10), thoi_gian: new Date(2020, 1, Math.random()*28), phan_tram_tich_luy:Math.floor(Math.random()*100)/100, so_luong_diem_doi:Math.floor(Math.random()*1000), ty_gia_diem_doi:Math.floor(Math.random()*100)/100, so_san_pham: Math.floor(Math.random() * 100)});
     }
 
     //Thêm vào bảng
@@ -309,7 +311,9 @@ const extractFromModelHoaDon = (model) => {
     let so_luong_diem_doi = $(model).find(".so_luong_diem_doi").val();
     let ty_gia_diem_doi = $(model).find(".ty_gia_diem_doi").val();
 
-    return {id_hoa_don: id_hoa_don, id_khach_hang: id_khach_hang, id_ban: id_ban, id_nhan_vien: id_nhan_vien, thoi_gian: thoi_gian, phan_tram_tich_luy:phan_tram_tich_luy, so_luong_diem_doi:so_luong_diem_doi, ty_gia_diem_doi:ty_gia_diem_doi};
+    let so_san_pham = $(model).find(".so_san_pham").val();
+
+    return {id_hoa_don: id_hoa_don, id_khach_hang: id_khach_hang, id_ban: id_ban, id_nhan_vien: id_nhan_vien, thoi_gian: thoi_gian, phan_tram_tich_luy:phan_tram_tich_luy, so_luong_diem_doi:so_luong_diem_doi, ty_gia_diem_doi:ty_gia_diem_doi, so_san_pham: so_san_pham};
 };
 
 const setModelThemHoaDon = (modifyHoaDon) => {
@@ -333,6 +337,8 @@ const setToModelHoaDon = (model, hoadon) => {
     $(model).find(".phan_tram_tich_luy").val(hoadon.phan_tram_tich_luy);
     $(model).find(".so_luong_diem_doi").val(hoadon.so_luong_diem_doi);
     $(model).find(".ty_gia_diem_doi").val(hoadon.ty_gia_diem_doi);
+
+    $(model).find(".so_san_pham").val(hoadon.so_san_pham);
 };
 
 const validateHoaDonInformation = (alertContainer, hoadon) => {

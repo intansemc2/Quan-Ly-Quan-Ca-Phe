@@ -35,7 +35,7 @@ $(document).ready(function () {
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
 <button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaBan" modify="${ban.id_ban}"><i class="fas fa-edit"></i></button>
 <button type="button" class="btn btn-outline-dark m-1" data-toggle="modal" data-target="#modelChiTietBan" modify="${ban.id_ban}"><i class="fas fa-info"></i></button>
-<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLBanRow(this)"><i class="fas fa-trash"></i></button>`
+<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLBanRow(this)"><i class="fas fa-trash"></i></button>`;
                     return `${renderData}`;
                 }
             }]
@@ -75,9 +75,9 @@ $(document).ready(function () {
         let newBan = modifyBan;
         newBan.id_ban = -1;
         //Thêm xuống CSDL
-        let themNVResult = true;
+        let themBanResult = true;
         //Thêm thành công
-        if (themNVResult) {
+        if (themBanResult) {
             $("#modelThemBan").find("#themBanAlerts").append(createAlerts("success", "Thêm thành công"));
             //Thêm hoá đơn mới vào bảng
             $("#modelThemBan").find(".close").trigger("click");
@@ -110,10 +110,10 @@ $(document).ready(function () {
         let oldBanRow = $("#tableQuanLyBan").find("button[modify='" + modifyBan.id_ban + "']").parents("tr");
 
         //Sửa xuống CSDL
-        let suaNVResult = true;
+        let suaBanResult = true;
 
         //Sửa thành công
-        if (suaNVResult) {
+        if (suaBanResult) {
             $("#modelSuaBan").find("#suaBanAlerts").append(createAlerts("success", "Sửa thành công"));
 
             //Sửa hoá đơn mới vào bảng
@@ -138,8 +138,8 @@ $(document).ready(function () {
         if ($(rowBan).find("button[data-target='#modelChiTietBan']").length) {
             let modifyBan = extractDataFromTableQLBanRow(rowBan);
             $(this).attr("id_ban", modifyBan.id_ban);
-            setModelSuaBan(modifyBan);
-            $("#modelChiTietBan").find("#BanTitleInformation").text(`${$(rowBan).find(".id_ban").attr("data")}`);
+
+            $("#modelChiTietBan").find("#banTitleInformation").text(`${$(rowBan).find(".id_ban").attr("data")}`);
              refreshDataTableQLCTBan();
          }
     });

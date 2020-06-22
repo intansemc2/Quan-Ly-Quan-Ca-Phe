@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create property</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<div id="content"></div>
+	<script type="text/javascript">
+		let convertNameToSqlProperty = (name) => {
+			return name.toUpperCase();
+		};
+		let convertNameToCSProperty = (name) => {
+			return name
+				.split("_")
+				.map(item => item.charAt(0).toUpperCase()+item.slice(1))
+				.join("");
+		};
+		let createCSCodeConvertFromString = (input, type) => {
+			if (type === "int") {
+				return `Convert.ToInt32(${input})`;
+			}
+			if (type === "float") {
+				return `(float)Convert.ToDouble(${input})`;
+			}
+			return input;
+		};
+		let createCSCodeConditionAccept = (input, type) => {
+			if (type === "int") {
+				return `${input}  >= 0`;
+			}
+			if (type === "float") {
+				return `${input}  >= 0`;
+			}
+			return `${input}  != null`;
+		};
+
+		let content = document.querySelector("#content");
+		let datas = [
+			{
+				classname: "Ban", 
+				properties: [
+					{name: "id_Ban", type: "int"},
+					{name: "ten", type: "String"},
+					{name: "trang_Thai", type: "int"}
+				],
+				keys: ["id_Ban"]
+			},
+			{
+				classname: "Cthd", 
+				properties: [
+					{name: "id_Nhan_Vien", type: "int"},
+					{name: "id_San_Pham", type: "int"},
+					{name: "so_Luong", type: "int"},
+					{name: "don_Gia", type: "int"},
+					{name: "diem_Tich_Luy", type: "int"}
+				],
+				keys: ["id_Nhan_Vien", "id_San_Pham"]
+			},
+			{
+				classname: "Ctkm", 
+				properties: [
+					{name: "id_Khuyen_Mai", type: "int"},
+					{name: "id_San_Pham", type: "int"},
+					{name: "so_Luong", type: "int"},
+					{name: "don_Gia", type: "int"},
+					{name: "diem_Tich_Luy", type: "int"}
+				],
+				keys: ["id_Khuyen_Mai", "id_San_Pham"]
+			},
+			{
+				classname: "Dat_Ban", 
+				properties: [
+					{name: "username", type: "String"},
+					{name: "id_Ban", type: "int"},
+					{name: "thoi_GIan_Lap", type: "String"},
+					{name: "thoi_GIan_Nhan", type: "String"},
+					{name: "ghi_Chu", type: "String"}
+				],
+				keys: ["username", "id_Ban", "thoi_GIan_Lap"]
+			},
+			{
+				classname: "Hoa_Don", 
+				properties: [
+					{name: "id_Hoa_Don", type: "int"},
+					{name: "id_Khach_Hang", type: "int"},
+					{name: "id_Ban", type: "int"},
+					{name: "id_Nhan_Vien", type: "int"},
+					{name: "thoi_GIan", type: "String"},
+					{name: "phan_Tram_Tich_Luy", type: "float"},
+					{name: "so_Luong_Diem_Doi", type: "int"},
+					{name: "ty_Gia_Diem_Doi", type: "float"}
+				],
+				keys: ["id_Hoa_Don"]
+			},
+			{
+				classname: "Khach_Hang", 
+				properties: [
+					{name: "id_Khach_Hang", type: "int"},
+					{name: "ten", type: "String"},
+					{name: "sdt", type: "String"},
+					{name: "username", type: "String"},
+					{name: "diem_Tich_Luy", type: "int"}
+				],
+				keys: ["id_Khach_Hang"]
+			},
+			{
+				classname: "Khuyen_Mai", 
+				properties: [
+					{name: "id_Khuyen_Mai", type: "int"},
+					{name: "ten", type: "String"},
+					{name: "thoi_GIan_Dien_Ra", type: "String"},
+					{name: "thoi_GIan_Ket_Thuc", type: "String"}
+				],
+				keys: ["id_Khuyen_Mai"]
+			},
+			{
+				classname: "Loai_San_Pham", 
+				properties: [
+					{name: "id_LoaiSP", type: "int"},
+					{name: "ten", type: "String"}
+				],
+				keys: ["id_LoaiSP"]
+			},
+			{
+				classname: "Nhan_Vien", 
+				properties: [
+					{name: "id_Nhan_Vien", type: "int"},
+					{name: "ten", type: "String"},
+					{name: "sdt", type: "String"},
+					{name: "loai", type: "int"},
+					{name: "username", type: "String"}
+				],
+				keys: ["id_Nhan_Vien"]
+			},
+			{
+				classname: "San_Pham", 
+				properties: [
+					{name: "id_San_Pham", type: "int"},
+					{name: "id_LoaiSP", type: "int"},
+					{name: "ten", type: "String"},
+					{name: "gia", type: "int"},
+					{name: "diem_Tich_Luy", type: "int"},
+					{name: "description", type: "String"}
+				],
+				keys: ["id_San_Pham", "id_LoaiSP"]
+			},
+			{
+				classname: "Tai_Khoan", 
+				properties: [
+					{name: "username", type: "String"},
+					{name: "password", type: "String"},
+					{name: "type", type: "int"}
+				],
+				keys: ["username"]
+			}
+		];
+
+		content.innerHTML = "";
+		for (let data of datas) {
+			content.innerHTML += data.classname + "<br>";
+
+			let sqlTableName = convertNameToSqlProperty(data.classname);
+			let csTableName =convertNameToCSProperty(data.classname);
+
+			let sqlTableProperties = data.properties.map(item => convertNameToSqlProperty(item.name));
+			let csTableProperties = data.properties.map(item => convertNameToCSProperty(item.name));
+
+			let sqlTableKeys = data.keys.map(item => convertNameToSqlProperty(item));
+			let csTableKeys = data.keys.map(item => convertNameToCSProperty(item));
+
+			let newContent = `
+<textarea id='${csTableName}' style='width: 100%; height: 800px;'>
+
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace AdminASP.Models
+{
+public class ${csTableName}StoreContext : BaseStoreContext
+{
+
+public override BaseModel ConvertReaderToModelFind(MySqlDataReader reader)
+{
+    BaseModel model = new ${csTableName}()
+    {
+        ${
+        	csTableProperties.map((item, index) => `${item} = ${createCSCodeConvertFromString(`reader["${sqlTableProperties[index]}"].ToString()`, data.properties[index].type)}`).join(",\n")
+        }
+    };
+
+    return model;
+}
+
+public override BaseModel ConvertReaderToModelGetAll(MySqlDataReader reader)
+{
+    BaseModel model = new  ${csTableName}()
+    {
+        ${
+        	csTableProperties.map((item, index) => `${item} = ${createCSCodeConvertFromString(`reader["${sqlTableProperties[index]}"].ToString()`, data.properties[index].type)}`).join(",\n")
+        }
+    };
+
+    return model;
+}
+
+public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
+{
+     ${csTableName} currentModel = ( ${csTableName})model;
+    String query = "INSERT INTO ${sqlTableName} (${sqlTableProperties.join()}) VALUES (${sqlTableProperties.map(item => `@${item}`).join()})";
+
+    MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
+    ${
+    	sqlTableProperties.map((item, index) => `mySqlCommand.Parameters.AddWithValue("${item}", currentModel.${csTableProperties[index]});`).join("\n")
+    }
+
+    return mySqlCommand;
+}
+
+public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
+{
+    ${csTableName} currentModel = (${csTableName})model;
+    String query = "DELETE FROM ${sqlTableName} WHERE ${ sqlTableKeys.map(item => ` BAN.${item} = @${item} `).join(" AND ") }";
+
+    MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
+    ${
+    	sqlTableKeys.map((item, index) => `mySqlCommand.Parameters.AddWithValue("${item}", currentModel.${csTableKeys[index]});`).join("\n")
+    }
+
+    return mySqlCommand;
+}
+
+public override MySqlCommand CreateQueryEdit(MySqlConnection conn, BaseModel oldmodel, BaseModel newmodel)
+{
+    ${csTableName} oldcurrentModel = (${csTableName})oldmodel;
+    ${csTableName} newcurrentModel = (${csTableName})newmodel;
+    String query = "UPDATE ${sqlTableName} SET ${sqlTableProperties.map(item => `@${item}`).join()} WHERE ${ sqlTableKeys.map(item => ` BAN.${item} = @OLD_${item} `).join(" AND ") }";
+
+    MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
+    ${
+    	sqlTableProperties.map((item, index) => `mySqlCommand.Parameters.AddWithValue("${item}", newcurrentModel.${csTableProperties[index]});`).join("\n")
+    }
+    ${
+    	sqlTableKeys.map((item, index) => `mySqlCommand.Parameters.AddWithValue("OLD_${item}", oldcurrentModel.${csTableKeys[index]});`).join("\n")
+    }
+
+    return mySqlCommand;
+}
+
+public override MySqlCommand CreateQueryFind(MySqlConnection conn, BaseModel model)
+{
+    ${csTableName} currentModel = (${csTableName})model;
+
+    String query = "SELECT FROM ${sqlTableName} WHERE 1=1 ";
+    ${
+    	sqlTableProperties.map((item, index) => ` if (${createCSCodeConditionAccept(`currentModel.${csTableProperties[index]}`, data.properties[index].type)}) query += " AND ${sqlTableName}.${item} = @${item} ";`).join("\n")
+    }
+
+    MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
+    ${
+    	sqlTableProperties.map((item, index) => ` if (${createCSCodeConditionAccept(`currentModel.${csTableProperties[index]}`, data.properties[index].type)}) mySqlCommand.Parameters.AddWithValue("${item}", currentModel.${csTableProperties[index]});`).join("\n")
+    }
+
+    return mySqlCommand;
+}
+
+public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
+{
+    String query = "SELECT * FROM ${sqlTableName}";
+
+    MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
+
+    return mySqlCommand;
+}
+
+}
+}
+
+</textarea>
+			`;
+
+			// newContent = newContent.replace(/\n/g, "\n<br>\n");
+
+			content.innerHTML += newContent;
+
+			content.innerHTML += "<br>-----------------------------------------------------------------<br>";
+		}
+
+	</script>
+</body>
+</html>

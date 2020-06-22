@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AdminASP.Models
 {
-    public class TaiKhoan
+    public class TaiKhoan : BaseModel
     {
         private String username;
         public String Username { get { return this.username; } set { this.username = value; } }

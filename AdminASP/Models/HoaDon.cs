@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AdminASP.Models
 {
-    public class HoaDon
+    public class HoaDon : BaseModel
     {
         private int idHoaDon;
         public int IdHoaDon { get { return this.idHoaDon; } set { this.idHoaDon = value; } }

@@ -12,8 +12,6 @@ C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\bin\Debug\netcoreapp3.1\Adm
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.csprojAssemblyReference.cache
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.AssemblyInfoInputs.cache
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.AssemblyInfo.cs
-C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.csproj.CoreCompileInputs.cache
-C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.RazorAssemblyInfo.cache
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.RazorAssemblyInfo.cs
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.TagHelpers.input.cache

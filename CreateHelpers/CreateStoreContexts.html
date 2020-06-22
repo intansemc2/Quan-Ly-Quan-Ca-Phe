@@ -289,6 +289,26 @@ public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
 			content.innerHTML += "<br>-----------------------------------------------------------------<br>";
 		}
 
+		content.innerHTML += "<br>Startup Context:<br>";
+
+		content.innerHTML += `
+<textarea style='width: 100%; height: 800px;'>
+
+${
+	datas.map(data => {
+		let csTableName =convertNameToCSProperty(data.classname);
+		return `
+services.Add(new ServiceDescriptor(typeof(${csTableName}StoreContext), new ${csTableName}StoreContext() {
+	ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+}));`
+	}).join("\n")
+}
+
+</textarea>
+		`;
+
+		content.innerHTML += "<br>-----------------------------------------------------------------<br>";
+
 	</script>
 </body>
 </html>

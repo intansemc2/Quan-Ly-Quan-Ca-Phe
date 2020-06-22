@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AdminASP.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,7 +24,63 @@ namespace AdminASP
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            //services.AddControllersWithViews();
+            services.AddMvc();
+
+            services.Add(new ServiceDescriptor(typeof(BanStoreContext), new BanStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
+
+            services.Add(new ServiceDescriptor(typeof(CthdStoreContext), new CthdStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
+
+            services.Add(new ServiceDescriptor(typeof(CtkmStoreContext), new CtkmStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
+
+            services.Add(new ServiceDescriptor(typeof(DatBanStoreContext), new DatBanStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
+
+            services.Add(new ServiceDescriptor(typeof(HoaDonStoreContext), new HoaDonStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
+
+            services.Add(new ServiceDescriptor(typeof(KhachHangStoreContext), new KhachHangStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
+
+            services.Add(new ServiceDescriptor(typeof(KhuyenMaiStoreContext), new KhuyenMaiStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
+
+            services.Add(new ServiceDescriptor(typeof(LoaiSanPhamStoreContext), new LoaiSanPhamStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
+
+            services.Add(new ServiceDescriptor(typeof(NhanVienStoreContext), new NhanVienStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
+
+            services.Add(new ServiceDescriptor(typeof(SanPhamStoreContext), new SanPhamStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
+
+            services.Add(new ServiceDescriptor(typeof(TaiKhoanStoreContext), new TaiKhoanStoreContext()
+            {
+                ConnectionString = Configuration.GetConnectionString("DefaultConnection")
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

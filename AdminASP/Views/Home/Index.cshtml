@@ -1,1 +1,23 @@
 ﻿<a href="Admin/Tongquat">Admin Tongquat</a>
+
+<table border="1" cellpadding="0" cellspacing="0">
+    <tr>
+        <th>Id</th>
+        <th>Tên</th>
+        <th>Trạng thái</th>
+    </tr>
+
+    @{
+        List<AdminASP.Models.BaseModel> banBaseModels = ViewData["Bans"] as List<AdminASP.Models.BaseModel>;
+        foreach (var banBaseModel in banBaseModels)
+        {
+            Ban ban = (Ban)banBaseModel;
+            <tr>
+                <td>@ban.IdBan</td>
+                <td>@ban.Ten</td>
+                <td>@ban.TrangThai</td>
+            </tr>
+        }
+    }
+
+</table>

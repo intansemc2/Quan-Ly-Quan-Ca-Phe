@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Đăng ký - Quản lý quán cà phê</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Optional Stylesheets-->
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="~/liblaries/bootstrap.min.css">
+    <!-- Custom JavaScript-->
+    <link rel="stylesheet" href="~/css/main.css">
+</head>
+<body class="sb-nav-fixed">
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header">
+                                    <h3 class="text-center font-weight-light my-4">Tạo tài khoản mới</h3>
+                                </div>
+                                @{ 
+                                    List<String> errors = ViewData["errors"] as List<String>;
+                                    if (errors != null && errors.Count > 0)
+                                    {
+                                        @foreach (String error in errors)
+                                        {
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert"><span> @error </span><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+                                        }
+                                    }
+                                }
+                                <div class="card-body">
+                                    <form action="Register" method="POST">
+                                        @{ FormRegisterInput input = ViewData["input"] as FormRegisterInput;
+                                                        if (input == null)
+                                                        {
+                                                            input = new FormRegisterInput();
+                                                        } }
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="inputFirstName">Tên của bạn</label>
+                                                    <input class="form-control py-4" id="inputFirstName" type="text" name="Firstname" value="@input.Firstname" placeholder="Nhập tên và tên đêm của bạn">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="inputLastName">Họ của bạn</label>
+                                                    <input class="form-control py-4" id="inputLastName" type="text" name="Lastname" value="@input.Lastname" placeholder="Nhập họ của bạn">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="small mb-1" for="inputSdt">Số điện thoại</label>
+                                            <input class="form-control py-4" id="inputSdt" type="text" name="Sdt" value="@input.Sdt" placeholder="Nhập số điện thoại của bạn">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="small mb-1" for="inputUsername">Tên đăng nhập</label>
+                                            <input class="form-control py-4" id="inputUsername" type="text" name="Username" value="@input.Username" placeholder="Nhập tên đăng nhập của bạn">
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="inputPassword">Mật khẩu</label>
+                                                    <input class="form-control py-4" id="inputPassword" type="password" name="Password" value="@input.Password" placeholder="Nhập mật khẩu của bạn">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="inputConfirmPassword">Nhập lại mậu khẩu</label>
+                                                    <input class="form-control py-4" id="inputConfirmPassword" type="password" name="RePassword" value="@input.RePassword" placeholder="Nhập lại mật khẩu của bạn">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-4 mb-0">
+                                            <input class="btn btn-primary btn-block" type="submit" value="Tạo tài khoản mới">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <div class="small"><a href="Login">Bạn đã có tài khoản rồi? Đi tới trang Đăng nhập!</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div id="layoutAuthentication_footer">
+            <!-- Footer của content-->
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Nhóm framework số 1</div>
+                        <div><a href="#">Thông tin ứng dụng</a>                                ·<a href="#"> Thành viên tham gia project &amp; chi tiết</a></div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <!-- Optional JavaScript-->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS-->
+    <script type="text/javascript" src="~/liblaries/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/liblaries/bootstrap.bundle.min.js"></script>
+    <!-- Fontawesome-->
+    <script type="text/javascript" src="~/liblaries/fontawesome-all.min.js"></script>
+    <!-- Custom JavaScript-->
+    <script type="text/javascript" src="~/js/main.js"></script>
+</body>
+</html>

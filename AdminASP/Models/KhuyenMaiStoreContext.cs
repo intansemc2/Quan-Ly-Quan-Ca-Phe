@@ -38,7 +38,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             KhuyenMai currentModel = (KhuyenMai)model;
-            String query = "INSERT INTO KHUYEN_MAI (ID_KHUYEN_MAI,TEN,THOI_GIAN_DIEN_RA,THOI_GIAN_KET_THUC) VALUES (@ID_KHUYEN_MAI,@TEN,@THOI_GIAN_DIEN_RA,@THOI_GIAN_KET_THUC)";
+            String query = "INSERT INTO khuyen_mai (ID_KHUYEN_MAI,TEN,THOI_GIAN_DIEN_RA,THOI_GIAN_KET_THUC) VALUES (@ID_KHUYEN_MAI,@TEN,@THOI_GIAN_DIEN_RA,@THOI_GIAN_KET_THUC)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_KHUYEN_MAI", currentModel.IdKhuyenMai);
@@ -52,7 +52,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             KhuyenMai currentModel = (KhuyenMai)model;
-            String query = "DELETE FROM KHUYEN_MAI WHERE  BAN.ID_KHUYEN_MAI = @ID_KHUYEN_MAI ";
+            String query = "DELETE FROM khuyen_mai WHERE  BAN.ID_KHUYEN_MAI = @ID_KHUYEN_MAI ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_KHUYEN_MAI", currentModel.IdKhuyenMai);
@@ -64,7 +64,7 @@ namespace AdminASP.Models
         {
             KhuyenMai oldcurrentModel = (KhuyenMai)oldmodel;
             KhuyenMai newcurrentModel = (KhuyenMai)newmodel;
-            String query = "UPDATE KHUYEN_MAI SET @ID_KHUYEN_MAI,@TEN,@THOI_GIAN_DIEN_RA,@THOI_GIAN_KET_THUC WHERE  BAN.ID_KHUYEN_MAI = @OLD_ID_KHUYEN_MAI ";
+            String query = "UPDATE khuyen_mai SET @ID_KHUYEN_MAI,@TEN,@THOI_GIAN_DIEN_RA,@THOI_GIAN_KET_THUC WHERE  BAN.ID_KHUYEN_MAI = @OLD_ID_KHUYEN_MAI ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_KHUYEN_MAI", newcurrentModel.IdKhuyenMai);
@@ -80,11 +80,11 @@ namespace AdminASP.Models
         {
             KhuyenMai currentModel = (KhuyenMai)model;
 
-            String query = "SELECT FROM KHUYEN_MAI WHERE 1=1 ";
-            if (currentModel.IdKhuyenMai >= 0) query += " AND KHUYEN_MAI.ID_KHUYEN_MAI = @ID_KHUYEN_MAI ";
-            if (currentModel.Ten != null) query += " AND KHUYEN_MAI.TEN = @TEN ";
-            if (currentModel.ThoiGIanDienRa != null) query += " AND KHUYEN_MAI.THOI_GIAN_DIEN_RA = @THOI_GIAN_DIEN_RA ";
-            if (currentModel.ThoiGIanKetThuc != null) query += " AND KHUYEN_MAI.THOI_GIAN_KET_THUC = @THOI_GIAN_KET_THUC ";
+            String query = "SELECT * FROM khuyen_mai WHERE 1=1 ";
+            if (currentModel.IdKhuyenMai >= 0) query += " AND khuyen_mai.ID_KHUYEN_MAI = @ID_KHUYEN_MAI ";
+            if (currentModel.Ten != null) query += " AND khuyen_mai.TEN = @TEN ";
+            if (currentModel.ThoiGIanDienRa != null) query += " AND khuyen_mai.THOI_GIAN_DIEN_RA = @THOI_GIAN_DIEN_RA ";
+            if (currentModel.ThoiGIanKetThuc != null) query += " AND khuyen_mai.THOI_GIAN_KET_THUC = @THOI_GIAN_KET_THUC ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdKhuyenMai >= 0) mySqlCommand.Parameters.AddWithValue("ID_KHUYEN_MAI", currentModel.IdKhuyenMai);
@@ -97,7 +97,7 @@ namespace AdminASP.Models
 
         public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
         {
-            String query = "SELECT * FROM KHUYEN_MAI";
+            String query = "SELECT * FROM khuyen_mai";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 

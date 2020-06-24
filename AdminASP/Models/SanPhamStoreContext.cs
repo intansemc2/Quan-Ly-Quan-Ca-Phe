@@ -42,7 +42,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             SanPham currentModel = (SanPham)model;
-            String query = "INSERT INTO SAN_PHAM (ID_SAN_PHAM,ID_LOAISP,TEN,GIA,DIEM_TICH_LUY,DESCRIPTION) VALUES (@ID_SAN_PHAM,@ID_LOAISP,@TEN,@GIA,@DIEM_TICH_LUY,@DESCRIPTION)";
+            String query = "INSERT INTO san_pham (ID_SAN_PHAM,ID_LOAISP,TEN,GIA,DIEM_TICH_LUY,DESCRIPTION) VALUES (@ID_SAN_PHAM,@ID_LOAISP,@TEN,@GIA,@DIEM_TICH_LUY,@DESCRIPTION)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", currentModel.IdSanPham);
@@ -58,7 +58,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             SanPham currentModel = (SanPham)model;
-            String query = "DELETE FROM SAN_PHAM WHERE  BAN.ID_SAN_PHAM = @ID_SAN_PHAM  AND  BAN.ID_LOAISP = @ID_LOAISP ";
+            String query = "DELETE FROM san_pham WHERE  BAN.ID_SAN_PHAM = @ID_SAN_PHAM  AND  BAN.ID_LOAISP = @ID_LOAISP ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", currentModel.IdSanPham);
@@ -71,7 +71,7 @@ namespace AdminASP.Models
         {
             SanPham oldcurrentModel = (SanPham)oldmodel;
             SanPham newcurrentModel = (SanPham)newmodel;
-            String query = "UPDATE SAN_PHAM SET @ID_SAN_PHAM,@ID_LOAISP,@TEN,@GIA,@DIEM_TICH_LUY,@DESCRIPTION WHERE  BAN.ID_SAN_PHAM = @OLD_ID_SAN_PHAM  AND  BAN.ID_LOAISP = @OLD_ID_LOAISP ";
+            String query = "UPDATE san_pham SET @ID_SAN_PHAM,@ID_LOAISP,@TEN,@GIA,@DIEM_TICH_LUY,@DESCRIPTION WHERE  BAN.ID_SAN_PHAM = @OLD_ID_SAN_PHAM  AND  BAN.ID_LOAISP = @OLD_ID_LOAISP ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", newcurrentModel.IdSanPham);
@@ -90,13 +90,13 @@ namespace AdminASP.Models
         {
             SanPham currentModel = (SanPham)model;
 
-            String query = "SELECT FROM SAN_PHAM WHERE 1=1 ";
-            if (currentModel.IdSanPham >= 0) query += " AND SAN_PHAM.ID_SAN_PHAM = @ID_SAN_PHAM ";
-            if (currentModel.IdLoaiSP >= 0) query += " AND SAN_PHAM.ID_LOAISP = @ID_LOAISP ";
-            if (currentModel.Ten != null) query += " AND SAN_PHAM.TEN = @TEN ";
-            if (currentModel.Gia >= 0) query += " AND SAN_PHAM.GIA = @GIA ";
-            if (currentModel.DiemTichLuy >= 0) query += " AND SAN_PHAM.DIEM_TICH_LUY = @DIEM_TICH_LUY ";
-            if (currentModel.Description != null) query += " AND SAN_PHAM.DESCRIPTION = @DESCRIPTION ";
+            String query = "SELECT * FROM san_pham WHERE 1=1 ";
+            if (currentModel.IdSanPham >= 0) query += " AND san_pham.ID_SAN_PHAM = @ID_SAN_PHAM ";
+            if (currentModel.IdLoaiSP >= 0) query += " AND san_pham.ID_LOAISP = @ID_LOAISP ";
+            if (currentModel.Ten != null) query += " AND san_pham.TEN = @TEN ";
+            if (currentModel.Gia >= 0) query += " AND san_pham.GIA = @GIA ";
+            if (currentModel.DiemTichLuy >= 0) query += " AND san_pham.DIEM_TICH_LUY = @DIEM_TICH_LUY ";
+            if (currentModel.Description != null) query += " AND san_pham.DESCRIPTION = @DESCRIPTION ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdSanPham >= 0) mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", currentModel.IdSanPham);
@@ -111,7 +111,7 @@ namespace AdminASP.Models
 
         public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
         {
-            String query = "SELECT * FROM SAN_PHAM";
+            String query = "SELECT * FROM san_pham";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 

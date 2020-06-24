@@ -8,7 +8,7 @@
 	<div id="content"></div>
 	<script type="text/javascript">
 		let convertNameToSqlProperty = (name) => {
-			return name.toUpperCase();
+			return name.toLowerCase();
 		};
 		let convertNameToCSProperty = (name) => {
 			return name
@@ -254,7 +254,7 @@ public override MySqlCommand CreateQueryFind(MySqlConnection conn, BaseModel mod
 {
     ${csTableName} currentModel = (${csTableName})model;
 
-    String query = "SELECT FROM ${sqlTableName} WHERE 1=1 ";
+    String query = "SELECT * FROM ${sqlTableName} WHERE 1=1 ";
     ${
     	sqlTableProperties.map((item, index) => ` if (${createCSCodeConditionAccept(`currentModel.${csTableProperties[index]}`, data.properties[index].type)}) query += " AND ${sqlTableName}.${item} = @${item} ";`).join("\n")
     }

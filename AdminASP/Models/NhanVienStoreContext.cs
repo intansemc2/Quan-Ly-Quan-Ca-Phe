@@ -40,7 +40,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             NhanVien currentModel = (NhanVien)model;
-            String query = "INSERT INTO NHAN_VIEN (ID_NHAN_VIEN,TEN,SDT,LOAI,USERNAME) VALUES (@ID_NHAN_VIEN,@TEN,@SDT,@LOAI,@USERNAME)";
+            String query = "INSERT INTO nhan_vien (ID_NHAN_VIEN,TEN,SDT,LOAI,USERNAME) VALUES (@ID_NHAN_VIEN,@TEN,@SDT,@LOAI,@USERNAME)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", currentModel.IdNhanVien);
@@ -55,7 +55,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             NhanVien currentModel = (NhanVien)model;
-            String query = "DELETE FROM NHAN_VIEN WHERE  BAN.ID_NHAN_VIEN = @ID_NHAN_VIEN ";
+            String query = "DELETE FROM nhan_vien WHERE  BAN.ID_NHAN_VIEN = @ID_NHAN_VIEN ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", currentModel.IdNhanVien);
@@ -67,7 +67,7 @@ namespace AdminASP.Models
         {
             NhanVien oldcurrentModel = (NhanVien)oldmodel;
             NhanVien newcurrentModel = (NhanVien)newmodel;
-            String query = "UPDATE NHAN_VIEN SET @ID_NHAN_VIEN,@TEN,@SDT,@LOAI,@USERNAME WHERE  BAN.ID_NHAN_VIEN = @OLD_ID_NHAN_VIEN ";
+            String query = "UPDATE nhan_vien SET @ID_NHAN_VIEN,@TEN,@SDT,@LOAI,@USERNAME WHERE  BAN.ID_NHAN_VIEN = @OLD_ID_NHAN_VIEN ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", newcurrentModel.IdNhanVien);
@@ -84,12 +84,12 @@ namespace AdminASP.Models
         {
             NhanVien currentModel = (NhanVien)model;
 
-            String query = "SELECT FROM NHAN_VIEN WHERE 1=1 ";
-            if (currentModel.IdNhanVien >= 0) query += " AND NHAN_VIEN.ID_NHAN_VIEN = @ID_NHAN_VIEN ";
-            if (currentModel.Ten != null) query += " AND NHAN_VIEN.TEN = @TEN ";
-            if (currentModel.Sdt != null) query += " AND NHAN_VIEN.SDT = @SDT ";
-            if (currentModel.Loai >= 0) query += " AND NHAN_VIEN.LOAI = @LOAI ";
-            if (currentModel.Username != null) query += " AND NHAN_VIEN.USERNAME = @USERNAME ";
+            String query = "SELECT * FROM nhan_vien WHERE 1=1 ";
+            if (currentModel.IdNhanVien >= 0) query += " AND nhan_vien.ID_NHAN_VIEN = @ID_NHAN_VIEN ";
+            if (currentModel.Ten != null) query += " AND nhan_vien.TEN = @TEN ";
+            if (currentModel.Sdt != null) query += " AND nhan_vien.SDT = @SDT ";
+            if (currentModel.Loai >= 0) query += " AND nhan_vien.LOAI = @LOAI ";
+            if (currentModel.Username != null) query += " AND nhan_vien.USERNAME = @USERNAME ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdNhanVien >= 0) mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", currentModel.IdNhanVien);
@@ -103,7 +103,7 @@ namespace AdminASP.Models
 
         public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
         {
-            String query = "SELECT * FROM NHAN_VIEN";
+            String query = "SELECT * FROM nhan_vien";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 

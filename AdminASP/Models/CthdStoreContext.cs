@@ -40,7 +40,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             Cthd currentModel = (Cthd)model;
-            String query = "INSERT INTO CTHD (ID_NHAN_VIEN,ID_SAN_PHAM,SO_LUONG,DON_GIA,DIEM_TICH_LUY) VALUES (@ID_NHAN_VIEN,@ID_SAN_PHAM,@SO_LUONG,@DON_GIA,@DIEM_TICH_LUY)";
+            String query = "INSERT INTO cthd (ID_NHAN_VIEN,ID_SAN_PHAM,SO_LUONG,DON_GIA,DIEM_TICH_LUY) VALUES (@ID_NHAN_VIEN,@ID_SAN_PHAM,@SO_LUONG,@DON_GIA,@DIEM_TICH_LUY)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", currentModel.IdNhanVien);
@@ -55,7 +55,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             Cthd currentModel = (Cthd)model;
-            String query = "DELETE FROM CTHD WHERE BAN.ID_NHAN_VIEN = @ID_NHAN_VIEN AND BAN.ID_SAN_PHAM = @ID_SAN_PHAM ";
+            String query = "DELETE FROM cthd WHERE BAN.ID_NHAN_VIEN = @ID_NHAN_VIEN AND BAN.ID_SAN_PHAM = @ID_SAN_PHAM ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", currentModel.IdNhanVien);
@@ -68,7 +68,7 @@ namespace AdminASP.Models
         {
             Cthd oldcurrentModel = (Cthd)oldmodel;
             Cthd newcurrentModel = (Cthd)newmodel;
-            String query = "UPDATE CTHD SET @ID_NHAN_VIEN,@ID_SAN_PHAM,@SO_LUONG,@DON_GIA,@DIEM_TICH_LUY WHERE BAN.ID_NHAN_VIEN = @OLD_ID_NHAN_VIEN AND BAN.ID_SAN_PHAM = @OLD_ID_SAN_PHAM ";
+            String query = "UPDATE cthd SET @ID_NHAN_VIEN,@ID_SAN_PHAM,@SO_LUONG,@DON_GIA,@DIEM_TICH_LUY WHERE BAN.ID_NHAN_VIEN = @OLD_ID_NHAN_VIEN AND BAN.ID_SAN_PHAM = @OLD_ID_SAN_PHAM ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", newcurrentModel.IdNhanVien);
@@ -86,12 +86,12 @@ namespace AdminASP.Models
         {
             Cthd currentModel = (Cthd)model;
 
-            String query = "SELECT FROM CTHD WHERE 1=1 ";
-            if (currentModel.IdNhanVien >= 0) query += " AND CTHD.ID_NHAN_VIEN = @ID_NHAN_VIEN ";
-            if (currentModel.IdSanPham >= 0) query += " AND CTHD.ID_SAN_PHAM = @ID_SAN_PHAM ";
-            if (currentModel.SoLuong >= 0) query += " AND CTHD.SO_LUONG = @SO_LUONG ";
-            if (currentModel.DonGia >= 0) query += " AND CTHD.DON_GIA = @DON_GIA ";
-            if (currentModel.DiemTichLuy >= 0) query += " AND CTHD.DIEM_TICH_LUY = @DIEM_TICH_LUY ";
+            String query = "SELECT * FROM cthd WHERE 1=1 ";
+            if (currentModel.IdNhanVien >= 0) query += " AND cthd.ID_NHAN_VIEN = @ID_NHAN_VIEN ";
+            if (currentModel.IdSanPham >= 0) query += " AND cthd.ID_SAN_PHAM = @ID_SAN_PHAM ";
+            if (currentModel.SoLuong >= 0) query += " AND cthd.SO_LUONG = @SO_LUONG ";
+            if (currentModel.DonGia >= 0) query += " AND cthd.DON_GIA = @DON_GIA ";
+            if (currentModel.DiemTichLuy >= 0) query += " AND cthd.DIEM_TICH_LUY = @DIEM_TICH_LUY ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdNhanVien >= 0) mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", currentModel.IdNhanVien);
@@ -105,7 +105,7 @@ namespace AdminASP.Models
 
         public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
         {
-            String query = "SELECT * FROM CTHD";
+            String query = "SELECT * FROM cthd";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 

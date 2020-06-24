@@ -10,7 +10,7 @@ namespace AdminASP.Controllers
     {
         public IActionResult Index()
         {
-            return this.Tongquat();
+            return RedirectToAction("Tongquat", "Admin");
         }
 
         public IActionResult ForgotPassword()

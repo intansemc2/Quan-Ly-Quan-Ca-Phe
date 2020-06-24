@@ -46,7 +46,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             HoaDon currentModel = (HoaDon)model;
-            String query = "INSERT INTO HOA_DON (ID_HOA_DON,ID_KHACH_HANG,ID_BAN,ID_NHAN_VIEN,THOI_GIAN,PHAN_TRAM_TICH_LUY,SO_LUONG_DIEM_DOI,TY_GIA_DIEM_DOI) VALUES (@ID_HOA_DON,@ID_KHACH_HANG,@ID_BAN,@ID_NHAN_VIEN,@THOI_GIAN,@PHAN_TRAM_TICH_LUY,@SO_LUONG_DIEM_DOI,@TY_GIA_DIEM_DOI)";
+            String query = "INSERT INTO hoa_don (ID_HOA_DON,ID_KHACH_HANG,ID_BAN,ID_NHAN_VIEN,THOI_GIAN,PHAN_TRAM_TICH_LUY,SO_LUONG_DIEM_DOI,TY_GIA_DIEM_DOI) VALUES (@ID_HOA_DON,@ID_KHACH_HANG,@ID_BAN,@ID_NHAN_VIEN,@THOI_GIAN,@PHAN_TRAM_TICH_LUY,@SO_LUONG_DIEM_DOI,@TY_GIA_DIEM_DOI)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", currentModel.IdHoaDon);
@@ -64,7 +64,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             HoaDon currentModel = (HoaDon)model;
-            String query = "DELETE FROM HOA_DON WHERE  BAN.ID_HOA_DON = @ID_HOA_DON ";
+            String query = "DELETE FROM hoa_don WHERE  BAN.ID_HOA_DON = @ID_HOA_DON ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", currentModel.IdHoaDon);
@@ -76,7 +76,7 @@ namespace AdminASP.Models
         {
             HoaDon oldcurrentModel = (HoaDon)oldmodel;
             HoaDon newcurrentModel = (HoaDon)newmodel;
-            String query = "UPDATE HOA_DON SET @ID_HOA_DON,@ID_KHACH_HANG,@ID_BAN,@ID_NHAN_VIEN,@THOI_GIAN,@PHAN_TRAM_TICH_LUY,@SO_LUONG_DIEM_DOI,@TY_GIA_DIEM_DOI WHERE  BAN.ID_HOA_DON = @OLD_ID_HOA_DON ";
+            String query = "UPDATE hoa_don SET @ID_HOA_DON,@ID_KHACH_HANG,@ID_BAN,@ID_NHAN_VIEN,@THOI_GIAN,@PHAN_TRAM_TICH_LUY,@SO_LUONG_DIEM_DOI,@TY_GIA_DIEM_DOI WHERE  BAN.ID_HOA_DON = @OLD_ID_HOA_DON ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", newcurrentModel.IdHoaDon);
@@ -96,15 +96,15 @@ namespace AdminASP.Models
         {
             HoaDon currentModel = (HoaDon)model;
 
-            String query = "SELECT FROM HOA_DON WHERE 1=1 ";
-            if (currentModel.IdHoaDon >= 0) query += " AND HOA_DON.ID_HOA_DON = @ID_HOA_DON ";
-            if (currentModel.IdKhachHang >= 0) query += " AND HOA_DON.ID_KHACH_HANG = @ID_KHACH_HANG ";
-            if (currentModel.IdBan >= 0) query += " AND HOA_DON.ID_BAN = @ID_BAN ";
-            if (currentModel.IdNhanVien >= 0) query += " AND HOA_DON.ID_NHAN_VIEN = @ID_NHAN_VIEN ";
-            if (currentModel.ThoiGIan != null) query += " AND HOA_DON.THOI_GIAN = @THOI_GIAN ";
-            if (currentModel.PhanTramTichLuy >= 0) query += " AND HOA_DON.PHAN_TRAM_TICH_LUY = @PHAN_TRAM_TICH_LUY ";
-            if (currentModel.SoLuongDiemDoi >= 0) query += " AND HOA_DON.SO_LUONG_DIEM_DOI = @SO_LUONG_DIEM_DOI ";
-            if (currentModel.TyGiaDiemDoi >= 0) query += " AND HOA_DON.TY_GIA_DIEM_DOI = @TY_GIA_DIEM_DOI ";
+            String query = "SELECT * FROM hoa_don WHERE 1=1 ";
+            if (currentModel.IdHoaDon >= 0) query += " AND hoa_don.ID_HOA_DON = @ID_HOA_DON ";
+            if (currentModel.IdKhachHang >= 0) query += " AND hoa_don.ID_KHACH_HANG = @ID_KHACH_HANG ";
+            if (currentModel.IdBan >= 0) query += " AND hoa_don.ID_BAN = @ID_BAN ";
+            if (currentModel.IdNhanVien >= 0) query += " AND hoa_don.ID_NHAN_VIEN = @ID_NHAN_VIEN ";
+            if (currentModel.ThoiGIan != null) query += " AND hoa_don.THOI_GIAN = @THOI_GIAN ";
+            if (currentModel.PhanTramTichLuy >= 0) query += " AND hoa_don.PHAN_TRAM_TICH_LUY = @PHAN_TRAM_TICH_LUY ";
+            if (currentModel.SoLuongDiemDoi >= 0) query += " AND hoa_don.SO_LUONG_DIEM_DOI = @SO_LUONG_DIEM_DOI ";
+            if (currentModel.TyGiaDiemDoi >= 0) query += " AND hoa_don.TY_GIA_DIEM_DOI = @TY_GIA_DIEM_DOI ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdHoaDon >= 0) mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", currentModel.IdHoaDon);
@@ -121,7 +121,7 @@ namespace AdminASP.Models
 
         public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
         {
-            String query = "SELECT * FROM HOA_DON";
+            String query = "SELECT * FROM hoa_don";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 

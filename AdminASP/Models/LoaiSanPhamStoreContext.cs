@@ -34,7 +34,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             LoaiSanPham currentModel = (LoaiSanPham)model;
-            String query = "INSERT INTO LOAI_SAN_PHAM (ID_LOAISP,TEN) VALUES (@ID_LOAISP,@TEN)";
+            String query = "INSERT INTO loai_san_pham (ID_LOAISP,TEN) VALUES (@ID_LOAISP,@TEN)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_LOAISP", currentModel.IdLoaiSP);
@@ -46,7 +46,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             LoaiSanPham currentModel = (LoaiSanPham)model;
-            String query = "DELETE FROM LOAI_SAN_PHAM WHERE  BAN.ID_LOAISP = @ID_LOAISP ";
+            String query = "DELETE FROM loai_san_pham WHERE  BAN.ID_LOAISP = @ID_LOAISP ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_LOAISP", currentModel.IdLoaiSP);
@@ -58,7 +58,7 @@ namespace AdminASP.Models
         {
             LoaiSanPham oldcurrentModel = (LoaiSanPham)oldmodel;
             LoaiSanPham newcurrentModel = (LoaiSanPham)newmodel;
-            String query = "UPDATE LOAI_SAN_PHAM SET @ID_LOAISP,@TEN WHERE  BAN.ID_LOAISP = @OLD_ID_LOAISP ";
+            String query = "UPDATE loai_san_pham SET @ID_LOAISP,@TEN WHERE  BAN.ID_LOAISP = @OLD_ID_LOAISP ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_LOAISP", newcurrentModel.IdLoaiSP);
@@ -72,9 +72,9 @@ namespace AdminASP.Models
         {
             LoaiSanPham currentModel = (LoaiSanPham)model;
 
-            String query = "SELECT FROM LOAI_SAN_PHAM WHERE 1=1 ";
-            if (currentModel.IdLoaiSP >= 0) query += " AND LOAI_SAN_PHAM.ID_LOAISP = @ID_LOAISP ";
-            if (currentModel.Ten != null) query += " AND LOAI_SAN_PHAM.TEN = @TEN ";
+            String query = "SELECT * FROM loai_san_pham WHERE 1=1 ";
+            if (currentModel.IdLoaiSP >= 0) query += " AND loai_san_pham.ID_LOAISP = @ID_LOAISP ";
+            if (currentModel.Ten != null) query += " AND loai_san_pham.TEN = @TEN ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdLoaiSP >= 0) mySqlCommand.Parameters.AddWithValue("ID_LOAISP", currentModel.IdLoaiSP);
@@ -85,7 +85,7 @@ namespace AdminASP.Models
 
         public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
         {
-            String query = "SELECT * FROM LOAI_SAN_PHAM";
+            String query = "SELECT * FROM loai_san_pham";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 

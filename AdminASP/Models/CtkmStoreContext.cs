@@ -40,7 +40,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             Ctkm currentModel = (Ctkm)model;
-            String query = "INSERT INTO CTKM (ID_KHUYEN_MAI,ID_SAN_PHAM,SO_LUONG,DON_GIA,DIEM_TICH_LUY) VALUES (@ID_KHUYEN_MAI,@ID_SAN_PHAM,@SO_LUONG,@DON_GIA,@DIEM_TICH_LUY)";
+            String query = "INSERT INTO ctkm (ID_KHUYEN_MAI,ID_SAN_PHAM,SO_LUONG,DON_GIA,DIEM_TICH_LUY) VALUES (@ID_KHUYEN_MAI,@ID_SAN_PHAM,@SO_LUONG,@DON_GIA,@DIEM_TICH_LUY)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_KHUYEN_MAI", currentModel.IdKhuyenMai);
@@ -55,7 +55,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             Ctkm currentModel = (Ctkm)model;
-            String query = "DELETE FROM CTKM WHERE  BAN.ID_KHUYEN_MAI = @ID_KHUYEN_MAI  AND  BAN.ID_SAN_PHAM = @ID_SAN_PHAM ";
+            String query = "DELETE FROM ctkm WHERE  BAN.ID_KHUYEN_MAI = @ID_KHUYEN_MAI  AND  BAN.ID_SAN_PHAM = @ID_SAN_PHAM ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_KHUYEN_MAI", currentModel.IdKhuyenMai);
@@ -68,7 +68,7 @@ namespace AdminASP.Models
         {
             Ctkm oldcurrentModel = (Ctkm)oldmodel;
             Ctkm newcurrentModel = (Ctkm)newmodel;
-            String query = "UPDATE CTKM SET @ID_KHUYEN_MAI,@ID_SAN_PHAM,@SO_LUONG,@DON_GIA,@DIEM_TICH_LUY WHERE  BAN.ID_KHUYEN_MAI = @OLD_ID_KHUYEN_MAI  AND  BAN.ID_SAN_PHAM = @OLD_ID_SAN_PHAM ";
+            String query = "UPDATE ctkm SET @ID_KHUYEN_MAI,@ID_SAN_PHAM,@SO_LUONG,@DON_GIA,@DIEM_TICH_LUY WHERE  BAN.ID_KHUYEN_MAI = @OLD_ID_KHUYEN_MAI  AND  BAN.ID_SAN_PHAM = @OLD_ID_SAN_PHAM ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_KHUYEN_MAI", newcurrentModel.IdKhuyenMai);
@@ -86,12 +86,12 @@ namespace AdminASP.Models
         {
             Ctkm currentModel = (Ctkm)model;
 
-            String query = "SELECT FROM CTKM WHERE 1=1 ";
-            if (currentModel.IdKhuyenMai >= 0) query += " AND CTKM.ID_KHUYEN_MAI = @ID_KHUYEN_MAI ";
-            if (currentModel.IdSanPham >= 0) query += " AND CTKM.ID_SAN_PHAM = @ID_SAN_PHAM ";
-            if (currentModel.SoLuong >= 0) query += " AND CTKM.SO_LUONG = @SO_LUONG ";
-            if (currentModel.DonGia >= 0) query += " AND CTKM.DON_GIA = @DON_GIA ";
-            if (currentModel.DiemTichLuy >= 0) query += " AND CTKM.DIEM_TICH_LUY = @DIEM_TICH_LUY ";
+            String query = "SELECT * FROM ctkm WHERE 1=1 ";
+            if (currentModel.IdKhuyenMai >= 0) query += " AND ctkm.ID_KHUYEN_MAI = @ID_KHUYEN_MAI ";
+            if (currentModel.IdSanPham >= 0) query += " AND ctkm.ID_SAN_PHAM = @ID_SAN_PHAM ";
+            if (currentModel.SoLuong >= 0) query += " AND ctkm.SO_LUONG = @SO_LUONG ";
+            if (currentModel.DonGia >= 0) query += " AND ctkm.DON_GIA = @DON_GIA ";
+            if (currentModel.DiemTichLuy >= 0) query += " AND ctkm.DIEM_TICH_LUY = @DIEM_TICH_LUY ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdKhuyenMai >= 0) mySqlCommand.Parameters.AddWithValue("ID_KHUYEN_MAI", currentModel.IdKhuyenMai);
@@ -105,7 +105,7 @@ namespace AdminASP.Models
 
         public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
         {
-            String query = "SELECT * FROM CTKM";
+            String query = "SELECT * FROM ctkm";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 

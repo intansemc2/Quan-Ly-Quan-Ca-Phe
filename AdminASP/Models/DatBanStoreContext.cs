@@ -40,7 +40,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             DatBan currentModel = (DatBan)model;
-            String query = "INSERT INTO DAT_BAN (USERNAME,ID_BAN,THOI_GIAN_LAP,THOI_GIAN_NHAN,GHI_CHU) VALUES (@USERNAME,@ID_BAN,@THOI_GIAN_LAP,@THOI_GIAN_NHAN,@GHI_CHU)";
+            String query = "INSERT INTO dat_ban (USERNAME,ID_BAN,THOI_GIAN_LAP,THOI_GIAN_NHAN,GHI_CHU) VALUES (@USERNAME,@ID_BAN,@THOI_GIAN_LAP,@THOI_GIAN_NHAN,@GHI_CHU)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("USERNAME", currentModel.Username);
@@ -55,7 +55,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             DatBan currentModel = (DatBan)model;
-            String query = "DELETE FROM DAT_BAN WHERE  BAN.USERNAME = @USERNAME  AND  BAN.ID_BAN = @ID_BAN  AND  BAN.THOI_GIAN_LAP = @THOI_GIAN_LAP ";
+            String query = "DELETE FROM dat_ban WHERE  BAN.USERNAME = @USERNAME  AND  BAN.ID_BAN = @ID_BAN  AND  BAN.THOI_GIAN_LAP = @THOI_GIAN_LAP ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("USERNAME", currentModel.Username);
@@ -69,7 +69,7 @@ namespace AdminASP.Models
         {
             DatBan oldcurrentModel = (DatBan)oldmodel;
             DatBan newcurrentModel = (DatBan)newmodel;
-            String query = "UPDATE DAT_BAN SET @USERNAME,@ID_BAN,@THOI_GIAN_LAP,@THOI_GIAN_NHAN,@GHI_CHU WHERE  BAN.USERNAME = @OLD_USERNAME  AND  BAN.ID_BAN = @OLD_ID_BAN  AND  BAN.THOI_GIAN_LAP = @OLD_THOI_GIAN_LAP ";
+            String query = "UPDATE dat_ban SET @USERNAME,@ID_BAN,@THOI_GIAN_LAP,@THOI_GIAN_NHAN,@GHI_CHU WHERE  BAN.USERNAME = @OLD_USERNAME  AND  BAN.ID_BAN = @OLD_ID_BAN  AND  BAN.THOI_GIAN_LAP = @OLD_THOI_GIAN_LAP ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("USERNAME", newcurrentModel.Username);
@@ -88,12 +88,12 @@ namespace AdminASP.Models
         {
             DatBan currentModel = (DatBan)model;
 
-            String query = "SELECT FROM DAT_BAN WHERE 1=1 ";
-            if (currentModel.Username != null) query += " AND DAT_BAN.USERNAME = @USERNAME ";
-            if (currentModel.IdBan >= 0) query += " AND DAT_BAN.ID_BAN = @ID_BAN ";
-            if (currentModel.ThoiGIanLap != null) query += " AND DAT_BAN.THOI_GIAN_LAP = @THOI_GIAN_LAP ";
-            if (currentModel.ThoiGIanNhan != null) query += " AND DAT_BAN.THOI_GIAN_NHAN = @THOI_GIAN_NHAN ";
-            if (currentModel.GhiChu != null) query += " AND DAT_BAN.GHI_CHU = @GHI_CHU ";
+            String query = "SELECT * FROM dat_ban WHERE 1=1 ";
+            if (currentModel.Username != null) query += " AND dat_ban.USERNAME = @USERNAME ";
+            if (currentModel.IdBan >= 0) query += " AND dat_ban.ID_BAN = @ID_BAN ";
+            if (currentModel.ThoiGIanLap != null) query += " AND dat_ban.THOI_GIAN_LAP = @THOI_GIAN_LAP ";
+            if (currentModel.ThoiGIanNhan != null) query += " AND dat_ban.THOI_GIAN_NHAN = @THOI_GIAN_NHAN ";
+            if (currentModel.GhiChu != null) query += " AND dat_ban.GHI_CHU = @GHI_CHU ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.Username != null) mySqlCommand.Parameters.AddWithValue("USERNAME", currentModel.Username);
@@ -107,7 +107,7 @@ namespace AdminASP.Models
 
         public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
         {
-            String query = "SELECT * FROM DAT_BAN";
+            String query = "SELECT * FROM dat_ban";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 

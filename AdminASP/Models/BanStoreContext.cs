@@ -36,7 +36,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             Ban currentModel = (Ban)model;
-            String query = "INSERT INTO BAN (ID_BAN,TEN,TRANG_THAI) VALUES (@ID_BAN,@TEN,@TRANG_THAI)";
+            String query = "INSERT INTO ban (ID_BAN,TEN,TRANG_THAI) VALUES (@ID_BAN,@TEN,@TRANG_THAI)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_BAN", currentModel.IdBan);
@@ -49,7 +49,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             Ban currentModel = (Ban)model;
-            String query = "DELETE FROM BAN WHERE BAN.ID_BAN = @ID_BAN ";
+            String query = "DELETE FROM ban WHERE ban.ID_BAN = @ID_BAN ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_BAN", currentModel.IdBan);
@@ -61,7 +61,7 @@ namespace AdminASP.Models
         {
             Ban oldcurrentModel = (Ban)oldmodel;
             Ban newcurrentModel = (Ban)newmodel;
-            String query = "UPDATE BAN SET @ID_BAN,@TEN,@TRANG_THAI WHERE BAN.ID_BAN = @OLD_ID_BAN ";
+            String query = "UPDATE ban SET @ID_BAN,@TEN,@TRANG_THAI WHERE ban.ID_BAN = @OLD_ID_BAN ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_BAN", newcurrentModel.IdBan);
@@ -76,10 +76,10 @@ namespace AdminASP.Models
         {
             Ban currentModel = (Ban)model;
 
-            String query = "SELECT FROM BAN WHERE 1=1 ";
-            if (currentModel.IdBan >= 0) query += " AND BAN.ID_BAN = @ID_BAN ";
-            if (currentModel.Ten != null) query += " AND BAN.TEN = @TEN ";
-            if (currentModel.TrangThai >= 0) query += " AND BAN.TRANG_THAI = @TRANG_THAI ";
+            String query = "SELECT * FROM ban WHERE 1=1 ";
+            if (currentModel.IdBan >= 0) query += " AND ban.ID_BAN = @ID_BAN ";
+            if (currentModel.Ten != null) query += " AND ban.TEN = @TEN ";
+            if (currentModel.TrangThai >= 0) query += " AND ban.TRANG_THAI = @TRANG_THAI ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdBan >= 0) mySqlCommand.Parameters.AddWithValue("ID_BAN", currentModel.IdBan);
@@ -91,7 +91,7 @@ namespace AdminASP.Models
 
         public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
         {
-            String query = "SELECT * FROM BAN";
+            String query = "SELECT * FROM ban";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,6 +27,7 @@ namespace AdminASP
             //services.AddControllersWithViews();
             services.AddMvc();
 
+            //Phần này cho đọc ghi dữ liệu với database
             services.Add(new ServiceDescriptor(typeof(BanStoreContext), new BanStoreContext()
             {
                 ConnectionString = Configuration.GetConnectionString("DefaultConnection")
@@ -81,6 +82,9 @@ namespace AdminASP
             {
                 ConnectionString = Configuration.GetConnectionString("DefaultConnection")
             }));
+
+            //Thêm để dùng được session
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,6 +104,13 @@ namespace AdminASP
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            //Thêm để dùng được session
+            app.UseSession();
+
+            //Cookie
+            app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

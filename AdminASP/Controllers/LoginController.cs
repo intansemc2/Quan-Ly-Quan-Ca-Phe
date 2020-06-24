@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdminASP.Models;
 using System.Security.Cryptography;
+using AdminASP.Helpers;
 
 namespace AdminASP.Controllers
 {
@@ -32,7 +33,7 @@ namespace AdminASP.Controllers
                 List<BaseModel> findresult = taiKhoanStoreContext.Find(new TaiKhoan()
                 {
                     Username = input.Username,
-                    Password = TaiKhoanStoreContext.ComputeSha256Hash(input.Password),
+                    Password = PasswordHashHelper.ComputeSha256Hash(input.Password),
                     Type = -1
                 });
 
@@ -85,7 +86,7 @@ namespace AdminASP.Controllers
 
                 int addAccountResult = taiKhoanStoreContext.Add(new TaiKhoan() { 
                     Username = input.Username,
-                    Password = TaiKhoanStoreContext.ComputeSha256Hash(input.Password),
+                    Password = PasswordHashHelper.ComputeSha256Hash(input.Password),
                     Type = TaiKhoan.TAI_KHOAN_USER
                 });
 
@@ -138,6 +139,11 @@ namespace AdminASP.Controllers
         public IActionResult ChangeAccountInfo()
         {
             return View();
+        }
+
+        public IActionResult Logout()
+        {
+            return RedirectToAction("Login", "Login");
         }
     }
 }

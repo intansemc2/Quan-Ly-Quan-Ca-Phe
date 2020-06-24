@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using AdminASP.Helpers;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,24 +11,6 @@ namespace AdminASP.Models
 {
     public class TaiKhoanStoreContext : BaseStoreContext
     {
-        public static string ComputeSha256Hash(string rawData)
-        {
-            // Create a SHA256   
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                // ComputeHash - returns byte array  
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-
-                // Convert byte array to a string   
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
-            }
-        }
-
         public override BaseModel ConvertReaderToModelFind(MySqlDataReader reader)
         {
             BaseModel model = new TaiKhoan()
@@ -115,6 +98,36 @@ namespace AdminASP.Models
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 
             return mySqlCommand;
+        }
+
+        public bool CheckLogin(TaiKhoan model, bool isPasswordHashed = true, MySqlConnection conn = null)
+        {
+            if (conn == null)
+            {
+                conn = this.GenerateNewConnection().MySqlConnection;
+            }
+
+            conn.Open();
+
+            int numberAccountsMatch = 0;
+
+            String query = "SELECT COUNT(tai_khoan.USERNAME) AS 'NUMBER_ACCOUNTS'  FROM tai_khoan WHERE USERNAME = @USERNAME AND PASSWORD = @PASSWORD";
+
+            MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
+            mySqlCommand.Parameters.AddWithValue("USERNAME", model.Username);
+            mySqlCommand.Parameters.AddWithValue("PASSWORD", model.Password);
+
+            using (MySqlDataReader reader = mySqlCommand.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    numberAccountsMatch = Convert.ToInt32(reader["NUMBER_ACCOUNTS"].ToString());
+                }
+                reader.Close();
+            }
+            conn.Close();
+
+            return numberAccountsMatch > 0;
         }
     }
 }

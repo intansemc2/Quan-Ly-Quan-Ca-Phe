@@ -18,11 +18,6 @@ namespace AdminASP.Controllers
             return View();
         }
 
-        public IActionResult Huongdansudung()
-        {
-            return View();
-        }
-
         public IActionResult Login()
         {
             return View();
@@ -68,19 +63,14 @@ namespace AdminASP.Controllers
             return View();
         }
 
-        public IActionResult Thongtinungdung()
-        {
-            return View();
-        }
-
         public IActionResult Tongquat()
         {
             return View();
         }
 
-        public IActionResult Xemthongke()
+        public IActionResult Thongtinungdung()
         {
-            return View();
+            return RedirectToAction("Index", "Info");
         }
     }
 }

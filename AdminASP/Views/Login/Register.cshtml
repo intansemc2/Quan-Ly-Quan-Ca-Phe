@@ -34,10 +34,11 @@
                                 <div class="card-body">
                                     <form action="Register" method="POST">
                                         @{ FormRegisterInput input = ViewData["input"] as FormRegisterInput;
-                                                        if (input == null)
-                                                        {
-                                                            input = new FormRegisterInput();
-                                                        } }
+                                            if (input == null)
+                                            {
+                                                input = new FormRegisterInput();
+                                            } 
+                                        }
                                         <div class="form-row">
                                             <div class="col-md-6">
                                                 <div class="form-group">

@@ -29,6 +29,44 @@ namespace AdminASP.Models
             return taiKhoanStoreContext.CheckLogin(taiKhoan, true);
         }
 
+        public static bool AutoLogin(Controller controller)
+        {
+            TaiKhoan taiKhoanSession = StoreLoginInfoHelper.GetLoginInSession(controller.HttpContext.Session);
+            TaiKhoan taiKhoanCookie = StoreLoginInfoHelper.GetLoginInCookie(controller.HttpContext.Request.Cookies);
+            TaiKhoanStoreContext taiKhoanStoreContext = controller.HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
+
+            bool checkTaiKhoanSession = false;
+            bool checkTaiKhoanCookie = false;
+
+            if (taiKhoanSession != null)
+            {
+                checkTaiKhoanSession = taiKhoanStoreContext.CheckLogin(taiKhoanSession);
+            }
+
+            if (taiKhoanCookie != null)
+            {
+                checkTaiKhoanCookie = taiKhoanStoreContext.CheckLogin(taiKhoanCookie);
+            }
+
+            if (checkTaiKhoanSession && checkTaiKhoanCookie == false || checkTaiKhoanSession && checkTaiKhoanCookie)
+            {
+                StoreLoginInfoHelper.StoreLoginInCookie(controller.Response.Cookies, taiKhoanSession);
+                return true;
+            }
+            else if (checkTaiKhoanSession == false && checkTaiKhoanCookie)
+            {
+                StoreLoginInfoHelper.StoreLoginInSession(controller.HttpContext.Session, taiKhoanSession);
+                return true;
+            }
+            else
+            {
+                StoreLoginInfoHelper.RemoveLoginInSession(controller.HttpContext.Session);
+                StoreLoginInfoHelper.RemoveLoginInCookie(controller.Response.Cookies);
+            }
+
+            return false;
+        }
+
         public static void StoreLoginInSession(this ISession session, TaiKhoan taiKhoan)
         {
             SessionHelper.SetObjectAsJson(session, SESSION_TAIKHOAN_KEY, taiKhoan);

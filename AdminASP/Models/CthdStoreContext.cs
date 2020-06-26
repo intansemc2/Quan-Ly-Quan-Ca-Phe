@@ -55,7 +55,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             Cthd currentModel = (Cthd)model;
-            String query = "DELETE FROM cthd WHERE BAN.ID_NHAN_VIEN = @ID_NHAN_VIEN AND BAN.ID_SAN_PHAM = @ID_SAN_PHAM ";
+            String query = "DELETE FROM cthd WHERE  cthd.ID_NHAN_VIEN = @ID_NHAN_VIEN  AND  cthd.ID_SAN_PHAM = @ID_SAN_PHAM ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", currentModel.IdNhanVien);
@@ -68,7 +68,7 @@ namespace AdminASP.Models
         {
             Cthd oldcurrentModel = (Cthd)oldmodel;
             Cthd newcurrentModel = (Cthd)newmodel;
-            String query = "UPDATE cthd SET @ID_NHAN_VIEN,@ID_SAN_PHAM,@SO_LUONG,@DON_GIA,@DIEM_TICH_LUY WHERE BAN.ID_NHAN_VIEN = @OLD_ID_NHAN_VIEN AND BAN.ID_SAN_PHAM = @OLD_ID_SAN_PHAM ";
+            String query = "UPDATE cthd SET ID_NHAN_VIEN = @ID_NHAN_VIEN,ID_SAN_PHAM = @ID_SAN_PHAM,SO_LUONG = @SO_LUONG,DON_GIA = @DON_GIA,DIEM_TICH_LUY = @DIEM_TICH_LUY WHERE  cthd.ID_NHAN_VIEN = @OLD_ID_NHAN_VIEN  AND  cthd.ID_SAN_PHAM = @OLD_ID_SAN_PHAM ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", newcurrentModel.IdNhanVien);
@@ -114,3 +114,4 @@ namespace AdminASP.Models
 
     }
 }
+

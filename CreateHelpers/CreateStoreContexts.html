@@ -7,8 +7,11 @@
 <body>
 	<div id="content"></div>
 	<script type="text/javascript">
-		let convertNameToSqlProperty = (name) => {
+		let convertTableNameToSqlProperty = (name) => {
 			return name.toLowerCase();
+		};
+		let convertNameToSqlProperty = (name) => {
+			return name.toUpperCase();
 		};
 		let convertNameToCSProperty = (name) => {
 			return name
@@ -160,7 +163,7 @@
 		for (let data of datas) {
 			content.innerHTML += data.classname + "<br>";
 
-			let sqlTableName = convertNameToSqlProperty(data.classname);
+			let sqlTableName = convertTableNameToSqlProperty(data.classname);
 			let csTableName =convertNameToCSProperty(data.classname);
 
 			let sqlTableProperties = data.properties.map(item => convertNameToSqlProperty(item.name));
@@ -170,7 +173,7 @@
 			let csTableKeys = data.keys.map(item => convertNameToCSProperty(item));
 
 			let newContent = `
-<textarea id='${csTableName}' style='width: 100%; height: 800px;'>
+<textarea id='${csTableName}' style='width: 100%; height: 800px;' readonly='readonly'>
 
 using MySql.Data.MySqlClient;
 using System;
@@ -223,7 +226,7 @@ public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel mode
 public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
 {
     ${csTableName} currentModel = (${csTableName})model;
-    String query = "DELETE FROM ${sqlTableName} WHERE ${ sqlTableKeys.map(item => ` BAN.${item} = @${item} `).join(" AND ") }";
+    String query = "DELETE FROM ${sqlTableName} WHERE ${ sqlTableKeys.map(item => ` ${sqlTableName}.${item} = @${item} `).join(" AND ") }";
 
     MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
     ${
@@ -237,7 +240,7 @@ public override MySqlCommand CreateQueryEdit(MySqlConnection conn, BaseModel old
 {
     ${csTableName} oldcurrentModel = (${csTableName})oldmodel;
     ${csTableName} newcurrentModel = (${csTableName})newmodel;
-    String query = "UPDATE ${sqlTableName} SET ${sqlTableProperties.map(item => `@${item}`).join()} WHERE ${ sqlTableKeys.map(item => ` BAN.${item} = @OLD_${item} `).join(" AND ") }";
+    String query = "UPDATE ${sqlTableName} SET ${sqlTableProperties.map(item => `${item} = @${item}`).join(",")} WHERE ${ sqlTableKeys.map(item => ` ${sqlTableName}.${item} = @OLD_${item} `).join(" AND ") }";
 
     MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
     ${

@@ -105,8 +105,6 @@ C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Raz
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Login\ForgotPassword.cshtml.g.cs
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Login\Login.cshtml.g.cs
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Login\Register.cshtml.g.cs
-C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\MyAccount\ChangeInfo.cshtml.g.cs
-C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\MyAccount\SeeInfo.cshtml.g.cs
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.RazorTargetAssemblyInfo.cache

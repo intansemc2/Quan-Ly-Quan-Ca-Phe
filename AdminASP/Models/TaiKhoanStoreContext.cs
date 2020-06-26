@@ -1,16 +1,14 @@
-﻿using AdminASP.Helpers;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AdminASP.Models
 {
     public class TaiKhoanStoreContext : BaseStoreContext
     {
+
         public override BaseModel ConvertReaderToModelFind(MySqlDataReader reader)
         {
             BaseModel model = new TaiKhoan()
@@ -51,7 +49,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             TaiKhoan currentModel = (TaiKhoan)model;
-            String query = "DELETE FROM tai_khoan WHERE  BAN.USERNAME = @USERNAME ";
+            String query = "DELETE FROM tai_khoan WHERE  tai_khoan.USERNAME = @USERNAME ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("USERNAME", currentModel.Username);
@@ -63,7 +61,7 @@ namespace AdminASP.Models
         {
             TaiKhoan oldcurrentModel = (TaiKhoan)oldmodel;
             TaiKhoan newcurrentModel = (TaiKhoan)newmodel;
-            String query = "UPDATE tai_khoan SET @USERNAME,@PASSWORD,@TYPE WHERE  BAN.USERNAME = @OLD_USERNAME ";
+            String query = "UPDATE tai_khoan SET USERNAME = @USERNAME,PASSWORD = @PASSWORD,TYPE = @TYPE WHERE  tai_khoan.USERNAME = @OLD_USERNAME ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("USERNAME", newcurrentModel.Username);

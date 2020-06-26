@@ -10,7 +10,7 @@ namespace AdminASP.Controllers
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Thongtinungdung", "InfoController");
+            return RedirectToAction("Thongtinungdung", "Info");
         }
 
         public IActionResult Thongtinungdung()

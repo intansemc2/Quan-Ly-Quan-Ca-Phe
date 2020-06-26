@@ -64,7 +64,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             HoaDon currentModel = (HoaDon)model;
-            String query = "DELETE FROM hoa_don WHERE  BAN.ID_HOA_DON = @ID_HOA_DON ";
+            String query = "DELETE FROM hoa_don WHERE  hoa_don.ID_HOA_DON = @ID_HOA_DON ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", currentModel.IdHoaDon);
@@ -76,7 +76,7 @@ namespace AdminASP.Models
         {
             HoaDon oldcurrentModel = (HoaDon)oldmodel;
             HoaDon newcurrentModel = (HoaDon)newmodel;
-            String query = "UPDATE hoa_don SET @ID_HOA_DON,@ID_KHACH_HANG,@ID_BAN,@ID_NHAN_VIEN,@THOI_GIAN,@PHAN_TRAM_TICH_LUY,@SO_LUONG_DIEM_DOI,@TY_GIA_DIEM_DOI WHERE  BAN.ID_HOA_DON = @OLD_ID_HOA_DON ";
+            String query = "UPDATE hoa_don SET ID_HOA_DON = @ID_HOA_DON,ID_KHACH_HANG = @ID_KHACH_HANG,ID_BAN = @ID_BAN,ID_NHAN_VIEN = @ID_NHAN_VIEN,THOI_GIAN = @THOI_GIAN,PHAN_TRAM_TICH_LUY = @PHAN_TRAM_TICH_LUY,SO_LUONG_DIEM_DOI = @SO_LUONG_DIEM_DOI,TY_GIA_DIEM_DOI = @TY_GIA_DIEM_DOI WHERE  hoa_don.ID_HOA_DON = @OLD_ID_HOA_DON ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", newcurrentModel.IdHoaDon);

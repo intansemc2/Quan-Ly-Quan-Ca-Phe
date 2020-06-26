@@ -52,7 +52,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             KhuyenMai currentModel = (KhuyenMai)model;
-            String query = "DELETE FROM khuyen_mai WHERE  BAN.ID_KHUYEN_MAI = @ID_KHUYEN_MAI ";
+            String query = "DELETE FROM khuyen_mai WHERE  khuyen_mai.ID_KHUYEN_MAI = @ID_KHUYEN_MAI ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_KHUYEN_MAI", currentModel.IdKhuyenMai);
@@ -64,7 +64,7 @@ namespace AdminASP.Models
         {
             KhuyenMai oldcurrentModel = (KhuyenMai)oldmodel;
             KhuyenMai newcurrentModel = (KhuyenMai)newmodel;
-            String query = "UPDATE khuyen_mai SET @ID_KHUYEN_MAI,@TEN,@THOI_GIAN_DIEN_RA,@THOI_GIAN_KET_THUC WHERE  BAN.ID_KHUYEN_MAI = @OLD_ID_KHUYEN_MAI ";
+            String query = "UPDATE khuyen_mai SET ID_KHUYEN_MAI = @ID_KHUYEN_MAI,TEN = @TEN,THOI_GIAN_DIEN_RA = @THOI_GIAN_DIEN_RA,THOI_GIAN_KET_THUC = @THOI_GIAN_KET_THUC WHERE  khuyen_mai.ID_KHUYEN_MAI = @OLD_ID_KHUYEN_MAI ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_KHUYEN_MAI", newcurrentModel.IdKhuyenMai);

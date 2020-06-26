@@ -25,27 +25,28 @@
                     <div class="small mb-3 text-muted">Thông tin tài khoản của bạn</div>
                     <form>
                         @{ 
-                            TaiKhoan taiKhoan = ViewData["taiKhoan"] as TaiKhoan;
+                            TaiKhoan input = ViewData["input"] as TaiKhoan;
                         }
                         <div class="form-group">
                             <label class="small mb-1" for="inputUsername">Tên đăng nhập</label>
-                            <input class="form-control py-4" id="inputUsername" type="text" name="Username" value="@taiKhoan.Username" placeholder="Tên đăng nhập của bạn" readonly="readonly">
+                            <input class="form-control py-4" id="inputUsername" type="text" name="Username" value="@input.Username" placeholder="Tên đăng nhập của bạn" readonly="readonly">
                         </div>
                         <div class="form-group">
                             <label class="small mb-1" for="inputPassword">Mật khẩu</label>
-                            <input class="form-control py-4" id="inputPassword" type="password" name="Password" value="*********************************************************" placeholder="Mật khẩu của bạn" readonly="readonly">
+                            <input class="form-control py-4" id="inputPassword" type="password" name="Password" value="****" placeholder="Mật khẩu của bạn" readonly="readonly">
                         </div>
                         <div class="form-group">
                             <label class="small mb-1" for="inputType">Loại tài khoản</label>
-                            <input class="form-control py-4" id="inputType" type="text" name="Type" value="@taiKhoan.Type" placeholder="Loại tài khoản của bạn" readonly="readonly">
+                            <input class="form-control py-4" id="inputType" type="text" name="Type" value="@input.Type" placeholder="Loại tài khoản của bạn" readonly="readonly">
                         </div>
                         <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                            <a class="small" href="/Login/Login">Trở về trang Đăng nhập</a>
+                            <a class="small" href="/Login/Logout">Đăng xuất</a>
+                            <a class="small" href="/Login/ChangeAccountInfo">Sửa thông tin tài khoản</a>
                         </div>
                     </form>
                   </div>
                   <div class="card-footer text-center">
-                    <div class="small"><a href="/Login/Register">Bạn chưa có tài khoản? Đăng ký ngay!</a></div>
+                      <div class="small"><a class="" href="/Login/Register">Bạn muốn tạo tài khoản mới? Đăng ký ngay!</a>.<a class="" href="/Home/Index">Trang chủ</a></div>
                   </div>
                 </div>
               </div>

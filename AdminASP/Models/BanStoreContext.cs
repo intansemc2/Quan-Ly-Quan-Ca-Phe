@@ -49,7 +49,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             Ban currentModel = (Ban)model;
-            String query = "DELETE FROM ban WHERE ban.ID_BAN = @ID_BAN ";
+            String query = "DELETE FROM ban WHERE  ban.ID_BAN = @ID_BAN ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_BAN", currentModel.IdBan);
@@ -61,7 +61,7 @@ namespace AdminASP.Models
         {
             Ban oldcurrentModel = (Ban)oldmodel;
             Ban newcurrentModel = (Ban)newmodel;
-            String query = "UPDATE ban SET @ID_BAN,@TEN,@TRANG_THAI WHERE ban.ID_BAN = @OLD_ID_BAN ";
+            String query = "UPDATE ban SET ID_BAN = @ID_BAN,TEN = @TEN,TRANG_THAI = @TRANG_THAI WHERE  ban.ID_BAN = @OLD_ID_BAN ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_BAN", newcurrentModel.IdBan);
@@ -100,3 +100,4 @@ namespace AdminASP.Models
 
     }
 }
+

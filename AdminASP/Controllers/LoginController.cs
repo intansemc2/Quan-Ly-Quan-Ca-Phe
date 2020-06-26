@@ -190,7 +190,7 @@ namespace AdminASP.Controllers
                         TaiKhoan newModel = new TaiKhoan()
                         {
                             Username = input.Username,
-                            Password = input.Password,
+                            Password = PasswordHashHelper.ComputeSha256Hash(input.Password),
                             Type = oldModel.Type
                         };
                         int editResult = taiKhoanStoreContext.Edit(oldModel, newModel);

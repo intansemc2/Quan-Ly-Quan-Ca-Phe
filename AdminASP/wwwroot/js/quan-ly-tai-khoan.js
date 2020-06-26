@@ -2,7 +2,7 @@ let tableQuanLyTaiKhoan;
 let taikhoanTypes = [];
 
 $(document).ready(function () {
-//Active dataTable
+    //Active dataTable
     tableQuanLyTaiKhoan = $("#tableQuanLyTaiKhoan").DataTable({
         "columnDefs": [
             {
@@ -11,7 +11,7 @@ $(document).ready(function () {
                     let renderData = data;
                     return `<span class="username" data="${data}">${renderData}</span>`;
                 }
-            },            {
+            }, {
                 "targets": 1,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
@@ -49,7 +49,7 @@ $(document).ready(function () {
     });
     $("#xoaDanhDau").click(function () {
         let markedRows = $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton))
-                .map((index, toggleButton) => $(toggleButton).parents("tr"));
+            .map((index, toggleButton) => $(toggleButton).parents("tr"));
         tableQuanLyTaiKhoan.rows(markedRows).remove().draw();
     });
     $("#xoaTatCa").click(function () {
@@ -61,7 +61,7 @@ $(document).ready(function () {
     $("#modelThemTaiKhoan").find("#themTaiKhoanConfirm").click(function () {
         //Xóa hết alert cũ
         $("#modelThemTaiKhoan").find("#themTaiKhoanAlerts").html("");
-        
+
         //Validate
         let modifyTaiKhoan = extractModelThemTaiKhoan();
         let numberValidateError = validateTaiKhoanInformation($("#modelThemTaiKhoan").find("#themTaiKhoanAlerts"), modifyTaiKhoan);
@@ -86,13 +86,13 @@ $(document).ready(function () {
         }
     });
 
-    $("#modelThemTaiKhoan").find("#themTaiKhoanReset").click(function() {
+    $("#modelThemTaiKhoan").find("#themTaiKhoanReset").click(function () {
         setModelThemTaiKhoan({});
     });
 
     $("#modelSuaTaiKhoan").find("#suaTaiKhoanConfirm").click(function () {
         //Xóa hết alert cũ
-        $("#modelSuaTaiKhoan").find("#suaTaiKhoanAlerts").html("");        
+        $("#modelSuaTaiKhoan").find("#suaTaiKhoanAlerts").html("");
 
         //Validate
         let modifyTaiKhoan = extractModelSuaTaiKhoan();
@@ -115,7 +115,7 @@ $(document).ready(function () {
 
             //Sửa tài khoản mới vào bảng
             $("#modelSuaTaiKhoan").find(".close").trigger("click");
-            tableQuanLyTaiKhoan.row(oldTaiKhoanRow).data(createTableQLTKArrayDataRow(newTaiKhoan)).draw();            
+            tableQuanLyTaiKhoan.row(oldTaiKhoanRow).data(createTableQLTKArrayDataRow(newTaiKhoan)).draw();
         }
         //Sửa thất bại
         else {
@@ -123,7 +123,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#modelSuaTaiKhoan").find("#suaTaiKhoanReset").click(function() {
+    $("#modelSuaTaiKhoan").find("#suaTaiKhoanReset").click(function () {
         setModelSuaTaiKhoan({});
     });
 
@@ -145,7 +145,7 @@ let extractDataFromTableQLTKRow = (tableRow) => {
     let username = $(tableRow).find(".username").attr("data");
     let password = $(tableRow).find(".password").attr("data");
     let type = taikhoanTypes[$(tableRow).find(".type").attr("data")];
-    return {username: username, password: password, re_password: password, type: type};
+    return { username: username, password: password, re_password: password, type: type };
 };
 
 let refreshDataTableQLTK = () => {
@@ -163,20 +163,30 @@ let refreshDataTableQLTK = () => {
     }
 
     tableQuanLyTaiKhoan.clear();
-    //Lấy thông tin tài khoản
-    let taikhoans = new Array();    
-    for (let i = 0; i < n; i += 1) {
-        let password = `Mật khẩu Tài khoản  ${i.toString().padStart(3, "0")}`;
-        let username = `User${i.toString().padStart(3, "0")}`;
-        let type = Math.floor(Math.random() * taikhoanTypes.length);
-        taikhoans.push({username: username, password: password, re_password: password, type: type,});
-    }
 
-    //Thêm vào bảng
-    for (let taikhoan of taikhoans) {
-        tableQuanLyTaiKhoan.row.add(createTableQLTKArrayDataRow(taikhoan));
-    }
-    tableQuanLyTaiKhoan.draw();
+    $.post("/TaiKhoan/GetAll", function (data) {
+        //Lấy thông tin tài khoản
+        let inputJson = data;
+        inputJson = inputJson.replace(/&quot;/g, `"`);
+        inputJson = inputJson.replace(/Username/g, `username`);
+        inputJson = inputJson.replace(/Password/g, `password`);
+        inputJson = inputJson.replace(/Type/g, `type`);
+        let taikhoans = JSON.parse(inputJson);
+
+        //Thêm vào bảng
+        for (let taikhoan of taikhoans) {
+            tableQuanLyTaiKhoan.row.add(createTableQLTKArrayDataRow(taikhoan));
+        }
+        tableQuanLyTaiKhoan.draw();
+    })
+        .done(function () {
+            alert("Lấy dữ liệu từ CSDL thành công");
+        })
+        .fail(function () {
+            alert("Không thể lấy dữ liệu từ CSDL");
+        })
+        .always(function () {
+        });
 };
 
 let deleteTableQLTKRow = (buttonInside) => {
@@ -193,12 +203,12 @@ let extractModelSuaTaiKhoan = () => {
 };
 
 let extractFromModel = (model) => {
-//Lấy thông tin
+    //Lấy thông tin
     let username = $(model).find(".username").val();
     let password = $(model).find(".password").val();
     let re_password = $(model).find(".re_password").val();
     let type = $(model).find(".type").val();
-    return {username: username, password: password, re_password: re_password, type: type};
+    return { username: username, password: password, re_password: re_password, type: type };
 };
 
 let setModelThemTaiKhoan = (modifyTaiKhoan) => {
@@ -213,7 +223,7 @@ let setToModel = (model, taikhoan) => {
     $(model).find(".username").val(taikhoan.username);
     $(model).find(".password").val(taikhoan.password);
     $(model).find(".re_password").val(taikhoan.re_password);
-   $(model).find(".type").val(taikhoan.type);
+    $(model).find(".type").val(taikhoan.type);
 };
 
 let validateTaiKhoanInformation = (alertContainer, taikhoan) => {
@@ -221,7 +231,7 @@ let validateTaiKhoanInformation = (alertContainer, taikhoan) => {
     let username = taikhoan.username;
     let password = taikhoan.password;
     let re_password = taikhoan.re_password;
-    let type =taikhoan.type;
+    let type = taikhoan.type;
 
     let numberValidateError = 0;
     if (!password || password === "") {

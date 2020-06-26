@@ -125,3 +125,4 @@ C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Raz
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.csproj.CoreCompileInputs.cache
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\TaiKhoan\GetAll.cshtml.g.cs

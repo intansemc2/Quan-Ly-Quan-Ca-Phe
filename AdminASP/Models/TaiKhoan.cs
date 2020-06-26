@@ -19,5 +19,21 @@ namespace AdminASP.Models
         public static int TAI_KHOAN_ADMIN = 2;
         public static int TAI_KHOAN_USER = 0;
         public static int TAI_KHOAN_STAFF = 1;
+
+        public String TypeToString()
+        {
+            if (this.Type == TaiKhoan.TAI_KHOAN_ADMIN)
+            {
+                return "Admin";
+            }
+            else if (this.Type == TaiKhoan.TAI_KHOAN_STAFF)
+            {
+                return "Staff";
+            }
+            else
+            {
+                return "User";
+            }
+        }
     }
 }

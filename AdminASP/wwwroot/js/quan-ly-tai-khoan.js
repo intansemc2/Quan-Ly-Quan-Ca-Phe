@@ -48,12 +48,27 @@ $(document).ready(function () {
         $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
     });
     $("#xoaDanhDau").click(function () {
-        let markedRows = $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton))
-            .map((index, toggleButton) => $(toggleButton).parents("tr"));
-        tableQuanLyTaiKhoan.rows(markedRows).remove().draw();
+        $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton)).each((index, element) => deleteTableQLTKRow($(element)) );        
     });
-    $("#xoaTatCa").click(function () {
-        tableQuanLyTaiKhoan.clear().draw();
+    $("#xoaTatCa").click(function () {        
+        $.post("/TaiKhoan/DeleteAll", function (data) {
+            //Lấy thông tin tài khoản
+            let inputJson = data;
+            inputJson = inputJson.replace(/&quot;/g, `"`);
+            let outputs = JSON.parse(inputJson);
+
+            //Xóa khỏi bảng
+            if (outputs.output >= 0) {
+                tableQuanLyTaiKhoan.clear().draw();
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể xóa dữ liệu từ CSDL");
+            })
+            .always(function () {
+            });
     });
     $("#lamMoi").click(function () {
         refreshDataTableQLTK();
@@ -71,19 +86,42 @@ $(document).ready(function () {
 
         //Tạo tài khoản mới 
         let newTaiKhoan = modifyTaiKhoan;
-        //Thêm xuống CSDL
-        let themTKResult = true;
-        //Thêm thành công
-        if (themTKResult) {
-            $("#modelThemTaiKhoan").find("#themTaiKhoanAlerts").append(createAlerts("success", "Thêm thành công"));
-            //Thêm tài khoản mới vào bảng
-            $("#modelThemTaiKhoan").find(".close").trigger("click");
-            tableQuanLyTaiKhoan.row.add(createTableQLTKArrayDataRow(newTaiKhoan)).draw();
-        }
-        //Thêm thất bại
-        else {
-            $("#modelThemTaiKhoan").find("#themTaiKhoanAlerts").append(createAlerts("danger", "Thêm thất bại"));
-        }
+        //Thêm xuống CSDL        
+        $.post("/TaiKhoan/Add", { Username: newTaiKhoan.username, Password: newTaiKhoan.password, RePassword: newTaiKhoan.re_password, Type: newTaiKhoan.type }, function (data) {
+            //Lấy thông tin tài khoản
+            let inputJson = data;
+            inputJson = inputJson.replace(/&quot;/g, `"`);
+            let outputs = JSON.parse(inputJson);
+
+            let themTKResult = true;
+            if (outputs.errors.Length > 0 || outputs.output < 0) {
+                themTKResult = false;
+            }
+
+            //Thêm thành công
+            if (themTKResult) {
+                $("#modelThemTaiKhoan").find("#themTaiKhoanAlerts").append(createAlerts("success", "Thêm thành công"));
+                //Thêm tài khoản mới vào bảng
+                $("#modelThemTaiKhoan").find(".close").trigger("click");
+                tableQuanLyTaiKhoan.row.add(createTableQLTKArrayDataRow(newTaiKhoan)).draw();
+            }
+            //Thêm thất bại
+            else {
+                $("#modelThemTaiKhoan").find("#themTaiKhoanAlerts").append(createAlerts("danger", "Thêm thất bại"));
+
+                for (let error of outputs.errors) {
+                    $("#modelThemTaiKhoan").find("#themTaiKhoanAlerts").append(createAlerts("danger", error));
+                }
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {                
+                alert("Không thể thêm dữ liệu vào CSDL");
+                $("#modelThemTaiKhoan").find("#themTaiKhoanAlerts").append(createAlerts("danger", "Thêm thất bại"));
+            })
+            .always(function () {
+            });
     });
 
     $("#modelThemTaiKhoan").find("#themTaiKhoanReset").click(function () {
@@ -107,20 +145,45 @@ $(document).ready(function () {
         let oldTaiKhoanRow = $("#tableQuanLyTaiKhoan").find("button[modify='" + oldUsername + "']").parents("tr");
 
         //Sửa xuống CSDL
-        let suaTKResult = true;
+        $.post("/TaiKhoan/Edit", { Username: newTaiKhoan.username, Password: newTaiKhoan.password, RePassword: newTaiKhoan.re_password, Type: newTaiKhoan.type, OldUsername: oldUsername }, function (data) {
+            //Lấy thông tin tài khoản
+            let inputJson = data;
+            inputJson = inputJson.replace(/&quot;/g, `"`);
+            inputJson = inputJson.replace(/Username/g, `username`);
+            inputJson = inputJson.replace(/Password/g, `password`);
+            inputJson = inputJson.replace(/Type/g, `type`);
+            let outputs = JSON.parse(inputJson);
 
-        //Sửa thành công
-        if (suaTKResult) {
-            $("#modelSuaTaiKhoan").find("#suaTaiKhoanAlerts").append(createAlerts("success", "Sửa thành công"));
+            let suaTKResult = true;
+            if (outputs.errors.length > 0 || outputs.output < 0) {
+                suaTKResult = false;
+            }
 
-            //Sửa tài khoản mới vào bảng
-            $("#modelSuaTaiKhoan").find(".close").trigger("click");
-            tableQuanLyTaiKhoan.row(oldTaiKhoanRow).data(createTableQLTKArrayDataRow(newTaiKhoan)).draw();
-        }
-        //Sửa thất bại
-        else {
-            $("#modelSuaTaiKhoan").find("#suaTaiKhoanAlerts").append(createAlerts("danger", "Sửa thất bại"));
-        }
+            //Sửa thành công
+            if (suaTKResult) {
+                $("#modelSuaTaiKhoan").find("#suaTaiKhoanAlerts").append(createAlerts("success", "Sửa thành công"));
+
+                //Sửa tài khoản mới vào bảng
+                $("#modelSuaTaiKhoan").find(".close").trigger("click");
+                tableQuanLyTaiKhoan.row(oldTaiKhoanRow).data(createTableQLTKArrayDataRow(outputs.newTaiKhoan)).draw();
+            }
+            //Sửa thất bại
+            else {
+                $("#modelSuaTaiKhoan").find("#suaTaiKhoanAlerts").append(createAlerts("danger", "Sửa thất bại"));
+
+                for (let error of outputs.errors) {
+                    $("#modelSuaTaiKhoan").find("#suaTaiKhoanAlerts").append(createAlerts("danger", error));
+                }
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể sửa dữ liệu vào CSDL");
+                $("#modelSuaTaiKhoan").find("#suaTaiKhoanAlerts").append(createAlerts("danger", "Sửa thất bại"));
+            })
+            .always(function () {
+            });   
     });
 
     $("#modelSuaTaiKhoan").find("#suaTaiKhoanReset").click(function () {
@@ -144,20 +207,20 @@ let createTableQLTKArrayDataRow = (taikhoan) => {
 let extractDataFromTableQLTKRow = (tableRow) => {
     let username = $(tableRow).find(".username").attr("data");
     let password = $(tableRow).find(".password").attr("data");
-    let type = taikhoanTypes[$(tableRow).find(".type").attr("data")];
+    let type = $(tableRow).find(".type").attr("data");
     return { username: username, password: password, re_password: password, type: type };
 };
 
 let refreshDataTableQLTK = () => {
-    let n = Math.floor(Math.random() * 10);
     //Lấy thông tin types
     taikhoanTypes = ["Người dùng", "Nhân viên", "Admin"];
 
     //Thêm option type
     $("#modelThemTaiKhoan").find("#themTaiKhoanLoaiTaiKhoan").html("");
     $("#modelSuaTaiKhoan").find("#suaTaiKhoanLoaiTaiKhoan").html("");
-    for (let type of taikhoanTypes) {
-        let newLoaiOption = `<option value="${type}">${type}</option>`;
+    for (let i = 0; i < taikhoanTypes.length; i+=1) {
+        let type = taikhoanTypes[i];
+        let newLoaiOption = `<option value="${i}">${type}</option>`;
         $("#modelThemTaiKhoan").find("#themTaiKhoanLoaiTaiKhoan").append(newLoaiOption);
         $("#modelSuaTaiKhoan").find("#suaTaiKhoanLoaiTaiKhoan").append(newLoaiOption);
     }
@@ -171,16 +234,15 @@ let refreshDataTableQLTK = () => {
         inputJson = inputJson.replace(/Username/g, `username`);
         inputJson = inputJson.replace(/Password/g, `password`);
         inputJson = inputJson.replace(/Type/g, `type`);
-        let taikhoans = JSON.parse(inputJson);
+        let outputs = JSON.parse(inputJson);
 
         //Thêm vào bảng
-        for (let taikhoan of taikhoans) {
-            tableQuanLyTaiKhoan.row.add(createTableQLTKArrayDataRow(taikhoan));
+        for (let output of outputs) {
+            tableQuanLyTaiKhoan.row.add(createTableQLTKArrayDataRow(output));
         }
         tableQuanLyTaiKhoan.draw();
     })
         .done(function () {
-            alert("Lấy dữ liệu từ CSDL thành công");
         })
         .fail(function () {
             alert("Không thể lấy dữ liệu từ CSDL");
@@ -191,7 +253,27 @@ let refreshDataTableQLTK = () => {
 
 let deleteTableQLTKRow = (buttonInside) => {
     let tableRow = $(buttonInside).parents("tr");
-    tableQuanLyTaiKhoan.row(tableRow).remove().draw();
+
+    let taiKhoan = extractDataFromTableQLTKRow(tableRow);
+
+    $.post("/TaiKhoan/Delete", { Username: taiKhoan.username }, function (data) {
+        //Lấy thông tin tài khoản
+        let inputJson = data;
+        inputJson = inputJson.replace(/&quot;/g, `"`);
+        let outputs = JSON.parse(inputJson);
+
+        //Xóa khỏi bảng
+        if (outputs.output >= 0) {
+            tableQuanLyTaiKhoan.row(tableRow).remove().draw();
+        }
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            alert("Không thể xóa dữ liệu từ CSDL");
+        })
+        .always(function () {
+        });
 };
 
 let extractModelThemTaiKhoan = () => {

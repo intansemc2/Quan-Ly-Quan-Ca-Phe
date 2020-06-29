@@ -1,0 +1,4 @@
+@{ 
+    List<TaiKhoan> taiKhoans = ViewData["inputs"] as List<TaiKhoan>;
+    @Newtonsoft.Json.JsonConvert.SerializeObject(taiKhoans);
+}

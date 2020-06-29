@@ -126,3 +126,7 @@ C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\bin\Debug\netcoreapp3.1\New
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.csproj.CoreCompileInputs.cache
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\TaiKhoan\GetAll.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\TaiKhoan\Add.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\TaiKhoan\Delete.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\TaiKhoan\Edit.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\TaiKhoan\DeleteAll.cshtml.g.cs

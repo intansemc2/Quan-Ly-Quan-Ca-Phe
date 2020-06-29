@@ -81,6 +81,18 @@ namespace AdminASP.Models
             return (cmd.ExecuteNonQuery());
         }
 
+        public int DeleteAll(MySqlConnection conn = null)
+        {
+            if (conn == null)
+            {
+                conn = this.GenerateNewConnection().MySqlConnection;
+            }
+
+            conn.Open();
+            MySqlCommand cmd = this.CreateQueryDeleteAll(conn);
+            return (cmd.ExecuteNonQuery());
+        }
+
         public List<BaseModel> Find(BaseModel sampleModel, MySqlConnection conn = null)
         {
             List<BaseModel> listModels = new List<BaseModel>();
@@ -109,6 +121,7 @@ namespace AdminASP.Models
         public abstract MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model);
         public abstract MySqlCommand CreateQueryEdit(MySqlConnection conn, BaseModel oldmodel, BaseModel newmodel);
         public abstract MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model);
+        public abstract MySqlCommand CreateQueryDeleteAll(MySqlConnection conn);
         public abstract MySqlCommand CreateQueryFind(MySqlConnection conn, BaseModel model);
 
         public abstract BaseModel ConvertReaderToModelGetAll(MySqlDataReader reader);

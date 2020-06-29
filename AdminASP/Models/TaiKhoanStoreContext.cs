@@ -127,6 +127,15 @@ namespace AdminASP.Models
 
             return numberAccountsMatch > 0;
         }
+
+        public override MySqlCommand CreateQueryDeleteAll(MySqlConnection conn)
+        {
+            String query = "DELETE FROM tai_khoan";
+
+            MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
+
+            return mySqlCommand;
+        }
     }
 }
 

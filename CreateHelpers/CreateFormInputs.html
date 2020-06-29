@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create property</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<div id="content"></div>
+	<script type="text/javascript">
+		let capitalize = (input) => {
+			return input.charAt(0).toUpperCase()+input.slice(1).toLowerCase();
+		};
+		let capitalizeFirst = (input) => {
+			return input.charAt(0).toUpperCase()+input.slice(1);
+		};
+		let convertTableNameToSqlProperty = (name) => {
+			return name.toLowerCase();
+		};
+		let convertNameToSqlProperty = (name) => {
+			return name.toUpperCase();
+		};
+		let convertNameToCSProperty = (name) => {
+			return name
+				.split("_")
+				.map(item => capitalizeFirst(item))
+				.join("");
+		};
+		let createCSCodeConvertFromString = (input, type) => {
+			if (type === "int") {
+				return `Convert.ToInt32(${input})`;
+			}
+			if (type === "float") {
+				return `(float)Convert.ToDouble(${input})`;
+			}
+			return input;
+		};
+		let createCSCodeConditionAccept = (input, type) => {
+			if (type === "int") {
+				return `${input}  >= 0`;
+			}
+			if (type === "float") {
+				return `${input}  >= 0`;
+			}
+			if (type === "String") {
+				return `${input} != null && ${input} != ""`;
+			}
+			return `${input}  != null`;
+		};
+
+		let content = document.querySelector("#content");
+		let datas = [
+			{
+				classname: "Ban", 
+				properties: [
+					{name: "id_Ban", type: "int", speak:"id bàn"},
+					{name: "ten", type: "String", speak:"tên bàn"},
+					{name: "trang_Thai", type: "int", speak:"loại bàn"}
+				],
+				keys: ["id_Ban"]
+			},
+			{
+				classname: "Cthd", 
+				properties: [
+					{name: "id_Nhan_Vien", type: "int", speak:"id nhân viên"},
+					{name: "id_San_Pham", type: "int", speak:"id sản phẩm"},
+					{name: "so_Luong", type: "int", speak:"số lượng"},
+					{name: "don_Gia", type: "int", speak:"đơn giá"},
+					{name: "diem_Tich_Luy", type: "int", speak:"điểm tích lũy"}
+				],
+				keys: ["id_Nhan_Vien", "id_San_Pham"]
+			},
+			{
+				classname: "Ctkm", 
+				properties: [
+					{name: "id_Khuyen_Mai", type: "int", speak:"id khuyến mãi"},
+					{name: "id_San_Pham", type: "int", speak:"id sản phẩm"},
+					{name: "so_Luong", type: "int", speak:"số lượng"},
+					{name: "don_Gia", type: "int", speak:"đơn giá"},
+					{name: "diem_Tich_Luy", type: "int", speak:"điểm tích lũy"}
+				],
+				keys: ["id_Khuyen_Mai", "id_San_Pham"]
+			},
+			{
+				classname: "Dat_Ban", 
+				properties: [
+					{name: "username", type: "String", speak:"tên đăng nhập"},
+					{name: "id_Ban", type: "int", speak:"id bàn"},
+					{name: "thoi_GIan_Lap", type: "String", speak:"thời gian lập"},
+					{name: "thoi_GIan_Nhan", type: "String", speak:"thời gian nhận"},
+					{name: "ghi_Chu", type: "String", speak:"ghi chú"}
+				],
+				keys: ["username", "id_Ban", "thoi_GIan_Lap"]
+			},
+			{
+				classname: "Hoa_Don", 
+				properties: [
+					{name: "id_Hoa_Don", type: "int", speak:"id hóa đơn"},
+					{name: "id_Khach_Hang", type: "int", speak:"id khách hàng"},
+					{name: "id_Ban", type: "int", speak:"id bàn"},
+					{name: "id_Nhan_Vien", type: "int", speak:"id nhân viên"},
+					{name: "thoi_GIan", type: "String", speak:"thời gian"},
+					{name: "phan_Tram_Tich_Luy", type: "float", speak:"phần trăm tích lũy"},
+					{name: "so_Luong_Diem_Doi", type: "int", speak:"số lượng điểm đổi"},
+					{name: "ty_Gia_Diem_Doi", type: "float", speak:"tỷ giá quy đổi"}
+				],
+				keys: ["id_Hoa_Don"]
+			},
+			{
+				classname: "Khach_Hang", 
+				properties: [
+					{name: "id_Khach_Hang", type: "int", speak:"id khách hàng"},
+					{name: "ten", type: "String", speak:"tên"},
+					{name: "sdt", type: "String", speak:"số điện thoại"},
+					{name: "username", type: "String", speak:"tên đăng nhập"},
+					{name: "diem_Tich_Luy", type: "int", speak:"điểm tích lũy"}
+				],
+				keys: ["id_Khach_Hang"]
+			},
+			{
+				classname: "Khuyen_Mai", 
+				properties: [
+					{name: "id_Khuyen_Mai", type: "int", speak:"id khuyến mãi"},
+					{name: "ten", type: "String", speak:"tên"},
+					{name: "thoi_GIan_Dien_Ra", type: "String", speak:"thời gian diễn ra"},
+					{name: "thoi_GIan_Ket_Thuc", type: "String", speak:"thời gian kết thúc"}
+				],
+				keys: ["id_Khuyen_Mai"]
+			},
+			{
+				classname: "Loai_San_Pham", 
+				properties: [
+					{name: "id_LoaiSP", type: "int", speak:"id loại sản phẩm"},
+					{name: "ten", type: "String", speak:"tên"}
+				],
+				keys: ["id_LoaiSP"]
+			},
+			{
+				classname: "Nhan_Vien", 
+				properties: [
+					{name: "id_Nhan_Vien", type: "int", speak:"id nhân viên"},
+					{name: "ten", type: "String", speak:"tên"},
+					{name: "sdt", type: "String", speak:"số điện thoại"},
+					{name: "loai", type: "int", speak:"loại"},
+					{name: "username", type: "String", speak:"tên đăng nhập"}
+				],
+				keys: ["id_Nhan_Vien"]
+			},
+			{
+				classname: "San_Pham", 
+				properties: [
+					{name: "id_San_Pham", type: "int", speak:"id sản phẩm"},
+					{name: "id_LoaiSP", type: "int", speak:"id loại sản phẩm"},
+					{name: "ten", type: "String", speak:"tên"},
+					{name: "gia", type: "int", speak:"giá"},
+					{name: "diem_Tich_Luy", type: "int", speak:"điểm tích lũy"},
+					{name: "description", type: "String", speak:"ghi chú"}
+				],
+				keys: ["id_San_Pham", "id_LoaiSP"]
+			},
+			{
+				classname: "Tai_Khoan", 
+				properties: [
+					{name: "username", type: "String", speak:"tên đăng nhập"},
+					{name: "password", type: "String", speak:"mật khẩu"},
+					{name: "type", type: "int", speak:"loại"}
+				],
+				keys: ["username"]
+			}
+		];
+
+		content.innerHTML = "";
+		for (let data of datas) {
+			content.innerHTML += data.classname + "<br>";
+
+			let sqlTableName = convertTableNameToSqlProperty(data.classname);
+			let csTableName =convertNameToCSProperty(data.classname);
+
+			let sqlTableProperties = data.properties.map(item => convertNameToSqlProperty(item.name));
+			let csTableProperties = data.properties.map(item => convertNameToCSProperty(item.name));
+
+			let sqlTableKeys = data.keys.map(item => convertNameToSqlProperty(item));
+			let csTableKeys = data.keys.map(item => convertNameToCSProperty(item));
+
+			let csTableKeysProperties = data.properties.filter(item => data.keys.find(key => key === item.name)).map(item => {
+				let newItem = item;
+				newItem.name = convertNameToCSProperty(item.name);
+				return newItem;
+			});
+
+			let formAddInput = `
+<br>
+Form${csTableName}AddInput
+<br>
+<textarea id='${csTableName}' style='width: 100%; height: 500px;' readonly='readonly'>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace AdminASP.Models
+{
+    public class Form${csTableName}AddInput
+    {
+        ${
+        	csTableProperties.map((item, index) => `
+private ${data.properties[index].type} ${item.toLowerCase()}; 
+public ${data.properties[index].type} ${item} { get { return this.${item.toLowerCase()}; } set { this.${item.toLowerCase()} = value; } }`)
+        	.join("\n")
+        }
+
+        public List<String> GetValidate()
+        {
+            List<String> errors = new List<String>();
+
+            ${
+            	csTableProperties.map((item, index) => `
+if (!(${createCSCodeConditionAccept(item, data.properties[index].type)}))
+{
+    errors.Add("${capitalizeFirst(data.properties[index].speak)} không thể để trống");
+}`)
+        	.join("\n")
+            }
+
+            return errors;
+        }
+    }
+}
+
+
+</textarea>
+			`;
+
+			let formDeleteInput = `
+<br>
+Form${csTableName}DeleteInput
+<br>
+<textarea id='${csTableName}' style='width: 100%; height: 500px;' readonly='readonly'>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace AdminASP.Models
+{
+    public class Form${csTableName}DeleteInput
+    {
+        ${
+        	csTableKeysProperties.map((item, index) => `
+private ${csTableKeysProperties[index].type} ${item.name.toLowerCase()}; 
+public ${csTableKeysProperties[index].type} ${item.name} { get { return this.${item.name.toLowerCase()}; } set { this.${item.name.toLowerCase()} = value; } }`)
+        	.join("\n")
+        }
+
+        public List<String> GetValidate()
+        {
+            List<String> errors = new List<String>();
+
+            ${
+            	csTableKeysProperties.map((item, index) => `
+if (!(${createCSCodeConditionAccept(item.name, csTableKeysProperties[index].type)}))
+{
+    errors.Add("${capitalizeFirst(data.properties[index].speak)} không thể để trống");
+}`)
+        	.join("\n")
+            }
+
+            return errors;
+        }
+    }
+}
+
+
+</textarea>
+			`;
+
+			let formEditInput = `
+<br>
+Form${csTableName}EditInput
+<br>
+<textarea id='${csTableName}' style='width: 100%; height: 500px;' readonly='readonly'>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace AdminASP.Models
+{
+    public class Form${csTableName}EditInput
+    {
+        ${
+        	csTableProperties.map((item, index) => `
+private ${data.properties[index].type} ${item.toLowerCase()}; 
+public ${data.properties[index].type} ${item} { get { return this.${item.toLowerCase()}; } set { this.${item.toLowerCase()} = value; } }`)
+        	.join("\n")
+        }
+
+        ${
+        	csTableKeysProperties.map((item, index) => `
+private ${csTableKeysProperties[index].type} old${item.name.toLowerCase()}; 
+public ${csTableKeysProperties[index].type} Old${item.name} { get { return this.old${item.name.toLowerCase()}; } set { this.old${item.name.toLowerCase()} = value; } }`)
+        	.join("\n")
+        }
+
+        public List<String> GetValidate()
+        {
+            List<String> errors = new List<String>();
+
+            ${
+            	csTableProperties.map((item, index) => `
+if (!(${createCSCodeConditionAccept(item, data.properties[index].type)}))
+{
+    errors.Add("${capitalizeFirst(data.properties[index].speak)} không thể để trống");
+}`)
+        	.join("\n")
+            }
+
+            ${
+            	csTableKeysProperties.map((item, index) => `
+if (!(${createCSCodeConditionAccept(`Old${item.name}`, csTableKeysProperties[index].type)}))
+{
+    errors.Add("${capitalizeFirst(data.properties[index].speak)} cũ không thể để trống");
+}`)
+        	.join("\n")
+            }
+
+            return errors;
+        }
+    }
+}
+
+
+</textarea>
+			`;
+
+			// newContent = newContent.replace(/\n/g, "\n<br>\n");
+
+			content.innerHTML += formAddInput;
+			content.innerHTML += "<br>---<br>";
+			content.innerHTML += formDeleteInput;
+			content.innerHTML += "<br>---<br>";
+			content.innerHTML += formEditInput;
+			content.innerHTML += "<br>-----------------------------------------------------------------<br>";
+		}
+
+	</script>
+</body>
+</html>

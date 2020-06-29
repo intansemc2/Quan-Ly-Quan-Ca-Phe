@@ -65,6 +65,15 @@ namespace AdminASP.Models
             return mySqlCommand;
         }
 
+        public override MySqlCommand CreateQueryDeleteAll(MySqlConnection conn)
+        {
+            String query = "DELETE FROM dat_ban";
+
+            MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
+
+            return mySqlCommand;
+        }
+
         public override MySqlCommand CreateQueryEdit(MySqlConnection conn, BaseModel oldmodel, BaseModel newmodel)
         {
             DatBan oldcurrentModel = (DatBan)oldmodel;

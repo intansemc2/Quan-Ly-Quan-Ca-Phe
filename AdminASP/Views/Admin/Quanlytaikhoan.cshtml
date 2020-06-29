@@ -101,47 +101,47 @@
                       <!-- Model thêm tài khoản-->
                       <div class="modal fade" id="modelThemTaiKhoan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title">Thêm tài khoản</h5>
-                              <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            </div>
-                            <div class="modal-body">
-                              <div id="themTaiKhoanAlerts">
-                                <!-- Các alert của phần này-->
-                              </div>
-                              <div class="form-group">
-                                <label class="small mb-1" for="themTaiKhoanUsername">Tên đăng nhập</label>
-                                <input class="form-control py-4 username" id="themTaiKhoanUsername" type="text" placeholder="Nhập tên đăng nhập của bạn">
-                              </div>
-                              <div class="form-row">
-                                <div class="col-md-6">
-                                  <div class="form-group">
-                                    <label class="small mb-1" for="themTaiKhoanPassword">Mật khẩu</label>
-                                    <input class="form-control py-4 password" id="themTaiKhoanPassword" type="password" placeholder="Nhập mật khẩu của bạn">
-                                  </div>
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Thêm tài khoản</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                                 </div>
-                                <div class="col-md-6">
-                                  <div class="form-group">
-                                    <label class="small mb-1" for="themTaiKhoanConfirmPassword">Nhập lại mậu khẩu</label>
-                                    <input class="form-control py-4 re_password" id="themTaiKhoanConfirmPassword" type="password" placeholder="Nhập lại mật khẩu của bạn">
-                                  </div>
+                                <div class="modal-body">
+                                    <div id="themTaiKhoanAlerts">
+                                        <!-- Các alert của phần này-->
+                                    </div>
+                                        <div class="form-group">
+                                            <label class="small mb-1" for="themTaiKhoanUsername">Tên đăng nhập</label>
+                                            <input class="form-control py-4 username" id="themTaiKhoanUsername" type="text" placeholder="Nhập tên đăng nhập của bạn">
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="themTaiKhoanPassword">Mật khẩu</label>
+                                                    <input class="form-control py-4 password" id="themTaiKhoanPassword" type="password" placeholder="Nhập mật khẩu của bạn">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="themTaiKhoanConfirmPassword">Nhập lại mậu khẩu</label>
+                                                    <input class="form-control py-4 re_password" id="themTaiKhoanConfirmPassword" type="password" placeholder="Nhập lại mật khẩu của bạn">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="small mb-1" for="themTaiKhoanLoaiTaiKhoan">Chọn loại tài khoản</label>
+                                            <select class="form-control type" id="themTaiKhoanLoaiTaiKhoan">
+                                                <option value="0">Người dùng</option>
+                                                <option value="1">Nhân viên</option>
+                                                <option value="2">Admin</option>
+                                            </select>
+                                        </div>
                                 </div>
-                              </div>
-                              <div class="form-group">
-                                <label class="small mb-1" for="themTaiKhoanLoaiTaiKhoan">Chọn loại tài khoản</label>
-                                <select class="form-control type" id="themTaiKhoanLoaiTaiKhoan">
-                                  <option value="0">Người dùng</option>
-                                  <option value="1">Nhân viên</option>
-                                  <option value="2">Admin</option>
-                                </select>
-                              </div>
+                                <div class="modal-footer">
+                                    <input class="btn btn-outline-primary" id="themTaiKhoanConfirm" type="button" value="Thêm Tài khoản">
+                                    <input class="btn btn-outline-secondary" id="themTaiKhoanReset" type="reset" value="Cài lại">
+                                </div>
                             </div>
-                            <div class="modal-footer">
-                              <input class="btn btn-outline-primary" id="themTaiKhoanConfirm" type="button" value="Thêm Tài khoản">
-                              <input class="btn btn-outline-secondary" id="themTaiKhoanReset" type="reset" value="Cài lại">
-                            </div>
-                          </div>
                         </div>
                       </div>
                       <!-- Model sửa tài khoản-->

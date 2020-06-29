@@ -46,6 +46,18 @@
 			}
 			return `${input}  != null`;
 		};
+		let createCSCodeDefaultValue = (type) => {
+			if (type === "int") {
+				return `-1`;
+			}
+			if (type === "float") {
+				return `-1`;
+			}
+			if (type === "String") {
+				return `null`;
+			}
+			return `null`;
+		};
 
 		let content = document.querySelector("#content");
 		let datas = [
@@ -187,42 +199,133 @@
 				return newItem;
 			});
 
-			let formAddInput = `
+			let csTableNotKeysProperties = data.properties.filter(item => data.keys.find(key => key !== item.name)).map(item => {
+				let newItem = item;
+				newItem.name = convertNameToCSProperty(item.name);
+				return newItem;
+			});
+
+			let formController = `
 <br>
-Form${csTableName}AddInput
+${csTableName}Controller
 <br>
 <textarea id='${csTableName}' style='width: 100%; height: 500px;' readonly='readonly'>
+
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using AdminASP.Models;
+using System.Security.Cryptography;
+using AdminASP.Helpers;
+using Newtonsoft.Json;
 
-namespace AdminASP.Models
+namespace AdminASP.Controllers
 {
-    public class Form${csTableName}AddInput
+    public class ${csTableName}Controller : Controller
     {
-        ${
-        	csTableProperties.map((item, index) => `
-private ${data.properties[index].type} ${item.toLowerCase()}; 
-public ${data.properties[index].type} ${item} { get { return this.${item.toLowerCase()}; } set { this.${item.toLowerCase()} = value; } }`)
-        	.join("\n")
+        public IActionResult GetAll()
+        {
+            ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
+            List<BaseModel> baseModels = modelStoreContext.GetAll();
+            List<${csTableName}> thisModels = new List<${csTableName}>();
+            foreach (BaseModel baseModel in baseModels)
+            {
+                thisModels.Add(baseModel as ${csTableName});
+            }
+            ViewData["inputs"] = thisModels;
+            return View();
         }
 
-        public List<String> GetValidate()
+        public IActionResult Add(Form${csTableName}AddInput input)
         {
-            List<String> errors = new List<String>();
+            int result = 0;
+            List<String> resultValidate = input.GetValidate();
+            if (resultValidate.Count <= 0)
+            {
+                ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
+                int addResult = modelStoreContext.Add(new ${csTableName}() { 
+                    ${
+                    	csTableProperties.map(item => `${item} = input.${item}`).join(",")
+                    }
+                });
 
-            ${
-            	csTableProperties.map((item, index) => `
-if (!(${createCSCodeConditionAccept(item, data.properties[index].type)}))
-{
-    errors.Add("${capitalizeFirst(data.properties[index].speak)} không thể để trống");
-}`)
-        	.join("\n")
+                result = addResult;
             }
+            ViewData["input"] = result;
+            ViewData["errors"] = resultValidate;
+            return View();
+        }
 
-            return errors;
+        public IActionResult Edit(Form${csTableName}EditInput input)
+        {
+            int result = 0;
+            List<String> resultValidate = input.GetValidate();
+            if (resultValidate.Count <= 0)
+            {
+                ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
+                ${csTableName} old${csTableName} = new ${csTableName}()
+                {
+                    ${
+                    	csTableProperties.map((item, index) => {
+                    		if (csTableKeysProperties.find(key => key.name === item) !== undefined) {
+                    			return `${item} = input.${item}`;
+                    		}
+                    		else {
+                    			return `${item} = ${createCSCodeDefaultValue(data.properties[index].type)}`;
+                    		}
+                    	}).join(",")
+                    }
+                };
+                ${csTableName} new${csTableName} = new ${csTableName}()
+                {
+                    ${
+                    	csTableProperties.map(item => `${item} = input.${item}`).join(",")
+                    }
+                };
+                int editResult = modelStoreContext.Edit(old${csTableName}, new${csTableName});
+
+                result = editResult;
+                ViewData["new${csTableName}"] = new${csTableName};
+            }
+            ViewData["input"] = result;
+            ViewData["errors"] = resultValidate;             
+            return View();
+        }
+
+        public IActionResult Delete(Form${csTableName}DeleteInput input)
+        {
+            int result = 0;
+            List<String> resultValidate = input.GetValidate();
+            if (resultValidate.Count <= 0)
+            {
+                ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
+                ${csTableName} taiKhoan = new ${csTableName}()
+                {
+                    Username = input.Username,
+                    Password = null,
+                    Type = -1
+                };
+                int deleteResult = modelStoreContext.Delete(taiKhoan);
+
+                result = deleteResult;
+            }
+            ViewData["input"] = result;
+            ViewData["errors"] = resultValidate;
+            return View();
+        }
+
+        public IActionResult DeleteAll()
+        {
+            int result = 0;
+            ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
+            int deleteResult = modelStoreContext.DeleteAll();
+
+            result = deleteResult;
+            ViewData["input"] = result;
+            return View();
         }
     }
 }
@@ -231,117 +334,7 @@ if (!(${createCSCodeConditionAccept(item, data.properties[index].type)}))
 </textarea>
 			`;
 
-			let formDeleteInput = `
-<br>
-Form${csTableName}DeleteInput
-<br>
-<textarea id='${csTableName}' style='width: 100%; height: 500px;' readonly='readonly'>
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace AdminASP.Models
-{
-    public class Form${csTableName}DeleteInput
-    {
-        ${
-        	csTableKeysProperties.map((item, index) => `
-private ${csTableKeysProperties[index].type} ${item.name.toLowerCase()}; 
-public ${csTableKeysProperties[index].type} ${item.name} { get { return this.${item.name.toLowerCase()}; } set { this.${item.name.toLowerCase()} = value; } }`)
-        	.join("\n")
-        }
-
-        public List<String> GetValidate()
-        {
-            List<String> errors = new List<String>();
-
-            ${
-            	csTableKeysProperties.map((item, index) => `
-if (!(${createCSCodeConditionAccept(item.name, csTableKeysProperties[index].type)}))
-{
-    errors.Add("${capitalizeFirst(data.properties[index].speak)} không thể để trống");
-}`)
-        	.join("\n")
-            }
-
-            return errors;
-        }
-    }
-}
-
-
-</textarea>
-			`;
-
-			let formEditInput = `
-<br>
-Form${csTableName}EditInput
-<br>
-<textarea id='${csTableName}' style='width: 100%; height: 500px;' readonly='readonly'>
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace AdminASP.Models
-{
-    public class Form${csTableName}EditInput
-    {
-        ${
-        	csTableProperties.map((item, index) => `
-private ${data.properties[index].type} ${item.toLowerCase()}; 
-public ${data.properties[index].type} ${item} { get { return this.${item.toLowerCase()}; } set { this.${item.toLowerCase()} = value; } }`)
-        	.join("\n")
-        }
-
-        ${
-        	csTableKeysProperties.map((item, index) => `
-private ${csTableKeysProperties[index].type} old${item.name.toLowerCase()}; 
-public ${csTableKeysProperties[index].type} Old${item.name} { get { return this.old${item.name.toLowerCase()}; } set { this.old${item.name.toLowerCase()} = value; } }`)
-        	.join("\n")
-        }
-
-        public List<String> GetValidate()
-        {
-            List<String> errors = new List<String>();
-
-            ${
-            	csTableProperties.map((item, index) => `
-if (!(${createCSCodeConditionAccept(item, data.properties[index].type)}))
-{
-    errors.Add("${capitalizeFirst(data.properties[index].speak)} không thể để trống");
-}`)
-        	.join("\n")
-            }
-
-            ${
-            	csTableKeysProperties.map((item, index) => `
-if (!(${createCSCodeConditionAccept(`Old${item.name}`, csTableKeysProperties[index].type)}))
-{
-    errors.Add("${capitalizeFirst(data.properties[index].speak)} cũ không thể để trống");
-}`)
-        	.join("\n")
-            }
-
-            return errors;
-        }
-    }
-}
-
-
-</textarea>
-			`;
-
-			// newContent = newContent.replace(/\n/g, "\n<br>\n");
-
-			content.innerHTML += formAddInput;
-			content.innerHTML += "<br>---<br>";
-			content.innerHTML += formDeleteInput;
-			content.innerHTML += "<br>---<br>";
-			content.innerHTML += formEditInput;
+			content.innerHTML += formController;
 			content.innerHTML += "<br>-----------------------------------------------------------------<br>";
 		}
 

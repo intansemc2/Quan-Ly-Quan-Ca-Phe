@@ -8,8 +8,8 @@ namespace AdminASP.Models
     public class FormCthdEditInput
     {
 
-        private int idnhanvien;
-        public int IdNhanVien { get { return this.idnhanvien; } set { this.idnhanvien = value; } }
+        private int idhoadon;
+        public int IdHoaDon { get { return this.idhoadon; } set { this.idhoadon = value; } }
 
         private int idsanpham;
         public int IdSanPham { get { return this.idsanpham; } set { this.idsanpham = value; } }
@@ -24,8 +24,8 @@ namespace AdminASP.Models
         public int DiemTichLuy { get { return this.diemtichluy; } set { this.diemtichluy = value; } }
 
 
-        private int oldidnhanvien;
-        public int OldIdNhanVien { get { return this.oldidnhanvien; } set { this.oldidnhanvien = value; } }
+        private int oldidhoadon;
+        public int OldIdHoaDon { get { return this.oldidhoadon; } set { this.oldidhoadon = value; } }
 
         private int oldidsanpham;
         public int OldIdSanPham { get { return this.oldidsanpham; } set { this.oldidsanpham = value; } }
@@ -35,9 +35,9 @@ namespace AdminASP.Models
             List<String> errors = new List<String>();
 
 
-            if (!(IdNhanVien >= 0))
+            if (!(IdHoaDon >= 0))
             {
-                errors.Add("Id nhân viên không thể để trống");
+                errors.Add("Id hóa đơn không thể để trống");
             }
 
             if (!(IdSanPham >= 0))
@@ -61,9 +61,9 @@ namespace AdminASP.Models
             }
 
 
-            if (!(OldIdNhanVien >= 0))
+            if (!(OldIdHoaDon >= 0))
             {
-                errors.Add("Id nhân viên cũ không thể để trống");
+                errors.Add("Id hóa đơn cũ không thể để trống");
             }
 
             if (!(OldIdSanPham >= 0))

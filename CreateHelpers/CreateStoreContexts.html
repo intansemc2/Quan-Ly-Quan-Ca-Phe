@@ -52,13 +52,13 @@
 			{
 				classname: "Cthd", 
 				properties: [
-					{name: "id_Nhan_Vien", type: "int"},
+					{name: "id_Hoa_Don", type: "int"},
 					{name: "id_San_Pham", type: "int"},
 					{name: "so_Luong", type: "int"},
 					{name: "don_Gia", type: "int"},
 					{name: "diem_Tich_Luy", type: "int"}
 				],
-				keys: ["id_Nhan_Vien", "id_San_Pham"]
+				keys: ["id_Hoa_Don", "id_San_Pham"]
 			},
 			{
 				classname: "Ctkm", 
@@ -232,6 +232,15 @@ public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel m
     ${
     	sqlTableKeys.map((item, index) => `mySqlCommand.Parameters.AddWithValue("${item}", currentModel.${csTableKeys[index]});`).join("\n")
     }
+
+    return mySqlCommand;
+}
+
+public override MySqlCommand CreateQueryDeleteAll(MySqlConnection conn)
+{
+    String query = "DELETE FROM ${sqlTableName}";
+
+    MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 
     return mySqlCommand;
 }

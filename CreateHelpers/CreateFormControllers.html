@@ -187,8 +187,8 @@
 			let sqlTableName = convertTableNameToSqlProperty(data.classname);
 			let csTableName =convertNameToCSProperty(data.classname);
 
-			let sqlTableProperties = data.properties.map(item => convertNameToSqlProperty(item.name));
-			let csTableProperties = data.properties.map(item => convertNameToCSProperty(item.name));
+			let sqlTablePropertiesNames = data.properties.map(item => convertNameToSqlProperty(item.name));
+			let csTablePropertiesNames = data.properties.map(item => convertNameToCSProperty(item.name));
 
 			let sqlTableKeys = data.keys.map(item => convertNameToSqlProperty(item));
 			let csTableKeys = data.keys.map(item => convertNameToCSProperty(item));
@@ -248,7 +248,7 @@ namespace AdminASP.Controllers
                 ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
                 int addResult = modelStoreContext.Add(new ${csTableName}() { 
                     ${
-                    	csTableProperties.map(item => `${item} = input.${item}`).join(",")
+                    	csTablePropertiesNames.map(item => `${item} = input.${item}`).join(",")
                     }
                 });
 
@@ -269,7 +269,7 @@ namespace AdminASP.Controllers
                 ${csTableName} old${csTableName} = new ${csTableName}()
                 {
                     ${
-                    	csTableProperties.map((item, index) => {
+                    	csTablePropertiesNames.map((item, index) => {
                     		if (csTableKeysProperties.find(key => key.name === item) !== undefined) {
                     			return `${item} = input.${item}`;
                     		}
@@ -282,7 +282,7 @@ namespace AdminASP.Controllers
                 ${csTableName} new${csTableName} = new ${csTableName}()
                 {
                     ${
-                    	csTableProperties.map(item => `${item} = input.${item}`).join(",")
+                    	csTablePropertiesNames.map(item => `${item} = input.${item}`).join(",")
                     }
                 };
                 int editResult = modelStoreContext.Edit(old${csTableName}, new${csTableName});
@@ -304,9 +304,16 @@ namespace AdminASP.Controllers
                 ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
                 ${csTableName} taiKhoan = new ${csTableName}()
                 {
-                    Username = input.Username,
-                    Password = null,
-                    Type = -1
+                    ${
+                    	csTablePropertiesNames.map((item, index) => {
+                    		if (csTableKeysProperties.find(key => key.name === item) !== undefined) {
+                    			return `${item} = input.${item}`;
+                    		}
+                    		else {
+                    			return `${item} = ${createCSCodeDefaultValue(data.properties[index].type)}`;
+                    		}
+                    	}).join(",")
+                    }
                 };
                 int deleteResult = modelStoreContext.Delete(taiKhoan);
 

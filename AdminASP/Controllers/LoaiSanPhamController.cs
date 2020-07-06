@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,33 +10,32 @@ using Newtonsoft.Json;
 
 namespace AdminASP.Controllers
 {
-    public class TaiKhoanController : Controller
+    public class LoaiSanPhamController : Controller
     {
         public IActionResult GetAll()
         {
-            TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
+            LoaiSanPhamStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(LoaiSanPhamStoreContext)) as LoaiSanPhamStoreContext;
             List<BaseModel> baseModels = modelStoreContext.GetAll();
-            List<TaiKhoan> thisModels = new List<TaiKhoan>();
+            List<LoaiSanPham> thisModels = new List<LoaiSanPham>();
             foreach (BaseModel baseModel in baseModels)
             {
-                thisModels.Add(baseModel as TaiKhoan);
+                thisModels.Add(baseModel as LoaiSanPham);
             }
             ViewData["inputs"] = thisModels;
             return View();
         }
 
-        public IActionResult Add(FormTaiKhoanAddInput input)
+        public IActionResult Add(FormLoaiSanPhamAddInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
             if (resultValidate.Count <= 0)
             {
-                TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
-                int addResult = modelStoreContext.Add(new TaiKhoan()
+                LoaiSanPhamStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(LoaiSanPhamStoreContext)) as LoaiSanPhamStoreContext;
+                int addResult = modelStoreContext.Add(new LoaiSanPham()
                 {
-                    Username = input.Username,
-                    Password = input.Password,
-                    Type = input.Type
+                    IdLoaiSP = input.IdLoaiSP,
+                    Ten = input.Ten
                 });
 
                 result = addResult;
@@ -47,47 +45,44 @@ namespace AdminASP.Controllers
             return View();
         }
 
-        public IActionResult Edit(FormTaiKhoanEditInput input)
+        public IActionResult Edit(FormLoaiSanPhamEditInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
             if (resultValidate.Count <= 0)
             {
-                TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
-                TaiKhoan oldTaiKhoan = new TaiKhoan()
+                LoaiSanPhamStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(LoaiSanPhamStoreContext)) as LoaiSanPhamStoreContext;
+                LoaiSanPham oldLoaiSanPham = new LoaiSanPham()
                 {
-                    Username = input.Username,
-                    Password = null,
-                    Type = -1
+                    IdLoaiSP = input.IdLoaiSP,
+                    Ten = null
                 };
-                TaiKhoan newTaiKhoan = new TaiKhoan()
+                LoaiSanPham newLoaiSanPham = new LoaiSanPham()
                 {
-                    Username = input.Username,
-                    Password = input.Password,
-                    Type = input.Type
+                    IdLoaiSP = input.IdLoaiSP,
+                    Ten = input.Ten
                 };
-                int editResult = modelStoreContext.Edit(oldTaiKhoan, newTaiKhoan);
+                int editResult = modelStoreContext.Edit(oldLoaiSanPham, newLoaiSanPham);
 
                 result = editResult;
-                ViewData["newTaiKhoan"] = newTaiKhoan;
+                ViewData["newLoaiSanPham"] = newLoaiSanPham;
             }
             ViewData["input"] = result;
             ViewData["errors"] = resultValidate;
             return View();
         }
 
-        public IActionResult Delete(FormTaiKhoanDeleteInput input)
+        public IActionResult Delete(FormLoaiSanPhamDeleteInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
             if (resultValidate.Count <= 0)
             {
-                TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
-                TaiKhoan taiKhoan = new TaiKhoan()
+                LoaiSanPhamStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(LoaiSanPhamStoreContext)) as LoaiSanPhamStoreContext;
+                LoaiSanPham taiKhoan = new LoaiSanPham()
                 {
-                    Username = input.Username,
-                    Password = null,
-                    Type = -1
+                    IdLoaiSP = input.IdLoaiSP,
+                    Ten = null
                 };
                 int deleteResult = modelStoreContext.Delete(taiKhoan);
 
@@ -101,7 +96,7 @@ namespace AdminASP.Controllers
         public IActionResult DeleteAll()
         {
             int result = 0;
-            TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
+            LoaiSanPhamStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(LoaiSanPhamStoreContext)) as LoaiSanPhamStoreContext;
             int deleteResult = modelStoreContext.DeleteAll();
 
             result = deleteResult;

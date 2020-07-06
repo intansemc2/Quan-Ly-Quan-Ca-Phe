@@ -176,7 +176,7 @@
                 </div>
               </div>
             </div><!-- Model chi tiết khuyến mãi -->
-            <div class="modal fade" id="modelChiTietKhuyenMai" tabindex="-1" role="dialog" aria-labelledby="model aria-labelledby" aria-hidden="true">
+            <div class="modal fade" id="modelCtkm" tabindex="-1" role="dialog" aria-labelledby="model aria-labelledby" aria-hidden="true">
               <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -187,23 +187,23 @@
                     <div class="card mb-4">
                       <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
                       <div class="card-body">
-                        <button class="btn btn-outline-primary mr-3" id="themChiTietKhuyenMai" type="button" data-toggle="modal" data-target="#modelThemChiTietKhuyenMai" modify="ThemChiTietKhuyenMai">Thêm chi tiết khuyến mãi</button>
+                        <button class="btn btn-outline-primary mr-3" id="themCtkm" type="button" data-toggle="modal" data-target="#modelThemCtkm" modify="ThemCtkm">Thêm chi tiết khuyến mãi</button>
                         <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
-                          <button class="btn btn-outline-secondary" id="danhDauTatCaChiTietKhuyenMai" type="button">Đánh dấu tất cả</button>
-                          <button class="btn btn-outline-secondary" id="boDanhDauTatCaChiTietKhuyenMai" type="button">Bỏ đánh dấu tất cả</button>
+                          <button class="btn btn-outline-secondary" id="danhDauTatCaCtkm" type="button">Đánh dấu tất cả</button>
+                          <button class="btn btn-outline-secondary" id="boDanhDauTatCaCtkm" type="button">Bỏ đánh dấu tất cả</button>
                         </div>
                         <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
-                          <button class="btn btn-outline-danger" id="xoaDanhDauChiTietKhuyenMai" type="button">Xóa đánh dấu</button>
-                          <button class="btn btn-outline-danger" id="xoaTatCaChiTietKhuyenMai" type="button">Xóa tất cả</button>
+                          <button class="btn btn-outline-danger" id="xoaDanhDauCtkm" type="button">Xóa đánh dấu</button>
+                          <button class="btn btn-outline-danger" id="xoaTatCaCtkm" type="button">Xóa tất cả</button>
                         </div>
-                        <button class="btn btn-outline-info mr-3" id="lamMoiChiTietKhuyenMai" type="button">Làm mới</button>
+                        <button class="btn btn-outline-info mr-3" id="lamMoiCtkm" type="button">Làm mới</button>
                       </div>
                     </div>
                     <div class="card mb-4">
                       <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý chi tiết khuyến mãi</div>
                       <div class="card-body">
-                        <div class="table-responsive" id="tableQuanLyChiTietKhuyenMaiContainer">
-                          <table class="table table-bordered table-striped table-hover" id="tableQuanLyChiTietKhuyenMai" width="100%" cellspacing="0">
+                        <div class="table-responsive" id="tableQuanLyCtkmContainer">
+                          <table class="table table-bordered table-striped table-hover" id="tableQuanLyCtkm" width="100%" cellspacing="0">
                             <thead>
                               <tr>
                                 <th>ID chi tiết khuyến mãi</th>
@@ -229,7 +229,7 @@
                         </div>
                       </div>
                     </div><!-- Model thêm khuyến mãi -->
-                    <div class="modal fade" id="modelThemChiTietKhuyenMai" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+                    <div class="modal fade" id="modelThemCtkm" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -237,36 +237,36 @@
                             <button class="close" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
                           </div>
                           <div class="modal-body">
-                            <div id="themChiTietKhuyenMaiAlerts"><!-- Các alert của phần này --></div>
+                            <div id="themCtkmAlerts"><!-- Các alert của phần này --></div>
                             <div class="form-group">
-                              <label class="small mb-1" for="themChiTietKhuyenMaiKhuyenMai">Khuyến mãi</label>
-                              <input class="form-control py-1 px-2 d-flex align-item-center id_khuyen_mai" id="themChiTietKhuyenMaiKhuyenMai" type="text" placeholder="Khuyến mãi hiện tại" readonly="readonly">
+                              <label class="small mb-1" for="themCtkmKhuyenMai">Khuyến mãi</label>
+                              <input class="form-control py-1 px-2 d-flex align-item-center id_khuyen_mai" id="themCtkmKhuyenMai" type="text" placeholder="Khuyến mãi hiện tại" readonly="readonly">
                             </div>
                             <div class="form-group">
-                              <label class="small mb-1" for="themChiTietKhuyenMaiSanPham">Sản phẩm</label>
-                              <select class="form-control id_san_pham" id="themChiTietKhuyenMaiSanPham"></select>
+                              <label class="small mb-1" for="themCtkmSanPham">Sản phẩm</label>
+                              <select class="form-control id_san_pham" id="themCtkmSanPham"></select>
                             </div>
                             <div class="form-group">
-                              <label class="small mb-1" for="themChiTietKhuyenMaiSoLuong">Số lượng</label>
-                              <input class="form-control py-4 username so_luong" id="themChiTietKhuyenMaiSoLuong" type="number" min="1" step="1" placeholder="Nhập Số lượng">
+                              <label class="small mb-1" for="themCtkmSoLuong">Số lượng</label>
+                              <input class="form-control py-4 username so_luong" id="themCtkmSoLuong" type="number" min="1" step="1" placeholder="Nhập Số lượng">
                             </div>
                             <div class="form-group">
-                              <label class="small mb-1" for="themChiTietKhuyenMaiDonGia">Đơn giá</label>
-                              <input class="form-control py-4 username don_gia" id="themChiTietKhuyenMaiDonGia" type="number" min="1" step="1" placeholder="Đơn giá hiện tại" readonly="readonly">
+                              <label class="small mb-1" for="themCtkmDonGia">Đơn giá</label>
+                              <input class="form-control py-4 username don_gia" id="themCtkmDonGia" type="number" min="1" step="1" placeholder="Đơn giá hiện tại" readonly="readonly">
                             </div>
                             <div class="form-group">
-                              <label class="small mb-1" for="themChiTietKhuyenMaiDiemTichLuy">Điểm tích lũy </label>
-                              <input class="form-control py-4 username diem_tich_luy" id="themChiTietKhuyenMaiDiemTichLuy" type="number" min="1" step="1" placeholder="Điểm tích lũy hiện tại" readonly="readonly">
+                              <label class="small mb-1" for="themCtkmDiemTichLuy">Điểm tích lũy </label>
+                              <input class="form-control py-4 username diem_tich_luy" id="themCtkmDiemTichLuy" type="number" min="1" step="1" placeholder="Điểm tích lũy hiện tại" readonly="readonly">
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <input class="btn btn-outline-primary" id="themChiTietKhuyenMaiConfirm" type="button" value="Thêm Khuyến mãi">
-                            <input class="btn btn-outline-secondary" id="themChiTietKhuyenMaiReset" type="reset" value="Cài lại">
+                            <input class="btn btn-outline-primary" id="themCtkmConfirm" type="button" value="Thêm Khuyến mãi">
+                            <input class="btn btn-outline-secondary" id="themCtkmReset" type="reset" value="Cài lại">
                           </div>
                         </div>
                       </div>
                     </div><!-- Model sửa khuyến mãi -->
-                    <div class="modal fade" id="modelSuaChiTietKhuyenMai" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+                    <div class="modal fade" id="modelSuaCtkm" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -274,33 +274,33 @@
                             <button class="close" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
                           </div>
                           <div class="modal-body">
-                            <div id="suaChiTietKhuyenMaiAlerts"><!-- Các alert của phần này --></div>
+                            <div id="suaCtkmAlerts"><!-- Các alert của phần này --></div>
                             <div class="form-group">
-                              <label class="small mb-1" for="suaChiTietKhuyenMaiKhuyenMai">Khuyến mãi</label>
-                              <input class="form-control py-1 px-2 d-flex align-item-center id_khuyen_mai" id="suaChiTietKhuyenMaiKhuyenMai" type="text" placeholder="Khuyến mãi hiện tại" readonly="readonly">
+                              <label class="small mb-1" for="suaCtkmKhuyenMai">Khuyến mãi</label>
+                              <input class="form-control py-1 px-2 d-flex align-item-center id_khuyen_mai" id="suaCtkmKhuyenMai" type="text" placeholder="Khuyến mãi hiện tại" readonly="readonly">
                             </div>
                             <div class="form-group">
-                              <label class="small mb-1" for="suaChiTietKhuyenMaiSanPham">Sản phẩm</label>
-                              <select class="form-control id_san_pham" id="suaChiTietKhuyenMaiSanPham">
+                              <label class="small mb-1" for="suaCtkmSanPham">Sản phẩm</label>
+                              <select class="form-control id_san_pham" id="suaCtkmSanPham">
                                 <option value="0">Sản phẩm</option>
                               </select>
                             </div>
                             <div class="form-group">
-                              <label class="small mb-1" for="suaChiTietKhuyenMaiSoLuong">Số lượng</label>
-                              <input class="form-control py-4 username so_luong" id="suaChiTietKhuyenMaiSoLuong" type="number" min="1" step="1" placeholder="Nhập Số lượng">
+                              <label class="small mb-1" for="suaCtkmSoLuong">Số lượng</label>
+                              <input class="form-control py-4 username so_luong" id="suaCtkmSoLuong" type="number" min="1" step="1" placeholder="Nhập Số lượng">
                             </div>
                             <div class="form-group">
-                              <label class="small mb-1" for="suaChiTietKhuyenMaiDonGia">Đơn giá</label>
-                              <input class="form-control py-4 username don_gia" id="suaChiTietKhuyenMaiDonGia" type="number" min="1" step="1" placeholder="Đơn giá">
+                              <label class="small mb-1" for="suaCtkmDonGia">Đơn giá</label>
+                              <input class="form-control py-4 username don_gia" id="suaCtkmDonGia" type="number" min="1" step="1" placeholder="Đơn giá">
                             </div>
                             <div class="form-group">
-                              <label class="small mb-1" for="suaChiTietKhuyenMaiDiemTichLuy">Điểm tích lũy </label>
-                              <input class="form-control py-4 username diem_tich_luy" id="suaChiTietKhuyenMaiDiemTichLuy" type="number" min="1" step="1" placeholder="Điểm tích lũy">
+                              <label class="small mb-1" for="suaCtkmDiemTichLuy">Điểm tích lũy </label>
+                              <input class="form-control py-4 username diem_tich_luy" id="suaCtkmDiemTichLuy" type="number" min="1" step="1" placeholder="Điểm tích lũy">
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <input class="btn btn-outline-primary" id="suaChiTietKhuyenMaiConfirm" type="button" value="Sửa Khuyến mãi">
-                            <input class="btn btn-outline-secondary" id="suaChiTietKhuyenMaiReset" type="reset" value="Cài lại">
+                            <input class="btn btn-outline-primary" id="suaCtkmConfirm" type="button" value="Sửa Khuyến mãi">
+                            <input class="btn btn-outline-secondary" id="suaCtkmReset" type="reset" value="Cài lại">
                           </div>
                         </div>
                       </div>

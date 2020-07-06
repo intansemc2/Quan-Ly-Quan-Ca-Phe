@@ -1,9 +1,9 @@
-let tableQuanLyChiTietDatBan;
+let tableQuanLyDatBan;
 let usernames = [];
 
 $(document).ready(function () {
 //Active dataTable
-    tableQuanLyChiTietDatBan = $("#tableQuanLyChiTietDatBan").DataTable({
+    tableQuanLyDatBan = $("#tableQuanLyDatBan").DataTable({
         "columnDefs": [
             {
                 "targets": 0,
@@ -45,150 +45,223 @@ $(document).ready(function () {
                     let chitietdatban = data;
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
-<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaChiTietDatBan" modify="${chitietdatban.id_ban}"><i class="fas fa-edit"></i></button>
-<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLCTBanRow(this)"><i class="fas fa-trash"></i></button>`;
+<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaDatBan" modify="${chitietdatban.id_ban}"><i class="fas fa-edit"></i></button>
+<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLDBRow(this)"><i class="fas fa-trash"></i></button>`;
                     return `${renderData}`;
                 }
             }]
     });
 
-    $("#danhDauTatCaChiTietDatBan").click(function () {
-        $("#modelChiTietDatBan").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
+    $("#danhDauTatCaDatBan").click(function () {
+        $("#modelDatBan").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
     });
-    $("#boDanhDauTatCaChiTietDatBan").click(function () {
-        $("#modelChiTietDatBan").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
+    $("#boDanhDauTatCaDatBan").click(function () {
+        $("#modelDatBan").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
     });
-    $("#xoaDanhDauChiTietDatBan").click(function () {
-        let markedRows = $("#modelChiTietDatBan").find(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton))
-                .map((index, toggleButton) => $(toggleButton).parents("tr"));
-        tableQuanLyChiTietDatBan.rows(markedRows).remove().draw();
+    $("#xoaDanhDauDatBan").click(function () {
+        $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton)).each((index, element) => deleteTableQLDBRow($(element)));
+
+
     });
-    $("#xoaTatCaChiTietDatBan").click(function () {
-        tableQuanLyChiTietDatBan.clear().draw();
+    $("#xoaTatCaDatBan").click(function () {
+        $.post("/DatBan/DeleteAll", function (data) {
+            //Lấy thông tin 
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            let outputs = JSON.parse(inputJson);
+
+            //Xóa khỏi bảng
+            if (outputs.output >= 0) {
+                tableQuanLyDatBan.clear().draw();
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để xóa dữ liệu từ CSDL");
+            })
+            .always(function () {
+            });
+
+
     });
-    $("#lamMoiChiTietDatBan").click(function () {
-        refreshDataTableQLCTBan();
+    $("#lamMoiDatBan").click(function () {
+        refreshDataTableQLDB();
     });
-    $("#modelThemChiTietDatBan").find("#themChiTietDatBanConfirm").click(function () {
+    $("#modelThemDatBan").find("#themDatBanConfirm").click(function () {
         //Xóa hết alert cũ
-        $("#modelThemChiTietDatBan").find("#themChiTietDatBanAlerts").html("");
+        $("#modelThemDatBan").find("#themDatBanAlerts").html("");
         
         //Validate
-        let modifyChiTietDatBan = extractModelThemChiTietDatBan();
-        let numberValidateError = validateChiTietDatBanInformation($("#modelThemChiTietDatBan").find("#themChiTietDatBanAlerts"), modifyChiTietDatBan);
+        let modifyDatBan = extractModelThemDatBan();
+        let numberValidateError = validateDatBanInformation($("#modelThemDatBan").find("#themDatBanAlerts"), modifyDatBan);
         if (numberValidateError > 0) {
             return;
         }
 
-        //Tạo hoá đơn mới 
-        let newChiTietDatBan = modifyChiTietDatBan;
-        newChiTietDatBan.id_ban = -1;
+        //Tạo chi tiết đặt bàn mới 
+        let newDatBan = modifyDatBan;
+        newDatBan.id_ban = -1;
         //Thêm xuống CSDL
-        let themNVResult = true;
-        //Thêm thành công
-        if (themNVResult) {
-            $("#modelThemChiTietDatBan").find("#themChiTietDatBanAlerts").append(createAlerts("success", "Thêm thành công"));
-            //Thêm hoá đơn mới vào bảng
-            $("#modelThemChiTietDatBan").find(".close").trigger("click");
-            tableQuanLyChiTietDatBan.row.add(createTableQLCTBanArrayDataRow(newChiTietDatBan)).draw();
-        }
-        //Thêm thất bại
-        else {
-            $("#modelThemChiTietDatBan").find("#themChiTietDatBanAlerts").append(createAlerts("danger", "Thêm thất bại"));
-        }
+        $.post("/DatBan/Add", { Username: newDatBan.username, IdBan: newDatBan.id_ban, ThoiGIanLap: newDatBan.thoi_gian_lap, ThoiGIanNhan: newDatBan.thoi_gian_nhan, GhiChu: newDatBan.ghi_chu }, function (data) {
+            //Lấy thông tin tài khoản
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            let outputs = JSON.parse(inputJson);
+
+            let themModelResult = true;
+            if (outputs.errors.Length > 0 || outputs.output < 0) {
+                themModelResult = false;
+            }
+
+            //Thêm thành công
+            if (themModelResult) {
+                $("#modelThemDatBan").find("#themDatBanAlerts").append(createAlerts("success", "Thêm thành công"));
+                //Thêm mới vào bảng
+                $("#modelThemDatBan").find(".close").trigger("click");
+                tableQuanLyDatBan.row.add(createTableQLDBArrayDataRow(newDatBan)).draw();
+            }
+            //Thêm thất bại
+            else {
+                $("#modelThemDatBan").find("#themDatBanAlerts").append(createAlerts("danger", "Thêm thất bại"));
+
+                for (let error of outputs.errors) {
+                    $("#modelThemDatBan").find("#themDatBanAlerts").append(createAlerts("danger", error));
+                }
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để thêm dữ liệu vào CSDL");
+                $("#modelThemDatBan").find("#themDatBanAlerts").append(createAlerts("danger", "Thêm thất bại"));
+            })
+            .always(function () {
+            });
+
+
     });
 
-    $("#modelThemChiTietDatBan").find("#themChiTietDatBanReset").click(function() {
-        setModelThemChiTietDatBan({});
+    $("#modelThemDatBan").find("#themDatBanReset").click(function() {
+        setModelThemDatBan({});
     });
 
-    $("#modelSuaChiTietDatBan").find("#suaChiTietDatBanConfirm").click(function () {
+    $("#modelSuaDatBan").find("#suaDatBanConfirm").click(function () {
         //Xóa hết alert cũ
-        $("#modelSuaChiTietDatBan").find("#suaChiTietDatBanAlerts").html("");        
+        $("#modelSuaDatBan").find("#suaDatBanAlerts").html("");        
 
-        let modifyChiTietDatBan = extractModelSuaChiTietDatBan();
+        let modifyDatBan = extractModelSuaDatBan();
 
         //Validate
-        let numberValidateError = validateChiTietDatBanInformation($("#modelSuaChiTietDatBan").find("#suaChiTietDatBanAlerts"), modifyChiTietDatBan);
+        let numberValidateError = validateDatBanInformation($("#modelSuaDatBan").find("#suaDatBanAlerts"), modifyDatBan);
         if (numberValidateError > 0) {
             return;
         }
 
-        //Tạo hoá đơn mới 
-        let newChiTietDatBan = modifyChiTietDatBan;
-        let id_ban = $(this).parents("#modelSuaChiTietDatBan").attr("id_ban");
-        let oldChiTietDatBanRow = $("#tableQuanLyChiTietDatBan").find(`button[modify='${id_ban}']`).parents("tr");
+        //Tạo chi tiết đặt bàn mới 
+        let newDatBan = modifyDatBan;
+        let id_ban = $(this).parents("#modelSuaDatBan").attr("id_ban");
+        let oldDatBanRow = $("#tableQuanLyDatBan").find(`button[modify='${id_ban}']`).parents("tr");
 
         //Sửa xuống CSDL
-        let suaNVResult = true;
+        $.post("/DatBan/Edit", { Username: newDatBan.username, IdBan: newDatBan.id_ban, ThoiGIanLap: newDatBan.thoi_gian_lap, ThoiGIanNhan: newDatBan.thoi_gian_nhan, GhiChu: newDatBan.ghi_chu }, function (data) {
+            //Lấy thông tin tài khoản
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            inputJson = inputJson.replace(/Username/g, `username`);;
+            inputJson = inputJson.replace(/IdBan/g, `idban`);;
+            inputJson = inputJson.replace(/ThoiGIanLap/g, `thoigianlap`);;
+            inputJson = inputJson.replace(/ThoiGIanNhan/g, `thoigiannhan`);;
+            inputJson = inputJson.replace(/GhiChu/g, `ghichu`);
+            let outputs = JSON.parse(inputJson);
 
-        //Sửa thành công
-        if (suaNVResult) {
-            $("#modelSuaChiTietDatBan").find("#suaChiTietDatBanAlerts").append(createAlerts("success", "Sửa thành công"));
+            let suaModelResult = true;
+            if (outputs.errors.length > 0 || outputs.output < 0) {
+                suaModelResult = false;
+            }
 
-            //Sửa hoá đơn mới vào bảng
-            $("#modelSuaChiTietDatBan").find(".close").trigger("click");
-            tableQuanLyChiTietDatBan.row(oldChiTietDatBanRow).data(createTableQLCTBanArrayDataRow(newChiTietDatBan)).draw();            
-        }
-        //Sửa thất bại
-        else {
-            $("#modelSuaChiTietDatBan").find("#suaChiTietDatBanAlerts").append(createAlerts("danger", "Sửa thất bại"));
-        }
+            //Sửa thành công
+            if (suaModelResult) {
+                $("#modelSuaDatBan").find("#suaDatBanAlerts").append(createAlerts("success", "Sửa thành công"));
+
+                //Sửa tài khoản mới vào bảng
+                $("#modelSuaDatBan").find(".close").trigger("click");
+                tableQuanLyDatBan.row(oldDatBanRow).data(createTableQLDBArrayDataRow(outputs.newDatBan)).draw();
+            }
+            //Sửa thất bại
+            else {
+                $("#modelSuaDatBan").find("#suaDatBanAlerts").append(createAlerts("danger", "Sửa thất bại"));
+
+                for (let error of outputs.errors) {
+                    $("#modelSuaDatBan").find("#suaDatBanAlerts").append(createAlerts("danger", error));
+                }
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để sửa dữ liệu vào CSDL");
+                $("#modelSuaDatBan").find("#suaDatBanAlerts").append(createAlerts("danger", "Sửa thất bại"));
+            })
+            .always(function () {
+            });
+
+
     });
 
-    $("#modelSuaChiTietDatBan").find("#suaChiTietDatBanReset").click(function() {
-        setModelSuaChiTietDatBan({});
+    $("#modelSuaDatBan").find("#suaDatBanReset").click(function() {
+        setModelSuaDatBan({});
     });
 
-    $('#modelSuaChiTietDatBan').on('show.bs.modal', function (event) {
-        let suaChiTietDatBanTriggered = $(event.relatedTarget); // Button that triggered the modal
+    $('#modelSuaDatBan').on('show.bs.modal', function (event) {
+        let suaDatBanTriggered = $(event.relatedTarget); // Button that triggered the modal
 
-        let modifyChiTietDatBan = extractDataFromTableQLCTBanRow(suaChiTietDatBanTriggered.parents("tr"));
+        let modifyDatBan = extractDataFromTableQLDBRow(suaDatBanTriggered.parents("tr"));
 
-        $(this).attr("id_ban", modifyChiTietDatBan.id_ban);
-        $(this).attr("username", modifyChiTietDatBan.username);
-        setModelSuaChiTietDatBan(modifyChiTietDatBan);
+        $(this).attr("id_ban", modifyDatBan.id_ban);
+        $(this).attr("username", modifyDatBan.username);
+        setModelSuaDatBan(modifyDatBan);
     });
 
-    $("#modelThemChiTietDatBan").find(".close").click(() => $("#modelThemChiTietDatBan").trigger("click"));
-    $("#modelSuaChiTietDatBan").find(".close").click(() => $("#modelSuaChiTietDatBan").trigger("click"));
+    $("#modelThemDatBan").find(".close").click(() => $("#modelThemDatBan").trigger("click"));
+    $("#modelSuaDatBan").find(".close").click(() => $("#modelSuaDatBan").trigger("click"));
 
-    $("#themChiTietDatBan").click(function () {
-        let id_ban = $(this).parents("#modelChiTietDatBan").attr("id_ban");
-        $("#modelThemChiTietDatBan").find(".id_ban").val(id_ban);
-        $("#modelThemChiTietDatBan").find(".username").val(usernames[0].username);
+    $("#themDatBan").click(function () {
+        let id_ban = $(this).parents("#modelDatBan").attr("id_ban");
+        $("#modelThemDatBan").find(".id_ban").val(id_ban);
+        $("#modelThemDatBan").find(".username").val(usernames[0].username);
     });
 
-    $("#modelThemChiTietDatBan").find("#themChiTietDatBanCurrentTimeLap").click(function () {
+    $("#modelThemDatBan").find("#themDatBanCurrentTimeLap").click(function () {
         let currentTimeParts = convertDateTimeToString(new Date()).split(" ");
-        $("#modelThemChiTietDatBan").find(".thoi_gian_lap[type='date']").val(currentTimeParts[0]);
-        $("#modelThemChiTietDatBan").find(".thoi_gian_lap[type='time']").val(currentTimeParts[1]);
+        $("#modelThemDatBan").find(".thoi_gian_lap[type='date']").val(currentTimeParts[0]);
+        $("#modelThemDatBan").find(".thoi_gian_lap[type='time']").val(currentTimeParts[1]);
     });
 
-    $("#modelSuaChiTietDatBan").find("#suaChiTietDatBanCurrentTimeLap").click(function () {
+    $("#modelSuaDatBan").find("#suaDatBanCurrentTimeLap").click(function () {
         let currentTimeParts = convertDateTimeToString(new Date()).split(" ");
-        $("#modelSuaChiTietDatBan").find(".thoi_gian_lap[type='date']").val(currentTimeParts[0]);
-        $("#modelSuaChiTietDatBan").find(".thoi_gian_lap[type='time']").val(currentTimeParts[1]);
+        $("#modelSuaDatBan").find(".thoi_gian_lap[type='date']").val(currentTimeParts[0]);
+        $("#modelSuaDatBan").find(".thoi_gian_lap[type='time']").val(currentTimeParts[1]);
     });
 
-    $("#modelThemChiTietDatBan").find("#themChiTietDatBanCurrentTimeNhan").click(function () {
+    $("#modelThemDatBan").find("#themDatBanCurrentTimeNhan").click(function () {
         let currentTimeParts = convertDateTimeToString(new Date()).split(" ");
-        $("#modelThemChiTietDatBan").find(".thoi_gian_nhan[type='date']").val(currentTimeParts[0]);
-        $("#modelThemChiTietDatBan").find(".thoi_gian_nhan[type='time']").val(currentTimeParts[1]);
+        $("#modelThemDatBan").find(".thoi_gian_nhan[type='date']").val(currentTimeParts[0]);
+        $("#modelThemDatBan").find(".thoi_gian_nhan[type='time']").val(currentTimeParts[1]);
     });
 
-    $("#modelSuaChiTietDatBan").find("#suaChiTietDatBanCurrentTimeNhan").click(function () {
+    $("#modelSuaDatBan").find("#suaDatBanCurrentTimeNhan").click(function () {
         let currentTimeParts = convertDateTimeToString(new Date()).split(" ");
-        $("#modelSuaChiTietDatBan").find(".thoi_gian_nhan[type='date']").val(currentTimeParts[0]);
-        $("#modelSuaChiTietDatBan").find(".thoi_gian_nhan[type='time']").val(currentTimeParts[1]);
+        $("#modelSuaDatBan").find(".thoi_gian_nhan[type='date']").val(currentTimeParts[0]);
+        $("#modelSuaDatBan").find(".thoi_gian_nhan[type='time']").val(currentTimeParts[1]);
     });
 });
 
-const createTableQLCTBanArrayDataRow = (chitietdatban) => {
+const createTableQLDBArrayDataRow = (chitietdatban) => {
     return [chitietdatban.id_ban, chitietdatban.username, chitietdatban.thoi_gian_lap, chitietdatban.thoi_gian_nhan, chitietdatban.ghi_chu, chitietdatban];
 };
 
-const extractDataFromTableQLCTBanRow = (tableRow) => {
+const extractDataFromTableQLDBRow = (tableRow) => {
     let id_ban = $(tableRow).find(".id_ban").attr("data");
     let username = $(tableRow).find(".username").attr("data");
     let thoi_gian_lap = $(tableRow).find(".thoi_gian_lap").attr("data");
@@ -197,54 +270,104 @@ const extractDataFromTableQLCTBanRow = (tableRow) => {
     return  {id_ban:id_ban, username:username, thoi_gian_lap:thoi_gian_lap, thoi_gian_nhan:thoi_gian_nhan, ghi_chu:ghi_chu};
 };
 
-const refreshDataTableQLCTBan = () => {    
+const refreshDataTableQLDB = () => {    
     //Lấy thông tin usernames
     usernames = [];
-    for (let i = 0; i < 10; i += 1) { usernames.push(`Username ${i}`); }
+    $.post("/TaiKhoan/GetAll", function (data) {
+        //Lấy thông tin tài khoản
+        let inputJson = data;
+        inputJson = inputJson.replace(/"/g, `"`);
+        inputJson = inputJson.replace(/Username/g, `username`);;
+        inputJson = inputJson.replace(/Password/g, `password`);;
+        inputJson = inputJson.replace(/Type/g, `type`);
+        let outputs = JSON.parse(inputJson);
 
-    //Thêm option username
-    $("#modelThemChiTietDatBan").find("#themChiTietDatBanUsername").html("");
-    $("#modelSuaChiTietDatBan").find("#suaChiTietDatBanUsername").html("");
-    for (let username of usernames) {
-        let newUsernameOption = `<option value="${username}">${username}</option>`;
-        $("#modelThemChiTietDatBan").find("#themChiTietDatBanUsername").append(newUsernameOption);
-        $("#modelSuaChiTietDatBan").find("#suaChiTietDatBanUsername").append(newUsernameOption);
-    }
+        //Thêm vào usernames
+        for (let output of outputs) {
+            usernames.push(output.username);
+        }
 
-    tableQuanLyChiTietDatBan.clear();
-    //Lấy thông tin hoá đơn
-    let n = Math.floor(Math.random() * 10);
-    let chitietdatbans =[];
-    for (let i = 0; i < n; i += 1) {
-        let id_ban = i;
-        let username = usernames[Math.floor(Math.random()*usernames.length)];
-        let thoi_gian_lap = new Date();
-        let thoi_gian_nhan = new Date();
-        let ghi_chu = "Ghi chú " + i;
-        chitietdatbans.push({id_ban:id_ban, username:username, thoi_gian_lap:thoi_gian_lap, thoi_gian_nhan:thoi_gian_nhan, ghi_chu:ghi_chu});
-    }
+        //Thêm option username
+        $("#modelThemDatBan").find("#themDatBanUsername").html("");
+        $("#modelSuaDatBan").find("#suaDatBanUsername").html("");
+        for (let username of usernames) {
+            let newUsernameOption = `<option value="${username}">${username}</option>`;
+            $("#modelThemDatBan").find("#themDatBanUsername").append(newUsernameOption);
+            $("#modelSuaDatBan").find("#suaDatBanUsername").append(newUsernameOption);
+        }
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            alert("Không thể gửi dữ liệu đến server để lấy dữ liệu từ CSDL");
+        })
+        .always(function () {
+        });
 
-    //Thêm vào bảng
-    for (let chitietdatban of chitietdatbans) {
-        tableQuanLyChiTietDatBan.row.add(createTableQLCTBanArrayDataRow(chitietdatban));
-    }
-    tableQuanLyChiTietDatBan.draw();
+    tableQuanLyDatBan.clear();
+    //Lấy thông tin chi tiết đặt bàn
+    $.post("/DatBan/GetAll", function (data) {
+        //Lấy thông tin tài khoản
+        let inputJson = data;
+        inputJson = inputJson.replace(/"/g, `"`);
+        inputJson = inputJson.replace(/Username/g, `username`);;
+        inputJson = inputJson.replace(/IdBan/g, `idban`);;
+        inputJson = inputJson.replace(/ThoiGIanLap/g, `thoigianlap`);;
+        inputJson = inputJson.replace(/ThoiGIanNhan/g, `thoigiannhan`);;
+        inputJson = inputJson.replace(/GhiChu/g, `ghichu`);
+        let outputs = JSON.parse(inputJson);
+
+        //Thêm vào bảng
+        for (let output of outputs) {
+            tableQuanLyDatBan.row.add(createTableQLDBArrayDataRow(output));
+        }
+        tableQuanLyDatBan.draw();
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            alert("Không thể gửi dữ liệu đến server để lấy dữ liệu từ CSDL");
+        })
+        .always(function () {
+        });
+
+
 };
 
-const deleteTableQLCTBanRow = (buttonInside) => {
+const deleteTableQLDBRow = (buttonInside) => {
     let tableRow = $(buttonInside).parents("tr");
-    tableQuanLyChiTietDatBan.row(tableRow).remove().draw();
+    let datBan = extractDataFromTableQLDBRow(tableRow);
+    $.post("/DatBan/Delete", { Username: datBan.username, IdBan: datBan.id_ban, ThoiGIanLap: datBan.thoi_gian_lap }, function (data) {
+        //Lấy thông tin 
+        let inputJson = data;
+        inputJson = inputJson.replace(/"/g, `"`);
+        let outputs = JSON.parse(inputJson);
+
+        //Xóa khỏi bảng
+        if (outputs.output >= 0) {
+            tableQuanLyDatBan.row(tableRow).remove().draw();
+        }
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            alert("Không thể gửi dữ liệu đến server để xóa dữ liệu từ CSDL");
+        })
+        .always(function () {
+        });
+
+
 };
 
-const extractModelThemChiTietDatBan = () => {
-    return extractFromModelChiTietDatBan($("#modelThemChiTietDatBan"));
+const extractModelThemDatBan = () => {
+    return extractFromModelDatBan($("#modelThemDatBan"));
 };
 
-const extractModelSuaChiTietDatBan = () => {
-    return extractFromModelChiTietDatBan($("#modelSuaChiTietDatBan"));
+const extractModelSuaDatBan = () => {
+    return extractFromModelDatBan($("#modelSuaDatBan"));
 };
 
-const extractFromModelChiTietDatBan = (model) => {
+const extractFromModelDatBan = (model) => {
     //Lấy thông tin
     let id_ban = $(model).find(".id_ban").val();
     let username = $(model).find(".username").val();
@@ -267,15 +390,15 @@ const extractFromModelChiTietDatBan = (model) => {
     return  {id_ban:id_ban, username:username, thoi_gian_lap:thoi_gian_lap, thoi_gian_nhan:thoi_gian_nhan, ghi_chu:ghi_chu};
 };
 
-const setModelThemChiTietDatBan = (modifyChiTietDatBan) => {
-    setToModelChiTietDatBan($("#modelThemChiTietDatBan"), modifyChiTietDatBan);
+const setModelThemDatBan = (modifyDatBan) => {
+    setToModelDatBan($("#modelThemDatBan"), modifyDatBan);
 };
 
-const setModelSuaChiTietDatBan = (modifyChiTietDatBan) => {
-    setToModelChiTietDatBan($("#modelSuaChiTietDatBan"), modifyChiTietDatBan);
+const setModelSuaDatBan = (modifyDatBan) => {
+    setToModelDatBan($("#modelSuaDatBan"), modifyDatBan);
 };
 
-const setToModelChiTietDatBan = (model, chitietdatban) => {
+const setToModelDatBan = (model, chitietdatban) => {
     $(model).find(".id_ban").val(chitietdatban.id_ban);
     $(model).find(".username").val(chitietdatban.username);
 
@@ -290,7 +413,7 @@ const setToModelChiTietDatBan = (model, chitietdatban) => {
     $(model).find(".ghi_chu").val(chitietdatban.ghi_chu);
 };
 
-const validateChiTietDatBanInformation = (alertContainer, chitietdatban) => {
+const validateDatBanInformation = (alertContainer, chitietdatban) => {
     //Validate
     let id_ban = chitietdatban.id_ban;
     let username = chitietdatban.username;

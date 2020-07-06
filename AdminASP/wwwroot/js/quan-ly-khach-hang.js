@@ -63,12 +63,31 @@ $(document).ready(function () {
         $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
     });
     $("#xoaDanhDau").click(function () {
-        let markedRows = $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton))
-                .map((index, toggleButton) => $(toggleButton).parents("tr"));
-        tableQuanLyKhachHang.rows(markedRows).remove().draw();
+        $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton)).each((index, element) => deleteTableQLKHRow($(element)));
+
+
     });
     $("#xoaTatCa").click(function () {
-        tableQuanLyKhachHang.clear().draw();
+        $.post("/KhachHang/DeleteAll", function (data) {
+            //Lấy thông tin 
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            let outputs = JSON.parse(inputJson);
+
+            //Xóa khỏi bảng
+            if (outputs.output >= 0) {
+                tableQuanLyKhachHang.clear().draw();
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để xóa dữ liệu từ CSDL");
+            })
+            .always(function () {
+            });
+
+
     });
     $("#lamMoi").click(function () {
         refreshDataTableQLNV();
@@ -88,18 +107,43 @@ $(document).ready(function () {
         let newKhachHang = modifyKhachHang;
         newKhachHang.id_khach_hang = -1;
         //Thêm xuống CSDL
-        let themNVResult = true;
-        //Thêm thành công
-        if (themNVResult) {
-            $("#modelThemKhachHang").find("#themKhachHangAlerts").append(createAlerts("success", "Thêm thành công"));
-            //Thêm khách hàng mới vào bảng
-            $("#modelThemKhachHang").find(".close").trigger("click");
-            tableQuanLyKhachHang.row.add(createTableQLNVArrayDataRow(newKhachHang)).draw();
-        }
-        //Thêm thất bại
-        else {
-            $("#modelThemKhachHang").find("#themKhachHangAlerts").append(createAlerts("danger", "Thêm thất bại"));
-        }
+        $.post("/KhachHang/Add", { IdKhachHang: newKhachHang.id_khach_hang, Ten: newKhachHang.ten, Sdt: newKhachHang.sdt, Username: newKhachHang.username, DiemTichLuy: newKhachHang.diem_tich_luy }, function (data) {
+            //Lấy thông tin tài khoản
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            let outputs = JSON.parse(inputJson);
+
+            let themModelResult = true;
+            if (outputs.errors.Length > 0 || outputs.output < 0) {
+                themModelResult = false;
+            }
+
+            //Thêm thành công
+            if (themModelResult) {
+                $("#modelThemKhachHang").find("#themKhachHangAlerts").append(createAlerts("success", "Thêm thành công"));
+                //Thêm mới vào bảng
+                $("#modelThemKhachHang").find(".close").trigger("click");
+                tableQuanLyKhachHang.row.add(createTableQLKHArrayDataRow(newKhachHang)).draw();
+            }
+            //Thêm thất bại
+            else {
+                $("#modelThemKhachHang").find("#themKhachHangAlerts").append(createAlerts("danger", "Thêm thất bại"));
+
+                for (let error of outputs.errors) {
+                    $("#modelThemKhachHang").find("#themKhachHangAlerts").append(createAlerts("danger", error));
+                }
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để thêm dữ liệu vào CSDL");
+                $("#modelThemKhachHang").find("#themKhachHangAlerts").append(createAlerts("danger", "Thêm thất bại"));
+            })
+            .always(function () {
+            });
+
+
     });
 
     $("#modelThemKhachHang").find("#themKhachHangReset").click(function() {

@@ -1,9 +1,9 @@
-let tableQuanLyChiTietHoaDon;
+let tableQuanLyCthd;
 let sanphams = [];
 
 $(document).ready(function () {
 //Active dataTable
-    tableQuanLyChiTietHoaDon = $("#tableQuanLyChiTietHoaDon").DataTable({
+    tableQuanLyCthd = $("#tableQuanLyCthd").DataTable({
         "columnDefs": [
             {
                 "targets": 0,
@@ -47,134 +47,207 @@ $(document).ready(function () {
                     let chitiethoadon = data;
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
-<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaChiTietHoaDon" modify="${chitiethoadon.id_hoa_don} ${chitiethoadon.id_san_pham}"><i class="fas fa-edit"></i></button>
-<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLCTHDRow(this)"><i class="fas fa-trash"></i></button>`;
+<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaCthd" modify="${chitiethoadon.id_hoa_don} ${chitiethoadon.id_san_pham}"><i class="fas fa-edit"></i></button>
+<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLCthdRow(this)"><i class="fas fa-trash"></i></button>`;
                     return `${renderData}`;
                 }
             }]
     });
 
-    $("#danhDauTatCaChiTietHoaDon").click(function () {
-        $("#modelChiTietHoaDon").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
+    $("#danhDauTatCaCthd").click(function () {
+        $("#modelCthd").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
     });
-    $("#boDanhDauTatCaChiTietHoaDon").click(function () {
-        $("#modelChiTietHoaDon").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
+    $("#boDanhDauTatCaCthd").click(function () {
+        $("#modelCthd").find(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
     });
-    $("#xoaDanhDauChiTietHoaDon").click(function () {
-        let markedRows = $("#modelChiTietHoaDon").find(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton))
-                .map((index, toggleButton) => $(toggleButton).parents("tr"));
-        tableQuanLyChiTietHoaDon.rows(markedRows).remove().draw();
+    $("#xoaDanhDauCthd").click(function () {
+        $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton)).each((index, element) => deleteTableQLCthdRow($(element)));
+
+
     });
-    $("#xoaTatCaChiTietHoaDon").click(function () {
-        tableQuanLyChiTietHoaDon.clear().draw();
+    $("#xoaTatCaCthd").click(function () {
+        $.post("/Cthd/DeleteAll", function (data) {
+            //Lấy thông tin 
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            let outputs = JSON.parse(inputJson);
+
+            //Xóa khỏi bảng
+            if (outputs.output >= 0) {
+                tableQuanLyCthd.clear().draw();
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để xóa dữ liệu từ CSDL");
+            })
+            .always(function () {
+            });
+
+
     });
-    $("#lamMoiChiTietHoaDon").click(function () {
-        refreshDataTableQLCTHD();
+    $("#lamMoiCthd").click(function () {
+        refreshDataTableQLCthd();
     });
-    $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonConfirm").click(function () {
+    $("#modelThemCthd").find("#themCthdConfirm").click(function () {
         //Xóa hết alert cũ
-        $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonAlerts").html("");
+        $("#modelThemCthd").find("#themCthdAlerts").html("");
         
         //Validate
-        let modifyChiTietHoaDon = extractModelThemChiTietHoaDon();
-        let numberValidateError = validateChiTietHoaDonInformation($("#modelThemChiTietHoaDon").find("#themChiTietHoaDonAlerts"), modifyChiTietHoaDon);
+        let modifyCthd = extractModelThemCthd();
+        let numberValidateError = validateCthdInformation($("#modelThemCthd").find("#themCthdAlerts"), modifyCthd);
         if (numberValidateError > 0) {
             return;
         }
 
         //Tạo hoá đơn mới 
-        let newChiTietHoaDon = modifyChiTietHoaDon;
+        let newCthd = modifyCthd;
         //Thêm xuống CSDL
-        let themNVResult = true;
-        //Thêm thành công
-        if (themNVResult) {
-            $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonAlerts").append(createAlerts("success", "Thêm thành công"));
-            //Thêm hoá đơn mới vào bảng
-            $("#modelThemChiTietHoaDon").find(".close").trigger("click");
-            tableQuanLyChiTietHoaDon.row.add(createTableQLCTHDArrayDataRow(newChiTietHoaDon)).draw();
-        }
-        //Thêm thất bại
-        else {
-            $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonAlerts").append(createAlerts("danger", "Thêm thất bại"));
-        }
+        $.post("/Cthd/Add", { IdHoaDon: newCthd.id_hoa_don, IdSanPham: newCthd.id_san_pham, SoLuong: newCthd.so_luong, DonGia: newCthd.don_gia, DiemTichLuy: newCthd.diem_tich_luy }, function (data) {
+            //Lấy thông tin tài khoản
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            let outputs = JSON.parse(inputJson);
+
+            let themModelResult = true;
+            if (outputs.errors.Length > 0 || outputs.output < 0) {
+                themModelResult = false;
+            }
+
+            //Thêm thành công
+            if (themModelResult) {
+                $("#modelThemCthd").find("#themCthdAlerts").append(createAlerts("success", "Thêm thành công"));
+                //Thêm mới vào bảng
+                $("#modelThemCthd").find(".close").trigger("click");
+                tableQuanLyCthd.row.add(createTableQLCthdArrayDataRow(newCthd)).draw();
+            }
+            //Thêm thất bại
+            else {
+                $("#modelThemCthd").find("#themCthdAlerts").append(createAlerts("danger", "Thêm thất bại"));
+
+                for (let error of outputs.errors) {
+                    $("#modelThemCthd").find("#themCthdAlerts").append(createAlerts("danger", error));
+                }
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để thêm dữ liệu vào CSDL");
+                $("#modelThemCthd").find("#themCthdAlerts").append(createAlerts("danger", "Thêm thất bại"));
+            })
+            .always(function () {
+            });
+
+
     });
 
-    $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonReset").click(function() {
-        setModelThemChiTietHoaDon({});
+    $("#modelThemCthd").find("#themCthdReset").click(function() {
+        setModelThemCthd({});
     });
 
-    $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonConfirm").click(function () {
+    $("#modelSuaCthd").find("#suaCthdConfirm").click(function () {
         //Xóa hết alert cũ
-        $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonAlerts").html("");        
+        $("#modelSuaCthd").find("#suaCthdAlerts").html("");        
 
-        let modifyChiTietHoaDon = extractModelSuaChiTietHoaDon();
+        let modifyCthd = extractModelSuaCthd();
 
         //Validate
-        let numberValidateError = validateChiTietHoaDonInformation($("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonAlerts"), modifyChiTietHoaDon);
+        let numberValidateError = validateCthdInformation($("#modelSuaCthd").find("#suaCthdAlerts"), modifyCthd);
         if (numberValidateError > 0) {
             return;
         }
 
         //Tạo hoá đơn mới 
-        let newChiTietHoaDon = modifyChiTietHoaDon;
-        let id_hoa_don = $(this).parents("#modelSuaChiTietHoaDon").attr("id_hoa_don");
-        let id_san_pham = $(this).parents("#modelSuaChiTietHoaDon").attr("id_san_pham");
-        let oldChiTietHoaDonRow = $("#tableQuanLyChiTietHoaDon").find(`button[modify='${id_hoa_don} ${id_san_pham}']`).parents("tr");
+        let newCthd = modifyCthd;
+        let id_hoa_don = $(this).parents("#modelSuaCthd").attr("id_hoa_don");
+        let id_san_pham = $(this).parents("#modelSuaCthd").attr("id_san_pham");
+        let oldCthdRow = $("#tableQuanLyCthd").find(`button[modify='${id_hoa_don} ${id_san_pham}']`).parents("tr");
         debugger;
 
         //Sửa xuống CSDL
-        let suaNVResult = true;
+        $.post("/Cthd/Edit", { IdHoaDon: newCthd.id_hoa_don, IdSanPham: newCthd.id_san_pham, SoLuong: newCthd.so_luong, DonGia: newCthd.don_gia, DiemTichLuy: newCthd.diem_tich_luy }, function (data) {
+            //Lấy thông tin tài khoản
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            inputJson = inputJson.replace(/IdHoaDon/g, `idhoadon`);;
+            inputJson = inputJson.replace(/IdSanPham/g, `idsanpham`);;
+            inputJson = inputJson.replace(/SoLuong/g, `soluong`);;
+            inputJson = inputJson.replace(/DonGia/g, `dongia`);;
+            inputJson = inputJson.replace(/DiemTichLuy/g, `diemtichluy`);
+            let outputs = JSON.parse(inputJson);
 
-        //Sửa thành công
-        if (suaNVResult) {
-            $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonAlerts").append(createAlerts("success", "Sửa thành công"));
+            let suaModelResult = true;
+            if (outputs.errors.length > 0 || outputs.output < 0) {
+                suaModelResult = false;
+            }
 
-            //Sửa hoá đơn mới vào bảng
-            $("#modelSuaChiTietHoaDon").find(".close").trigger("click");
-            tableQuanLyChiTietHoaDon.row(oldChiTietHoaDonRow).data(createTableQLCTHDArrayDataRow(newChiTietHoaDon)).draw();            
-        }
-        //Sửa thất bại
-        else {
-            $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonAlerts").append(createAlerts("danger", "Sửa thất bại"));
-        }
+            //Sửa thành công
+            if (suaModelResult) {
+                $("#modelSuaCthd").find("#suaCthdAlerts").append(createAlerts("success", "Sửa thành công"));
+
+                //Sửa tài khoản mới vào bảng
+                $("#modelSuaCthd").find(".close").trigger("click");
+                tableQuanLyCthd.row(oldCthdRow).data(createTableQLCthdArrayDataRow(outputs.newCthd)).draw();
+            }
+            //Sửa thất bại
+            else {
+                $("#modelSuaCthd").find("#suaCthdAlerts").append(createAlerts("danger", "Sửa thất bại"));
+
+                for (let error of outputs.errors) {
+                    $("#modelSuaCthd").find("#suaCthdAlerts").append(createAlerts("danger", error));
+                }
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để sửa dữ liệu vào CSDL");
+                $("#modelSuaCthd").find("#suaCthdAlerts").append(createAlerts("danger", "Sửa thất bại"));
+            })
+            .always(function () {
+            });
+
+
     });
 
-    $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonReset").click(function() {
-        setModelSuaChiTietHoaDon({});
+    $("#modelSuaCthd").find("#suaCthdReset").click(function() {
+        setModelSuaCthd({});
     });
 
-    $('#modelSuaChiTietHoaDon').on('show.bs.modal', function (event) {
-        let suaChiTietHoaDonTriggered = $(event.relatedTarget); // Button that triggered the modal
+    $('#modelSuaCthd').on('show.bs.modal', function (event) {
+        let suaCthdTriggered = $(event.relatedTarget); // Button that triggered the modal
 
-        let modifyChiTietHoaDon = extractDataFromTableQLCTHDRow(suaChiTietHoaDonTriggered.parents("tr"));
+        let modifyCthd = extractDataFromTableQLCthdRow(suaCthdTriggered.parents("tr"));
 
-        $(this).attr("id_hoa_don", modifyChiTietHoaDon.id_hoa_don);
-        $(this).attr("id_san_pham", modifyChiTietHoaDon.id_san_pham);
-        setModelSuaChiTietHoaDon(modifyChiTietHoaDon);
+        $(this).attr("id_hoa_don", modifyCthd.id_hoa_don);
+        $(this).attr("id_san_pham", modifyCthd.id_san_pham);
+        setModelSuaCthd(modifyCthd);
     });
 
-    $("#modelThemChiTietHoaDon").find(".close").click(() => $("#modelThemChiTietHoaDon").trigger("click"));
-    $("#modelSuaChiTietHoaDon").find(".close").click(() => $("#modelSuaChiTietHoaDon").trigger("click"));
+    $("#modelThemCthd").find(".close").click(() => $("#modelThemCthd").trigger("click"));
+    $("#modelSuaCthd").find(".close").click(() => $("#modelSuaCthd").trigger("click"));
 
-    $("#themChiTietHoaDonSanPham").change(function () {        
+    $("#themCthdSanPham").change(function () {        
         let id_san_pham = $(this).val();
         let sanpham = sanphams.find(item => item.id_san_pham == id_san_pham);
-        $(this).parents("#modelThemChiTietHoaDon").find(".don_gia").val(sanpham.gia);
-        $(this).parents("#modelThemChiTietHoaDon").find(".diem_tich_luy").val(sanpham.diem_tich_luy);
+        $(this).parents("#modelThemCthd").find(".don_gia").val(sanpham.gia);
+        $(this).parents("#modelThemCthd").find(".diem_tich_luy").val(sanpham.diem_tich_luy);
     });
 
-    $("#themChiTietHoaDon").click(function () {
-        let id_hoa_don = $(this).parents("#modelChiTietHoaDon").attr("id_hoa_don");
-        $("#modelThemChiTietHoaDon").find(".id_hoa_don").val(id_hoa_don);
-        $("#modelThemChiTietHoaDon").find(".id_san_pham").val(sanphams[0].id_san_pham);
+    $("#themCthd").click(function () {
+        let id_hoa_don = $(this).parents("#modelCthd").attr("id_hoa_don");
+        $("#modelThemCthd").find(".id_hoa_don").val(id_hoa_don);
+        $("#modelThemCthd").find(".id_san_pham").val(sanphams[0].id_san_pham);
     });
 });
 
-const createTableQLCTHDArrayDataRow = (chitiethoadon) => {
+const createTableQLCthdArrayDataRow = (chitiethoadon) => {
     return [chitiethoadon.id_hoa_don, chitiethoadon.id_san_pham, chitiethoadon.so_luong, chitiethoadon.don_gia, chitiethoadon.diem_tich_luy, chitiethoadon];
 };
 
-const extractDataFromTableQLCTHDRow = (tableRow) => {
+const extractDataFromTableQLCthdRow = (tableRow) => {
     let id_hoa_don = $(tableRow).find(".id_hoa_don").attr("data");
     let id_san_pham = $(tableRow).find(".id_san_pham").attr("data");
     let so_luong = $(tableRow).find(".so_luong").attr("data");
@@ -183,54 +256,104 @@ const extractDataFromTableQLCTHDRow = (tableRow) => {
     return  {id_hoa_don:id_hoa_don, id_san_pham:id_san_pham, so_luong:so_luong, don_gia:don_gia, diem_tich_luy:diem_tich_luy};
 };
 
-const refreshDataTableQLCTHD = () => {    
-    //Lấy thông tin usernames
+const refreshDataTableQLCthd = () => {    
+    //Lấy thông tin sanphams
     sanphams = [];
-    for (let i = 0; i < 10; i += 1) { sanphams.push({id_san_pham: i, ten: `Sản phẩm ${i}`, gia: Math.floor(Math.random()*1000)*1000, diem_tich_luy: Math.floor(Math.random()*1000)}); }
+    $.post("/SanPham/GetAll", function (data) {
+        //Lấy thông tin tài khoản
+        let inputJson = data;
+        inputJson = inputJson.replace(/"/g, `"`);
+        inputJson = inputJson.replace(/IdSanPham/g, `idsanpham`);;
+        inputJson = inputJson.replace(/IdLoaiSP/g, `idloaisp`);;
+        inputJson = inputJson.replace(/Ten/g, `ten`);;
+        inputJson = inputJson.replace(/Gia/g, `gia`);;
+        inputJson = inputJson.replace(/DiemTichLuy/g, `diemtichluy`);;
+        inputJson = inputJson.replace(/Description/g, `description`);
+        let outputs = JSON.parse(inputJson);
 
-    //Thêm option username
-    $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonSanPham").html("");
-    $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonSanPham").html("");
-    for (let sanpham of sanphams) {
-        let newUsernameOption = `<option value="${sanpham.id_san_pham}">${sanpham.id_san_pham} - ${sanpham.ten}</option>`;
-        $("#modelThemChiTietHoaDon").find("#themChiTietHoaDonSanPham").append(newUsernameOption);
-        $("#modelSuaChiTietHoaDon").find("#suaChiTietHoaDonSanPham").append(newUsernameOption);
-    }
+        sanphams = outputs;
 
-    tableQuanLyChiTietHoaDon.clear();
+        //Thêm option sanpham
+        $("#modelThemCthd").find("#themCthdSanPham").html("");
+        $("#modelSuaCthd").find("#suaCthdSanPham").html("");
+        for (let sanpham of sanphams) {
+            let newUsernameOption = `<option value="${sanpham.id_san_pham}">${sanpham.id_san_pham} - ${sanpham.ten}</option>`;
+            $("#modelThemCthd").find("#themCthdSanPham").append(newUsernameOption);
+            $("#modelSuaCthd").find("#suaCthdSanPham").append(newUsernameOption);
+        }
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            alert("Không thể gửi dữ liệu đến server để lấy dữ liệu từ CSDL");
+        })
+        .always(function () {
+        });
+
+    tableQuanLyCthd.clear();
     //Lấy thông tin hoá đơn
-    let n = Math.floor(Math.random() * 10);
-    let chitiethoadons =[];
-    for (let i = 0; i < n; i += 1) {
-        let id_hoa_don = i;
-        let id_san_pham = sanphams[Math.floor(Math.random()*sanphams.length)].id_san_pham;
-        let so_luong = Math.floor(Math.random()*sanphams.length)
-        let don_gia = sanphams[Math.floor(Math.random()*sanphams.length)].gia;
-        let diem_tich_luy = sanphams[Math.floor(Math.random()*sanphams.length)].diem_tich_luy;
-        chitiethoadons.push({id_hoa_don:id_hoa_don, id_san_pham:id_san_pham, so_luong:so_luong, don_gia:don_gia, diem_tich_luy:diem_tich_luy});
-    }
+    $.post("/Cthd/GetAll", function (data) {
+        //Lấy thông tin tài khoản
+        let inputJson = data;
+        inputJson = inputJson.replace(/"/g, `"`);
+        inputJson = inputJson.replace(/IdHoaDon/g, `idhoadon`);;
+        inputJson = inputJson.replace(/IdSanPham/g, `idsanpham`);;
+        inputJson = inputJson.replace(/SoLuong/g, `soluong`);;
+        inputJson = inputJson.replace(/DonGia/g, `dongia`);;
+        inputJson = inputJson.replace(/DiemTichLuy/g, `diemtichluy`);
+        let outputs = JSON.parse(inputJson);
 
-    //Thêm vào bảng
-    for (let chitiethoadon of chitiethoadons) {
-        tableQuanLyChiTietHoaDon.row.add(createTableQLCTHDArrayDataRow(chitiethoadon));
-    }
-    tableQuanLyChiTietHoaDon.draw();
+        //Thêm vào bảng
+        for (let output of outputs) {
+            tableQuanLyCthd.row.add(createTableQLCthdArrayDataRow(output));
+        }
+        tableQuanLyCthd.draw();
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            alert("Không thể gửi dữ liệu đến server để lấy dữ liệu từ CSDL");
+        })
+        .always(function () {
+        });
+
+
 };
 
-const deleteTableQLCTHDRow = (buttonInside) => {
+const deleteTableQLCthdRow = (buttonInside) => {
     let tableRow = $(buttonInside).parents("tr");
-    tableQuanLyChiTietHoaDon.row(tableRow).remove().draw();
+    let cthd = extractDataFromTableQLCthdRow(tableRow);
+    $.post("/Cthd/Delete", { IdHoaDon: cthd.id_hoa_don, IdSanPham: cthd.id_san_pham }, function (data) {
+        //Lấy thông tin 
+        let inputJson = data;
+        inputJson = inputJson.replace(/"/g, `"`);
+        let outputs = JSON.parse(inputJson);
+
+        //Xóa khỏi bảng
+        if (outputs.output >= 0) {
+            tableQuanLyCthd.row(tableRow).remove().draw();
+        }
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            alert("Không thể gửi dữ liệu đến server để xóa dữ liệu từ CSDL");
+        })
+        .always(function () {
+        });
+
+
 };
 
-const extractModelThemChiTietHoaDon = () => {
-    return extractFromModelChiTietHoaDon($("#modelThemChiTietHoaDon"));
+const extractModelThemCthd = () => {
+    return extractFromModelCthd($("#modelThemCthd"));
 };
 
-const extractModelSuaChiTietHoaDon = () => {
-    return extractFromModelChiTietHoaDon($("#modelSuaChiTietHoaDon"));
+const extractModelSuaCthd = () => {
+    return extractFromModelCthd($("#modelSuaCthd"));
 };
 
-const extractFromModelChiTietHoaDon = (model) => {
+const extractFromModelCthd = (model) => {
     //Lấy thông tin
     let id_hoa_don = $(model).find(".id_hoa_don").val();
     let id_san_pham = $(model).find(".id_san_pham").val();
@@ -240,15 +363,15 @@ const extractFromModelChiTietHoaDon = (model) => {
     return  {id_hoa_don:id_hoa_don, id_san_pham:id_san_pham, so_luong:so_luong, don_gia:don_gia, diem_tich_luy:diem_tich_luy};
 };
 
-const setModelThemChiTietHoaDon = (modifyChiTietHoaDon) => {
-    setToModelChiTietHoaDon($("#modelThemChiTietHoaDon"), modifyChiTietHoaDon);
+const setModelThemCthd = (modifyCthd) => {
+    setToModelCthd($("#modelThemCthd"), modifyCthd);
 };
 
-const setModelSuaChiTietHoaDon = (modifyChiTietHoaDon) => {
-    setToModelChiTietHoaDon($("#modelSuaChiTietHoaDon"), modifyChiTietHoaDon);
+const setModelSuaCthd = (modifyCthd) => {
+    setToModelCthd($("#modelSuaCthd"), modifyCthd);
 };
 
-const setToModelChiTietHoaDon = (model, chitiethoadon) => {
+const setToModelCthd = (model, chitiethoadon) => {
     $(model).find(".id_hoa_don").val(chitiethoadon.id_hoa_don);
     $(model).find(".id_san_pham").val(chitiethoadon.id_san_pham);
     $(model).find(".so_luong").val(chitiethoadon.so_luong);
@@ -256,7 +379,7 @@ const setToModelChiTietHoaDon = (model, chitiethoadon) => {
     $(model).find(".diem_tich_luy").val(chitiethoadon.diem_tich_luy);
 };
 
-const validateChiTietHoaDonInformation = (alertContainer, chitiethoadon) => {
+const validateCthdInformation = (alertContainer, chitiethoadon) => {
     //Validate
     let id_hoa_don = chitiethoadon.id_hoa_don;
     let id_san_pham = chitiethoadon.id_san_pham;

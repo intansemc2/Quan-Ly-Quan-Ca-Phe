@@ -1,0 +1,94 @@
+﻿@{
+    Layout = "_Layout_Main";
+}
+
+@{
+    if (ViewData["formSize"] == null)
+    {
+        ViewData["formSize"] = 5;
+    }
+}
+
+@section stylesheets {
+    <!-- Optional Stylesheets-->
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="~/liblaries/bootstrap.min.css">
+    <!-- Custom Stylesheets-->
+    <link rel="stylesheet" href="~/css/main.css">
+    @RenderSection("stylesheets", required: false)
+}
+
+@section content {
+    <div class="sb-nav-fixed">
+        <!-- Start Navbar chính-->
+        @RenderSection("navbar", required: false)
+        <!-- End Navbar chính-->
+        <!-- Form -->
+        <div id="layoutAuthentication">
+            <div id="layoutAuthentication_content">
+                <main>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-@ViewData["formSize"]">
+                                <div class="card shadow-lg border-0 rounded-lg mt-@ViewData["formSize"]">
+                                    <div class="card-header">
+                                        <h3 class="text-center font-weight-light my-4">@ViewData["mainTitle"]</h3>
+                                    </div>
+                                    <!-- Hiển thị lỗi -->
+                                    @{
+                                        List<String> errors = ViewData["errors"] as List<String>;
+                                        if (errors != null && errors.Count > 0)
+                                        {
+                                            @foreach (String error in errors)
+                                            {
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert"><span> @error </span><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+                                            }
+                                        }
+                                    }
+                                    <div class="card-body">
+                                        <form method="POST" action="@ViewData["action"]">
+
+                                            <!-- Nội dung chính của form -->
+                                            @RenderSection("formContent", required: false)
+
+                                            <!-- Nút -->
+                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                                @RenderSection("formButton", required: false)
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <!-- Đường dẫn đến trang khác -->
+                                    <div class="card-footer text-center">
+                                        @RenderSection("formExtraLink", required: false)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <div id="layoutAuthentication_footer">
+                <!-- Footer của content-->
+                <footer class="py-4 bg-light mt-auto">
+                    @RenderSection("footer", required: true)
+                </footer>
+            </div>
+        </div>
+        <!-- Hết Form -->
+
+    </div>
+}
+
+@section javascripts {
+    <!-- Optional JavaScript-->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS-->
+    <script type="text/javascript" src="~/liblaries/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/liblaries/bootstrap.bundle.min.js"></script>
+    <!-- Fontawesome-->
+    <script type="text/javascript" src="~/liblaries/fontawesome-all.min.js"></script>
+    <!-- Custom JavaScript-->
+    <script type="text/javascript" src="~/js/main.js"></script>
+    @RenderSection("javascripts", required: false)
+}

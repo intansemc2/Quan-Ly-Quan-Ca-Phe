@@ -126,10 +126,12 @@ namespace AdminASP.Controllers
         public IActionResult Tongquat()
         {
             if (CheckAdmin() == false)
-            {
+            {                
                 return RedirectToAction("Login", "Login");
             }
 
+            TaiKhoan taiKhoan = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+            ViewData["Username"] = taiKhoan.Username;
             return View();
         }
     }

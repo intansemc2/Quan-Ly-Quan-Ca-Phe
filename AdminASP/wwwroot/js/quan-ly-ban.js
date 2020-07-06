@@ -50,12 +50,31 @@ $(document).ready(function () {
         $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
     });
     $("#xoaDanhDau").click(function () {
-        let markedRows = $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton))
-                .map((index, toggleButton) => $(toggleButton).parents("tr"));
-        tableQuanLyBan.rows(markedRows).remove().draw();
+        $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton)).each((index, element) => deleteTableQLBanRow($(element)));
+
+
     });
     $("#xoaTatCa").click(function () {
-        tableQuanLyBan.clear().draw();
+        $.post("/Ban/DeleteAll", function (data) {
+            //Lấy thông tin 
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            let outputs = JSON.parse(inputJson);
+
+            //Xóa khỏi bảng
+            if (outputs.output >= 0) {
+                tableQuanLyBan.clear().draw();
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để xóa dữ liệu từ CSDL");
+            })
+            .always(function () {
+            });
+
+
     });
     $("#lamMoi").click(function () {
         refreshDataTableQLBan();
@@ -75,18 +94,43 @@ $(document).ready(function () {
         let newBan = modifyBan;
         newBan.id_ban = -1;
         //Thêm xuống CSDL
-        let themBanResult = true;
-        //Thêm thành công
-        if (themBanResult) {
-            $("#modelThemBan").find("#themBanAlerts").append(createAlerts("success", "Thêm thành công"));
-            //Thêm hoá đơn mới vào bảng
-            $("#modelThemBan").find(".close").trigger("click");
-            tableQuanLyBan.row.add(createTableQLBanArrayDataRow(newBan)).draw();
-        }
-        //Thêm thất bại
-        else {
-            $("#modelThemBan").find("#themBanAlerts").append(createAlerts("danger", "Thêm thất bại"));
-        }
+        $.post("/Ban/Add", { IdBan: newBan.id_ban, Ten: newBan.ten, TrangThai: newBan.trang_thai }, function (data) {
+            //Lấy thông tin tài khoản
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            let outputs = JSON.parse(inputJson);
+
+            let themModelResult = true;
+            if (outputs.errors.Length > 0 || outputs.output < 0) {
+                themModelResult = false;
+            }
+
+            //Thêm thành công
+            if (themModelResult) {
+                $("#modelThemBan").find("#themBanAlerts").append(createAlerts("success", "Thêm thành công"));
+                //Thêm mới vào bảng
+                $("#modelThemBan").find(".close").trigger("click");
+                tableQuanLyBan.row.add(createTableQLBanArrayDataRow(newBan)).draw();
+            }
+            //Thêm thất bại
+            else {
+                $("#modelThemBan").find("#themBanAlerts").append(createAlerts("danger", "Thêm thất bại"));
+
+                for (let error of outputs.errors) {
+                    $("#modelThemBan").find("#themBanAlerts").append(createAlerts("danger", error));
+                }
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để thêm dữ liệu vào CSDL");
+                $("#modelThemBan").find("#themBanAlerts").append(createAlerts("danger", "Thêm thất bại"));
+            })
+            .always(function () {
+            });
+
+
     });
 
     $("#modelThemBan").find("#themBanReset").click(function() {
@@ -106,24 +150,50 @@ $(document).ready(function () {
 
         //Tạo hoá đơn mới 
         let newBan = modifyBan;
-        let oldUsername = $("#modelSuaBan").attr("username");
         let oldBanRow = $("#tableQuanLyBan").find("button[modify='" + modifyBan.id_ban + "']").parents("tr");
 
         //Sửa xuống CSDL
-        let suaBanResult = true;
+        $.post("/Ban/Edit", { IdBan: newBan.id_ban, Ten: newBan.ten, TrangThai: newBan.trang_thai }, function (data) {
+            //Lấy thông tin tài khoản
+            let inputJson = data;
+            inputJson = inputJson.replace(/"/g, `"`);
+            inputJson = inputJson.replace(/IdBan/g, `idban`);;
+            inputJson = inputJson.replace(/Ten/g, `ten`);;
+            inputJson = inputJson.replace(/TrangThai/g, `trangthai`);
+            let outputs = JSON.parse(inputJson);
 
-        //Sửa thành công
-        if (suaBanResult) {
-            $("#modelSuaBan").find("#suaBanAlerts").append(createAlerts("success", "Sửa thành công"));
+            let suaModelResult = true;
+            if (outputs.errors.length > 0 || outputs.output < 0) {
+                suaModelResult = false;
+            }
 
-            //Sửa hoá đơn mới vào bảng
-            $("#modelSuaBan").find(".close").trigger("click");
-            tableQuanLyBan.row(oldBanRow).data(createTableQLBanArrayDataRow(newBan)).draw();            
-        }
-        //Sửa thất bại
-        else {
-            $("#modelSuaBan").find("#suaBanAlerts").append(createAlerts("danger", "Sửa thất bại"));
-        }
+            //Sửa thành công
+            if (suaModelResult) {
+                $("#modelSuaBan").find("#suaBanAlerts").append(createAlerts("success", "Sửa thành công"));
+
+                //Sửa tài khoản mới vào bảng
+                $("#modelSuaBan").find(".close").trigger("click");
+                tableQuanLyBan.row(oldBanRow).data(createTableQLBanArrayDataRow(outputs.newBan)).draw();
+            }
+            //Sửa thất bại
+            else {
+                $("#modelSuaBan").find("#suaBanAlerts").append(createAlerts("danger", "Sửa thất bại"));
+
+                for (let error of outputs.errors) {
+                    $("#modelSuaBan").find("#suaBanAlerts").append(createAlerts("danger", error));
+                }
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                alert("Không thể gửi dữ liệu đến server để sửa dữ liệu vào CSDL");
+                $("#modelSuaBan").find("#suaBanAlerts").append(createAlerts("danger", "Sửa thất bại"));
+            })
+            .always(function () {
+            });
+
+
     });
 
     $("#modelSuaBan").find("#suaBanReset").click(function() {
@@ -181,23 +251,57 @@ let refreshDataTableQLBan = () => {
 
     tableQuanLyBan.clear();
 
-    //Lấy thông tin bàn
-    let bans = [];
-    let n = Math.floor(Math.random()*10);
-    for (let i=0; i<10; i+=1) {
-        bans.push( {id_ban: i, ten: "Bàn " + i, trang_thai: Math.floor(Math.random()*trangThaiBans.length)} );
-    }
+    $.post("/Ban/GetAll", function (data) {
+        //Lấy thông tin tài khoản
+        let inputJson = data;
+        inputJson = inputJson.replace(/"/g, `"`);
+        inputJson = inputJson.replace(/IdBan/g, `idban`);;
+        inputJson = inputJson.replace(/Ten/g, `ten`);;
+        inputJson = inputJson.replace(/TrangThai/g, `trangthai`);
+        let outputs = JSON.parse(inputJson);
 
-    //Thêm vào bảng
-    for (let ban of bans) {
-        tableQuanLyBan.row.add(createTableQLBanArrayDataRow(ban));
-    }
-    tableQuanLyBan.draw();
+        //Thêm vào bảng
+        for (let output of outputs) {
+            tableQuanLyBan.row.add(createTableQLBanArrayDataRow(output));
+        }
+        tableQuanLyBan.draw();
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            alert("Không thể gửi dữ liệu đến server để lấy dữ liệu từ CSDL");
+        })
+        .always(function () {
+        });
+
+
 };
 
 const deleteTableQLBanRow = (buttonInside) => {
     let tableRow = $(buttonInside).parents("tr");
-    tableQuanLyBan.row(tableRow).remove().draw();
+    let ban = extractDataFromTableQLBanRow(tableRow);
+    let ban = extractDataFromTableQLBanRow(tableRow);
+    let ban = extractDataFromTableQLBanRow(tableRow);
+    $.post("/Ban/Delete", { IdBan: ban.id_ban }, function (data) {
+        //Lấy thông tin 
+        let inputJson = data;
+        inputJson = inputJson.replace(/"/g, `"`);
+        let outputs = JSON.parse(inputJson);
+
+        //Xóa khỏi bảng
+        if (outputs.output >= 0) {
+            tableQuanLyBan.row(tableRow).remove().draw();
+        }
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            alert("Không thể gửi dữ liệu đến server để xóa dữ liệu từ CSDL");
+        })
+        .always(function () {
+        });
+
+
 };
 
 const extractModelThemBan = () => {

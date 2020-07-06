@@ -1,0 +1,41 @@
+﻿@{ String adminSidebarActive = ViewData["adminSidebarActive"] as String; }
+
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <!-- Menu của sidebar-->
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Nội dung chính</div>
+                    <a class="nav-link @if (adminSidebarActive == "Tongquat") @("active")" href="/Admin/Tongquat">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>Tổng quan
+                    </a>
+                    <a class="nav-link @if (adminSidebarActive == "Quanlytaikhoan") @("active")" href="/Admin/Quanlytaikhoan">
+                        <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Quản lý tài khoản
+                    </a>
+                    <a class="nav-link @if (adminSidebarActive == "Quanlynhanvien") @("active")" href="/Admin/Quanlynhanvien">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Quản lý nhân viên
+                    </a>
+                    <a class="nav-link @if (adminSidebarActive == "Quanlyhoadon") @("active")" href="/Admin/Quanlyhoadon">
+                        <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>Quản lý hóa đơn và chi tiết hóa đơn
+                    </a>
+                    <a class="nav-link @if (adminSidebarActive == "Quanlykhachhang") @("active")" href="/Admin/Quanlykhachhang">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Quản lý khách hàng thành viên
+                    </a>
+                    <a class="nav-link @if (adminSidebarActive == "Quanlyban") @("active")" href="/Admin/Quanlyban">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>Quản lý bàn và đặt bàn
+                    </a>
+                    <a class="nav-link @if (adminSidebarActive == "Quanlyloaisanpham") @("active")" href="/Admin/Quanlyloaisanpham">
+                        <div class="sb-nav-link-icon"><i class="fas fa-beer"></i></div>Quản lý sản phẩm và loại sản phẩm
+                    </a>
+                    <a class="nav-link @if (adminSidebarActive == "Quanlykhuyenmai") @("active")" href="/Admin/Quanlykhuyenmai">
+                        <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>Quản lý khuyến mãi và chi tiết khuyến mãi
+                    </a>
+                </div>
+            </div>
+            <!-- Thông tin người dùng đăng nhập-->
+            <div class="sb-sidenav-footer">
+                <div class="small">Bạn đã đăng nhập bằng tài khoản:</div>@ViewData["Username"]
+            </div>
+        </nav>
+    </div>

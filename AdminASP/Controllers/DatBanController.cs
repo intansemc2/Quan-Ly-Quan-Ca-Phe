@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,33 +10,35 @@ using Newtonsoft.Json;
 
 namespace AdminASP.Controllers
 {
-    public class TaiKhoanController : Controller
+    public class DatBanController : Controller
     {
         public IActionResult GetAll()
         {
-            TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
+            DatBanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(DatBanStoreContext)) as DatBanStoreContext;
             List<BaseModel> baseModels = modelStoreContext.GetAll();
-            List<TaiKhoan> thisModels = new List<TaiKhoan>();
+            List<DatBan> thisModels = new List<DatBan>();
             foreach (BaseModel baseModel in baseModels)
             {
-                thisModels.Add(baseModel as TaiKhoan);
+                thisModels.Add(baseModel as DatBan);
             }
             ViewData["inputs"] = thisModels;
             return View();
         }
 
-        public IActionResult Add(FormTaiKhoanAddInput input)
+        public IActionResult Add(FormDatBanAddInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
             if (resultValidate.Count <= 0)
             {
-                TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
-                int addResult = modelStoreContext.Add(new TaiKhoan()
+                DatBanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(DatBanStoreContext)) as DatBanStoreContext;
+                int addResult = modelStoreContext.Add(new DatBan()
                 {
                     Username = input.Username,
-                    Password = input.Password,
-                    Type = input.Type
+                    IdBan = input.IdBan,
+                    ThoiGIanLap = input.ThoiGIanLap,
+                    ThoiGIanNhan = input.ThoiGIanNhan,
+                    GhiChu = input.GhiChu
                 });
 
                 result = addResult;
@@ -47,47 +48,53 @@ namespace AdminASP.Controllers
             return View();
         }
 
-        public IActionResult Edit(FormTaiKhoanEditInput input)
+        public IActionResult Edit(FormDatBanEditInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
             if (resultValidate.Count <= 0)
             {
-                TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
-                TaiKhoan oldTaiKhoan = new TaiKhoan()
+                DatBanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(DatBanStoreContext)) as DatBanStoreContext;
+                DatBan oldDatBan = new DatBan()
                 {
                     Username = input.Username,
-                    Password = null,
-                    Type = -1
+                    IdBan = input.IdBan,
+                    ThoiGIanLap = input.ThoiGIanLap,
+                    ThoiGIanNhan = null,
+                    GhiChu = null
                 };
-                TaiKhoan newTaiKhoan = new TaiKhoan()
+                DatBan newDatBan = new DatBan()
                 {
                     Username = input.Username,
-                    Password = input.Password,
-                    Type = input.Type
+                    IdBan = input.IdBan,
+                    ThoiGIanLap = input.ThoiGIanLap,
+                    ThoiGIanNhan = input.ThoiGIanNhan,
+                    GhiChu = input.GhiChu
                 };
-                int editResult = modelStoreContext.Edit(oldTaiKhoan, newTaiKhoan);
+                int editResult = modelStoreContext.Edit(oldDatBan, newDatBan);
 
                 result = editResult;
-                ViewData["newTaiKhoan"] = newTaiKhoan;
+                ViewData["newDatBan"] = newDatBan;
             }
             ViewData["input"] = result;
             ViewData["errors"] = resultValidate;
             return View();
         }
 
-        public IActionResult Delete(FormTaiKhoanDeleteInput input)
+        public IActionResult Delete(FormDatBanDeleteInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
             if (resultValidate.Count <= 0)
             {
-                TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
-                TaiKhoan taiKhoan = new TaiKhoan()
+                DatBanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(DatBanStoreContext)) as DatBanStoreContext;
+                DatBan taiKhoan = new DatBan()
                 {
                     Username = input.Username,
-                    Password = null,
-                    Type = -1
+                    IdBan = input.IdBan,
+                    ThoiGIanLap = input.ThoiGIanLap,
+                    ThoiGIanNhan = null,
+                    GhiChu = null
                 };
                 int deleteResult = modelStoreContext.Delete(taiKhoan);
 
@@ -101,7 +108,7 @@ namespace AdminASP.Controllers
         public IActionResult DeleteAll()
         {
             int result = 0;
-            TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
+            DatBanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(DatBanStoreContext)) as DatBanStoreContext;
             int deleteResult = modelStoreContext.DeleteAll();
 
             result = deleteResult;

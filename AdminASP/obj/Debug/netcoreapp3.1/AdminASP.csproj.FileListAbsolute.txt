@@ -180,3 +180,10 @@ C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Raz
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\SanPham\DeleteAll.cshtml.g.cs
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\SanPham\Edit.cshtml.g.cs
 C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\SanPham\GetAll.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Item_Breadcrumb.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Item_Footer.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Item_Navbar.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Item_Sidebar.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout_Main.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout_MainAdmin.cshtml.g.cs
+C:\Users\Love\Documents\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout_Login.cshtml.g.cs

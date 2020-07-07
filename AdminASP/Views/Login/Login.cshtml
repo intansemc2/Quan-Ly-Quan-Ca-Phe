@@ -1,9 +1,9 @@
 ﻿@{
-    Layout = "_Layout_Login";
+    Layout = "_Layout_PageDialog";
 }
 
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Đăng nhập";
     ViewData["formSize"] = 5;
     ViewData["mainTitle"] = "Đăng nhập";
     ViewData["action"] = "/Login/Login";
@@ -20,6 +20,24 @@
 
 @section navbar {
     <!-- Navbar -->
+}
+
+@section formErrors {
+    <!-- Thông báo lỗi trong form -->
+    @{
+        List<String> errors = ViewData["errors"] as List<String>;
+        if (errors != null && errors.Count > 0)
+        {
+            @foreach (String error in errors)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert"><span> @error </span><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+            }
+        }
+    }
+}
+
+@section formNotice {
+    <!-- Thông báo của form -->
 }
 
 @section formContent {
@@ -48,8 +66,10 @@
 }
 
 @section formButton {
-    <a class="small" href="/Login/ForgotPassword">Quên mật khẩu?</a>
-    <input class="btn btn-primary" type="submit" value="Đăng nhập">
+    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+        <a class="small" href="/Login/ForgotPassword">Quên mật khẩu?</a>
+        <input class="btn btn-primary" type="submit" value="Đăng nhập">
+    </div>
 }
 
 @section formExtraLink {

@@ -34,27 +34,17 @@
                                     <div class="card-header">
                                         <h3 class="text-center font-weight-light my-4">@ViewData["mainTitle"]</h3>
                                     </div>
-                                    <!-- Hiển thị lỗi -->
-                                    @{
-                                        List<String> errors = ViewData["errors"] as List<String>;
-                                        if (errors != null && errors.Count > 0)
-                                        {
-                                            @foreach (String error in errors)
-                                            {
-                                                <div class="alert alert-danger alert-dismissible fade show" role="alert"><span> @error </span><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
-                                            }
-                                        }
-                                    }
+                                    <!-- Hiển thị lỗi -->                                    
+                                    @RenderSection("formErrors", required: false)
                                     <div class="card-body">
+                                        @RenderSection("formNotice", required: false)
                                         <form method="POST" action="@ViewData["action"]">
 
                                             <!-- Nội dung chính của form -->
                                             @RenderSection("formContent", required: false)
 
                                             <!-- Nút -->
-                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                @RenderSection("formButton", required: false)
-                                            </div>
+                                            @RenderSection("formButton", required: false)
                                         </form>
                                     </div>
 

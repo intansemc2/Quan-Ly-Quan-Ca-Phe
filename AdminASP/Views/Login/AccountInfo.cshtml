@@ -1,0 +1,76 @@
+﻿@{
+    Layout = "_Layout_PageDialog";
+}
+
+@{
+    ViewData["Title"] = "Thông tin tài khoản";
+    ViewData["formSize"] = 8;
+    ViewData["mainTitle"] = "Thông tin tài khoản";
+    ViewData["action"] = "#";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
+    <!-- Optional Stylesheets-->
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="~/liblaries/bootstrap.min.css">
+    <!-- Custom Stylesheets-->
+    <link rel="stylesheet" href="~/css/main.css">
+}
+
+@section navbar {
+    <!-- Navbar -->
+}
+
+@section formErrors {
+    <!-- Thông báo lỗi trong form -->
+}
+
+@section formNotice {
+    <!-- Thông báo của form -->
+    <div class="small mb-3 text-muted">Thông tin tài khoản của bạn</div>
+}
+
+@section formContent {
+    @{ TaiKhoan input = ViewData["input"] as TaiKhoan; }
+    <div class="form-group">
+        <label class="small mb-1" for="inputUsername">Tên đăng nhập</label>
+        <input class="form-control py-4" id="inputUsername" type="text" name="Username" value="@input.Username" placeholder="Tên đăng nhập của bạn" readonly="readonly">
+    </div>
+    <div class="form-group">
+        <label class="small mb-1" for="inputPassword">Mật khẩu</label>
+        <input class="form-control py-4" id="inputPassword" type="password" name="Password" value="****" placeholder="Mật khẩu của bạn" readonly="readonly">
+    </div>
+    <div class="form-group">
+        <label class="small mb-1" for="inputType">Loại tài khoản</label>
+        <input class="form-control py-4" id="inputType" type="text" name="Type" value="@input.TypeToString()" placeholder="Loại tài khoản của bạn" readonly="readonly">
+    </div>
+}
+
+@section formButton {
+    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+        <a class="small" href="/Login/Logout">Đăng xuất</a>
+        <a class="small" href="/Login/ChangeAccountInfo">Sửa thông tin tài khoản</a>
+    </div>
+}
+
+@section formExtraLink {
+    <div class="small"><a href="/Login/Register">Bạn muốn tạo tài khoản mới? Đăng ký ngay!</a></div>
+    <div class="small"><a href="/Home/Index">Trang chủ</a></div>
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
+    <!-- Optional JavaScript-->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS-->
+    <script type="text/javascript" src="~/liblaries/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/liblaries/bootstrap.bundle.min.js"></script>
+    <!-- Fontawesome-->
+    <script type="text/javascript" src="~/liblaries/fontawesome-all.min.js"></script>
+    <!-- Custom JavaScript-->
+    <script type="text/javascript" src="~/js/main.js"></script>
+}

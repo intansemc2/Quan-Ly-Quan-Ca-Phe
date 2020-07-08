@@ -1,0 +1,192 @@
+﻿@{
+    Layout = "_Layout_MainAdmin";
+}
+
+@{
+    ViewData["Title"] = "Quản lý nhân viên";
+    ViewData["mainTitle"] = "Quản lý nhân viên";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
+    <!-- DataTable-->
+    <link rel="stylesheet" type="text/css" href="~/liblaries/datatables.min.css">
+}
+
+@section navbar {
+    <!-- Navbar -->
+    @await Html.PartialAsync("_Item_Navbar");
+}
+
+@section sidebar {
+    <!-- Sidebar -->
+    @{
+        ViewData["adminSidebarActive"] = "Quanlynhanvien";
+    }
+    @await Html.PartialAsync("_Item_Sidebar")
+}
+
+@section mainContent {
+    <!-- Breadcrumb đường dẫn đến trang -->
+    @{
+        List<Breadcrumb> breadcrumbs = new List<Breadcrumb>();
+        breadcrumbs.Add(new Breadcrumb() { Name = "Tổng quát", Link = "/Admin/Tongquat", IsActive = false });
+        breadcrumbs.Add(new Breadcrumb() { Name = "Quản lý nhân viên", Link = "/Admin/Quanlynhanvien", IsActive = true });
+        ViewData["breadcrumbs"] = breadcrumbs;
+    }
+    @await Html.PartialAsync("_Item_Breadcrumb")
+
+    <!-- Các thao tác  được hỗ trợ thực hiện -->
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
+        <div class="card-body">
+            <button class="btn btn-outline-primary mr-3" id="themNhanVien" type="button" data-toggle="modal" data-target="#modelThemNhanVien" modify="ThemNhanVien">Thêm nhân viên</button>
+            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                <button class="btn btn-outline-secondary" id="danhDauTatCa" type="button">Đánh dấu tất cả</button>
+                <button class="btn btn-outline-secondary" id="boDanhDauTatCa" type="button">Bỏ đánh dấu tất cả</button>
+            </div>
+            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                <button class="btn btn-outline-danger" id="xoaDanhDau" type="button">Xóa đánh dấu</button>
+                <button class="btn btn-outline-danger" id="xoaTatCa" type="button">Xóa tất cả</button>
+            </div>
+            <button class="btn btn-outline-info mr-3" id="lamMoi" type="button">Làm mới</button>
+        </div>
+    </div>
+
+    <!-- Model thêm nhân viên-->
+    <div class="modal fade" id="modelThemNhanVien" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm nhân viên</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div id="themNhanVienAlerts">
+                        <!-- Các alert của phần này-->
+                    </div>
+                    <form>
+                        <input class="id_nhan_vien" id="suaIdNhanVien" type="hidden">
+                        <div class="form-group">
+                            <label class="small mb-1" for="themTenNhanVien">Tên nhân viên</label>
+                            <input class="form-control py-4 ten" id="themTenNhanVien" type="text" placeholder="Nhập tên nhân viên của bạn">
+                        </div>
+                        <div class="form-group">
+                            <label class="small mb-1" for="themSoDienThoai">Số điện thoại</label>
+                            <input class="form-control py-4 sdt" id="themSoDienThoai" type="text" placeholder="Nhập số điện thoại của bạn">
+                        </div>
+                        <div class="form-group">
+                            <label class="small mb-1" for="themNhanVienUsername">Chọn tên đăng nhập</label>
+                            <select class="form-control id_tai_khoan" id="themNhanVienUsername">
+                                <option value="0">Không có</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="small mb-1" for="themNhanVienLoaiNhanVien">Chọn loại nhân viên</label>
+                            <select class="form-control type" id="themNhanVienLoaiNhanVien">
+                                <option value="0">Nhân viên</option>
+                                <option value="1">Admin</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-outline-primary" id="themNhanVienConfirm" type="button" value="Thêm Nhân viên">
+                    <input class="btn btn-outline-secondary" id="themNhanVienReset" type="reset" value="Cài lại">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model sửa nhân viên-->
+    <div class="modal fade" id="modelSuaNhanVien" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa nhân viên</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div id="suaNhanVienAlerts"></div>
+                    <!-- Các alert của phần này-->
+                    <input class="id_nhan_vien" id="suaIdNhanVien" type="hidden">
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaTenNhanVien">Tên nhân viên</label>
+                        <input class="form-control py-4 ten" id="suaTenNhanVien" type="text" placeholder="Nhập tên nhân viên của bạn">
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaSoDienThoai">Số điện thoại</label>
+                        <input class="form-control py-4 sdt" id="suaSoDienThoai" type="text" placeholder="Nhập số điện thoại của bạn">
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaNhanVienUsername">Chọn tên đăng nhập</label>
+                        <select class="form-control id_tai_khoan" id="suaNhanVienUsername">
+                            <option value="0">Không có</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaNhanVienLoaiNhanVien">Chọn loại nhân viên</label>
+                        <select class="form-control type" id="suaNhanVienLoaiNhanVien">
+                            <option value="0">Nhân viên</option>
+                            <option value="1">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-outline-primary" id="suaNhanVienConfirm" type="button" value="Sửa Nhân viên">
+                    <input class="btn btn-outline-secondary" id="suaNhanVienReset" type="reset" value="Cài lại">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bảng -->
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý nhân viên</div>
+        <div class="card-body">
+            <div id="tableQuanLyNhanVienAlert"></div>
+            <div class="table-responsive" id="tableQuanLyNhanVienContainer">
+                <table class="table table-bordered table-striped table-hover" id="tableQuanLyNhanVien" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID nhân viên</th>
+                            <th>Tên nhân viên</th>
+                            <th>Số điện thoại</th>
+                            <th>Loại</th>
+                            <th>Username</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>ID nhân viên</th>
+                            <th>Tên nhân viên</th>
+                            <th>Số điện thoại</th>
+                            <th>Loại</th>
+                            <th>Username</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <!-- Nội dung bảng-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
+    <!-- Datatable Javascript-->
+    <script type="text/javascript" src="~/liblaries/datatables.min.js"></script>
+    <!-- Custom JavaScript-->
+    <script type="text/javascript" src="~/js/custom-toggle-button.js"></script>
+    <script type="text/javascript" src="~/js/quan-ly-nhan-vien.js"></script>
+    <script type="text/javascript" src="~/js/custom-alert.js"></script>>
+}

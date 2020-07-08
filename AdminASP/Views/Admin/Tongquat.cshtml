@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "_Layout_MainAdmin";
+}
+
+@{
+    ViewData["Title"] = "Tổng quát";
+    ViewData["mainTitle"] = "Tổng quát";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
+}
+
+@section navbar {
+    <!-- Navbar -->
+    @await Html.PartialAsync("_Item_Navbar");
+}
+
+@section sidebar {
+    <!-- Sidebar -->
+    @{
+        ViewData["adminSidebarActive"] = "Tongquat";
+    }
+    @await Html.PartialAsync("_Item_Sidebar")
+}
+
+@section mainContent {
+    @{
+        List<Breadcrumb> breadcrumbs = new List<Breadcrumb>();
+        breadcrumbs.Add(new Breadcrumb() { Name = "Tổng quát", Link = "/Admin/Tongquat", IsActive = true });
+        ViewData["breadcrumbs"] = breadcrumbs;
+    }
+    @await Html.PartialAsync("_Item_Breadcrumb")
+
+    <div class="d-flex flex-column justify-content-between align-items-center">
+        <h1>Quản lý quán cà phê</h1>
+        <br />
+        <h5>Chào mừng @ViewData["Username"]</h5>
+    </div>
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
+}

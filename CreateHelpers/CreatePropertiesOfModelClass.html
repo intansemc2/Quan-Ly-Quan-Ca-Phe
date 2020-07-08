@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create property</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<div id="content"></div>
+	<script type="text/javascript">
+		let content = document.querySelector("#content");
+		let datas = [
+			{classname: "Ban", properties: [
+				{name: "idBan", type: "int"},
+				{name: "ten", type: "String"},
+				{name: "trangThai", type: "int"}
+			]},
+			{classname: "Cthd", properties: [
+				{name: "idHoaDon", type: "int"},
+				{name: "idSanPham", type: "int"},
+				{name: "soLuong", type: "int"},
+				{name: "donGia", type: "int"},
+				{name: "diemTichLuy", type: "int"}
+			]},
+			{classname: "Ctkm", properties: [
+				{name: "idKhuyenMai", type: "int"},
+				{name: "idSanPham", type: "int"},
+				{name: "soLuong", type: "int"},
+				{name: "donGia", type: "int"},
+				{name: "diemTichLuy", type: "int"}
+			]},
+			{classname: "DatBan", properties: [
+				{name: "username", type: "String"},
+				{name: "idBan", type: "int"},
+				{name: "thoiGIanLap", type: "String"},
+				{name: "thoiGIanNhan", type: "String"},
+				{name: "ghiChu", type: "String"}
+			]},
+			{classname: "HoaDon", properties: [
+				{name: "idHoaDon", type: "int"},
+				{name: "idKhachHang", type: "int"},
+				{name: "idBan", type: "int"},
+				{name: "idNhanVien", type: "int"},
+				{name: "thoiGIan", type: "String"},
+				{name: "phanTramTichLuy", type: "float"},
+				{name: "soLuongDiemDoi", type: "int"},
+				{name: "tyGiaDiemDoi", type: "float"}
+			]},
+			{classname: "KhachHang", properties: [
+				{name: "idKhachHang", type: "int"},
+				{name: "ten", type: "String"},
+				{name: "sdt", type: "String"},
+				{name: "username", type: "String"},
+				{name: "diemTichLuy", type: "int"}
+			]},
+			{classname: "KhuyenMai", properties: [
+				{name: "idKhuyenMai", type: "int"},
+				{name: "ten", type: "String"},
+				{name: "thoiGIanDienRa", type: "String"},
+				{name: "thoiGIanKetThuc", type: "String"}
+			]},
+			{classname: "LoaiSanPham", properties: [
+				{name: "idLoaiSP", type: "int"},
+				{name: "ten", type: "String"}
+			]},
+			{classname: "NhanVien", properties: [
+				{name: "idNhanVien", type: "int"},
+				{name: "ten", type: "String"},
+				{name: "sdt", type: "String"},
+				{name: "loai", type: "int"},
+				{name: "username", type: "String"}
+			]},
+			{classname: "SanPham", properties: [
+				{name: "idSanPham", type: "int"},
+				{name: "idLoaiSP", type: "int"},
+				{name: "ten", type: "String"},
+				{name: "gia", type: "int"},
+				{name: "diemTichLuy", type: "int"},
+				{name: "description", type: "String"}
+			]},
+			{classname: "TaiKhoan", properties: [
+				{name: "username", type: "String"},
+				{name: "password", type: "String"},
+				{name: "type", type: "int"}
+			]}
+		];
+
+		content.innerHTML = "";
+		for (let data of datas) {
+			content.innerHTML += data.classname + "<br>";
+
+			for (let property of data.properties) {
+				content.innerHTML +=  `private ${property.type} ${property.name};`;
+				content.innerHTML += "<br>";
+
+				let newCapitalizeName = property.name.charAt(0).toUpperCase() + property.name.slice(1);
+				content.innerHTML +=  `public ${property.type} ${newCapitalizeName} { get { return this.${property.name}; } set { this.${property.name} = value; } }`;
+				content.innerHTML += "<br>";
+
+				content.innerHTML += "<br>";
+			}
+
+			content.innerHTML += "<br>-----------------------------------------------------------------<br>";
+		}
+
+	</script>
+</body>
+</html>

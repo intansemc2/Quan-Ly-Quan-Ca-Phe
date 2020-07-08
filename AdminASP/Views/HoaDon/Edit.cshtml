@@ -1,0 +1,6 @@
+@{
+    int output = Convert.ToInt32(ViewData["output"]);
+    List<String> errors = ViewData["errors"] as List<String>;
+    TaiKhoan newTaiKhoan = ViewData["newTaiKhoan"] as TaiKhoan;
+    @Newtonsoft.Json.JsonConvert.SerializeObject(new { output = output, errors = errors, newTaiKhoan = newTaiKhoan });
+}

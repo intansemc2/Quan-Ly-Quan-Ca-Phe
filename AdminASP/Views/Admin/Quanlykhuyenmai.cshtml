@@ -1,0 +1,389 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <title>Quản lý khuyến mãi - Quản lý quán cà phê</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Optional Stylesheets-->
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="~/liblaries/bootstrap.min.css">
+    <!-- Custom JavaScript-->
+    <link rel="stylesheet" href="~/css/main.css"><!-- DataTable -->
+    <link rel="stylesheet" type="text/css" href="~/liblaries/datatables.min.css">
+  </head>
+  <body class="sb-nav-fixed">
+    <!-- Start Navbar chính-->
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark"><a class="navbar-brand" href="/Admin/Tongquat">Quản lý quán cà phê</a>
+      <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+      <!-- Navbar-->
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i>ADMIN</a>
+          <!-- Thông tin tài khoản-->
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown"><a class="dropdown-item" href="/Login/AccountInfo">Thông tin tài khoản</a><a class="dropdown-item" href="/Login/Logout">Đăng xuất</a></div>
+        </li>
+      </ul>
+    </nav>
+    <!-- End Navbar chính-->
+    <!-- Start Sidebar chính-->
+    <div id="layoutSidenav">
+      <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion"><!-- Menu của sidebar -->
+          <div class="sb-sidenav-menu">
+            <div class="nav">
+              <div class="sb-sidenav-menu-heading">Nội dung chính</div><a class="nav-link" href="/Admin/Tongquat">
+                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>Tổng quan</a><a class="nav-link" href="/Admin/Quanlytaikhoan">
+                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Quản lý tài khoản</a><a class="nav-link" href="/Admin/Quanlynhanvien">
+                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Quản lý nhân viên</a><a class="nav-link" href="/Admin/Quanlyhoadon">
+                <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>Quản lý hóa đơn và chi tiết hóa đơn</a><a class="nav-link" href="/Admin/Quanlykhachhang">
+                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Quản lý khách hàng thành viên</a><a class="nav-link" href="/Admin/Quanlyban">
+                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>Quản lý bàn và đặt bàn</a><a class="nav-link" href="/Admin/Quanlyloaisanpham">
+                <div class="sb-nav-link-icon"><i class="fas fa-beer"></i></div>Quản lý sản phẩm và loại sản phẩm</a><a class="nav-link active" href="/Admin/Quanlykhuyenmai">
+                <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>Quản lý khuyến mãi và chi tiết khuyến mãi</a>
+            </div>
+          </div><!-- Thông tin người dùng đăng nhập -->
+          <div class="sb-sidenav-footer">
+            <div class="small">Bạn đã đăng nhập bằng tài khoản:</div>ADMIN
+          </div>
+        </nav>
+      </div><!-- End Sidebar chính -->
+      <!-- Start Content-->
+      <div id="layoutSidenav_content">
+        <main>
+          <div class="container-fluid"><!-- Model thêm khuyến mãi -->
+            <div class="modal fade" id="modelThemKhuyenMai" tabindex="-1" role="dialog" aria-labelledby="model aria-labelledby" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Thêm khuyến mãi</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                  </div>
+                  <div class="modal-body">
+                    <div id="themKhuyenMaiAlerts"><!-- Các alert của phần này --></div>
+                    <input class="id_khuyen_mai" type="hidden">
+                    <input class="so_khuyen_mai" type="hidden">
+                    <div class="form-group">
+                      <label class="small mb-1" for="themKhuyenMaiTen">Tên</label>
+                      <input class="form-control py-4 username ten" id="themKhuyenMaiTen" type="text" placeholder="Tên">
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themKhuyenMaiThoiGianBatDauNgayThang">Ngày tháng bắt đầu </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_bat_dau" id="themKhuyenMaiThoiGianBatDauNgayThang" type="date" placeholder="Nhập ngày tháng bắt đầu ">
+                        </div>
+                      </div>
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themKhuyenMaiThoiGianBatDauThoiGian">Thời gian bắt đầu </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_bat_dau" id="themKhuyenMaiThoiGianBatDauThoiGian" type="time" step="1" placeholder="Nhập thời gian bắt đầu ">
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themKhuyenMaiThoiGianBatDauCurrentTime">&nbsp;</label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_bat_dau" id="themKhuyenMaiThoiGianBatDauCurrentTime" type="button" value="Lấy">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themKhuyenMaiThoiGianKetThucNgayThang">Ngày tháng kết thúc </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_ket_thuc" id="themKhuyenMaiThoiGianKetThucNgayThang" type="date" placeholder="Nhập ngày tháng kết thúc ">
+                        </div>
+                      </div>
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themKhuyenMaiThoiGianKetThucThoiGian">Thời gian kết thúc </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_ket_thuc" id="themKhuyenMaiThoiGianKetThucThoiGian" type="time" step="1" placeholder="Nhập thời gian kết thúc ">
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themKhuyenMaiThoiGianKetThucCurrentTime">&nbsp;</label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_ket_thuc" id="themKhuyenMaiThoiGianKetThucCurrentTime" type="button" value="Lấy">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <input class="btn btn-outline-primary" id="themKhuyenMaiConfirm" type="button" value="Thêm Khuyến mãi">
+                    <input class="btn btn-outline-secondary" id="themKhuyenMaiReset" type="reset" value="Cài lại">
+                  </div>
+                </div>
+              </div>
+            </div><!-- Model sửa khuyến mãi -->
+            <div class="modal fade" id="modelSuaKhuyenMai" tabindex="-1" role="dialog" aria-labelledby="model aria-labelledby" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Sửa khuyến mãi</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                  </div>
+                  <div class="modal-body">
+                    <div id="suaKhuyenMaiAlerts"><!-- Các alert của phần này --></div>
+                    <input class="id_khuyen_mai" type="hidden">
+                    <input class="so_khuyen_mai" type="hidden">
+                    <div class="form-group">
+                      <label class="small mb-1" for="suaKhuyenMaiTen">Tên</label>
+                      <input class="form-control py-4 username ten" id="suaKhuyenMaiTen" type="text" placeholder="Tên">
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="suaKhuyenMaiThoiGianBatDauNgayThang">Ngày tháng bắt đầu </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_bat_dau" id="suaKhuyenMaiThoiGianBatDauNgayThang" type="date" placeholder="Nhập ngày tháng bắt đầu ">
+                        </div>
+                      </div>
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="suaKhuyenMaiThoiGianBatDauThoiGian">Thời gian bắt đầu </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_bat_dau" id="suaKhuyenMaiThoiGianBatDauThoiGian" type="time" step="1" placeholder="Nhập thời gian bắt đầu ">
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="small mb-1" for="suaKhuyenMaiThoiGianBatDauCurrentTime">&nbsp;</label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_bat_dau" id="suaKhuyenMaiThoiGianBatDauCurrentTime" type="button" value="Lấy">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="suaKhuyenMaiThoiGianKetThucNgayThang">Ngày tháng kết thúc </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_ket_thuc" id="suaKhuyenMaiThoiGianKetThucNgayThang" type="date" placeholder="Nhập ngày tháng kết thúc ">
+                        </div>
+                      </div>
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="suaKhuyenMaiThoiGianKetThucThoiGian">Thời gian kết thúc </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_ket_thuc" id="suaKhuyenMaiThoiGianKetThucThoiGian" type="time" step="1" placeholder="Nhập thời gian kết thúc ">
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="small mb-1" for="suaKhuyenMaiThoiGianKetThucCurrentTime">&nbsp;</label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_ket_thuc" id="suaKhuyenMaiThoiGianKetThucCurrentTime" type="button" value="Lấy">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <input class="btn btn-outline-primary" id="suaKhuyenMaiConfirm" type="button" value="Sửa Khuyến mãi">
+                    <input class="btn btn-outline-secondary" id="suaKhuyenMaiReset" type="reset" value="Cài lại">
+                  </div>
+                </div>
+              </div>
+            </div><!-- Model chi tiết khuyến mãi -->
+            <div class="modal fade" id="modelCtkm" tabindex="-1" role="dialog" aria-labelledby="model aria-labelledby" aria-hidden="true">
+              <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Chi tiết khuyến mãi <span id="khuyenMaiTitleInformation"></span></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                  </div>
+                  <div class="modal-body"><!-- Thông tin nội dung trang -->
+                    <div class="card mb-4">
+                      <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
+                      <div class="card-body">
+                        <button class="btn btn-outline-primary mr-3" id="themCtkm" type="button" data-toggle="modal" data-target="#modelThemCtkm" modify="ThemCtkm">Thêm chi tiết khuyến mãi</button>
+                        <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                          <button class="btn btn-outline-secondary" id="danhDauTatCaCtkm" type="button">Đánh dấu tất cả</button>
+                          <button class="btn btn-outline-secondary" id="boDanhDauTatCaCtkm" type="button">Bỏ đánh dấu tất cả</button>
+                        </div>
+                        <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                          <button class="btn btn-outline-danger" id="xoaDanhDauCtkm" type="button">Xóa đánh dấu</button>
+                          <button class="btn btn-outline-danger" id="xoaTatCaCtkm" type="button">Xóa tất cả</button>
+                        </div>
+                        <button class="btn btn-outline-info mr-3" id="lamMoiCtkm" type="button">Làm mới</button>
+                      </div>
+                    </div>
+                    <div class="card mb-4">
+                      <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý chi tiết khuyến mãi</div>
+                      <div class="card-body">
+                        <div class="table-responsive" id="tableQuanLyCtkmContainer">
+                          <table class="table table-bordered table-striped table-hover" id="tableQuanLyCtkm" width="100%" cellspacing="0">
+                            <thead>
+                              <tr>
+                                <th>ID chi tiết khuyến mãi</th>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng </th>
+                                <th>Đơn giá </th>
+                                <th>Điểm tích lũy </th>
+                                <th>Thao tác </th>
+                              </tr>
+                            </thead>
+                            <tfoot>
+                              <tr>
+                                <th>ID chi tiết khuyến mãi</th>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng </th>
+                                <th>Đơn giá </th>
+                                <th>Điểm tích lũy </th>
+                                <th>Thao tác </th>
+                              </tr>
+                            </tfoot>
+                            <tbody><!-- Nội dung bảng --></tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div><!-- Model thêm khuyến mãi -->
+                    <div class="modal fade" id="modelThemCtkm" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Thêm chi tiết khuyến mãi</h5>
+                            <button class="close" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
+                          </div>
+                          <div class="modal-body">
+                            <div id="themCtkmAlerts"><!-- Các alert của phần này --></div>
+                            <div class="form-group">
+                              <label class="small mb-1" for="themCtkmKhuyenMai">Khuyến mãi</label>
+                              <input class="form-control py-1 px-2 d-flex align-item-center id_khuyen_mai" id="themCtkmKhuyenMai" type="text" placeholder="Khuyến mãi hiện tại" readonly="readonly">
+                            </div>
+                            <div class="form-group">
+                              <label class="small mb-1" for="themCtkmSanPham">Sản phẩm</label>
+                              <select class="form-control id_san_pham" id="themCtkmSanPham"></select>
+                            </div>
+                            <div class="form-group">
+                              <label class="small mb-1" for="themCtkmSoLuong">Số lượng</label>
+                              <input class="form-control py-4 username so_luong" id="themCtkmSoLuong" type="number" min="1" step="1" placeholder="Nhập Số lượng">
+                            </div>
+                            <div class="form-group">
+                              <label class="small mb-1" for="themCtkmDonGia">Đơn giá</label>
+                              <input class="form-control py-4 username don_gia" id="themCtkmDonGia" type="number" min="1" step="1" placeholder="Đơn giá hiện tại" readonly="readonly">
+                            </div>
+                            <div class="form-group">
+                              <label class="small mb-1" for="themCtkmDiemTichLuy">Điểm tích lũy </label>
+                              <input class="form-control py-4 username diem_tich_luy" id="themCtkmDiemTichLuy" type="number" min="1" step="1" placeholder="Điểm tích lũy hiện tại" readonly="readonly">
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <input class="btn btn-outline-primary" id="themCtkmConfirm" type="button" value="Thêm Khuyến mãi">
+                            <input class="btn btn-outline-secondary" id="themCtkmReset" type="reset" value="Cài lại">
+                          </div>
+                        </div>
+                      </div>
+                    </div><!-- Model sửa khuyến mãi -->
+                    <div class="modal fade" id="modelSuaCtkm" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Sửa khuyến mãi</h5>
+                            <button class="close" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
+                          </div>
+                          <div class="modal-body">
+                            <div id="suaCtkmAlerts"><!-- Các alert của phần này --></div>
+                            <div class="form-group">
+                              <label class="small mb-1" for="suaCtkmKhuyenMai">Khuyến mãi</label>
+                              <input class="form-control py-1 px-2 d-flex align-item-center id_khuyen_mai" id="suaCtkmKhuyenMai" type="text" placeholder="Khuyến mãi hiện tại" readonly="readonly">
+                            </div>
+                            <div class="form-group">
+                              <label class="small mb-1" for="suaCtkmSanPham">Sản phẩm</label>
+                              <select class="form-control id_san_pham" id="suaCtkmSanPham">
+                                <option value="0">Sản phẩm</option>
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <label class="small mb-1" for="suaCtkmSoLuong">Số lượng</label>
+                              <input class="form-control py-4 username so_luong" id="suaCtkmSoLuong" type="number" min="1" step="1" placeholder="Nhập Số lượng">
+                            </div>
+                            <div class="form-group">
+                              <label class="small mb-1" for="suaCtkmDonGia">Đơn giá</label>
+                              <input class="form-control py-4 username don_gia" id="suaCtkmDonGia" type="number" min="1" step="1" placeholder="Đơn giá">
+                            </div>
+                            <div class="form-group">
+                              <label class="small mb-1" for="suaCtkmDiemTichLuy">Điểm tích lũy </label>
+                              <input class="form-control py-4 username diem_tich_luy" id="suaCtkmDiemTichLuy" type="number" min="1" step="1" placeholder="Điểm tích lũy">
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <input class="btn btn-outline-primary" id="suaCtkmConfirm" type="button" value="Sửa Khuyến mãi">
+                            <input class="btn btn-outline-secondary" id="suaCtkmReset" type="reset" value="Cài lại">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- Thông tin nội dung trang -->
+            <h1 class="mt-4">Quản lý khuyến mãi </h1>
+            <ol class="breadcrumb mb-4">
+              <li class="breadcrumb-item"><a href="/Admin/Tongquat">Tổng quát</a></li>
+              <li class="breadcrumb-item active">Quản lý khuyến mãi</li>
+            </ol>
+            <div class="card mb-4">
+              <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
+              <div class="card-body">
+                <button class="btn btn-outline-primary mr-3" id="themKhuyenMai" type="button" data-toggle="modal" data-target="#modelThemKhuyenMai" modify="ThemKhuyenMai">Thêm khuyến mãi</button>
+                <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                  <button class="btn btn-outline-secondary" id="danhDauTatCa" type="button">Đánh dấu tất cả</button>
+                  <button class="btn btn-outline-secondary" id="boDanhDauTatCa" type="button">Bỏ đánh dấu tất cả</button>
+                </div>
+                <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                  <button class="btn btn-outline-danger" id="xoaDanhDau" type="button">Xóa đánh dấu</button>
+                  <button class="btn btn-outline-danger" id="xoaTatCa" type="button">Xóa tất cả</button>
+                </div>
+                <button class="btn btn-outline-info mr-3" id="lamMoi" type="button">Làm mới</button>
+              </div>
+            </div>
+            <div class="card mb-4">
+              <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý khuyến mãi</div>
+              <div class="card-body">
+                <div class="table-responsive" id="tableQuanLyKhuyenMaiContainer">
+                  <table class="table table-bordered table-striped table-hover" id="tableQuanLyKhuyenMai" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>ID </th>
+                        <th>Tên</th>
+                        <th>Thời gian diễn ra </th>
+                        <th>Thời gian kết thúc </th>
+                        <th>Thao tác </th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th>ID </th>
+                        <th>Tên</th>
+                        <th>Thời gian diễn ra </th>
+                        <th>Thời gian kết thúc </th>
+                        <th>Thao tác </th>
+                      </tr>
+                    </tfoot>
+                    <tbody><!-- Nội dung bảng --></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+        <!-- Footer của content-->
+        <footer class="py-4 bg-light mt-auto">
+          <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between small">
+              <div class="text-muted">Nhóm framework số 1</div>
+              <div><a href="/Info/Thongtinungdung">Thông tin ứng dụng</a></div>
+            </div>
+          </div>
+        </footer>
+      </div>
+      <!-- End Content-->
+    </div>
+    <!-- Optional JavaScript-->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS-->
+    <script type="text/javascript" src="~/liblaries/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/liblaries/bootstrap.bundle.min.js"></script>
+    <!-- Fontawesome-->
+    <script type="text/javascript" src="~/liblaries/fontawesome-all.min.js"></script>
+    <!-- Custom JavaScript-->
+    <script type="text/javascript" src="~/js/main.js"></script><!-- Datatable Javascript -->
+    <script type="text/javascript" src="~/liblaries/datatables.min.js"></script><!-- Custom JavaScript -->
+    <script type="text/javascript" src="~/js/custom-toggle-button.js"></script>
+    <script type="text/javascript" src="~/js/custom-alert.js"></script>
+    <script type="text/javascript" src="~/js/convert-thoi-gian.js"></script>
+    <script type="text/javascript" src="~/js/quan-ly-chi-tiet-khuyen-mai.js"></script>
+    <script type="text/javascript" src="~/js/quan-ly-khuyen-mai.js">   </script>
+  </body>
+</html>

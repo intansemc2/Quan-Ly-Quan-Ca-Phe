@@ -1,0 +1,94 @@
+﻿@{
+    Layout = "_Layout_PageDialog";
+}
+
+@{
+    ViewData["Title"] = "Thay đổi thông tin tài khoản";
+    ViewData["formSize"] = 8;
+    ViewData["mainTitle"] = "Thay đổi thông tin tài khoản";
+    ViewData["action"] = "/Login/Login";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
+    <!-- Optional Stylesheets-->
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="~/liblaries/bootstrap.min.css">
+    <!-- Custom Stylesheets-->
+    <link rel="stylesheet" href="~/css/main.css">
+}
+
+@section navbar {
+    <!-- Navbar -->
+}
+
+@section formErrors {
+    <!-- Thông báo lỗi trong form -->
+    @{
+        List<String> errors = ViewData["errors"] as List<String>;
+        if (errors != null && errors.Count > 0)
+        {
+            @foreach (String error in errors)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert"><span> @error </span><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+            }
+        }
+    }
+}
+
+@section formNotice {
+    <!-- Thông báo của form -->
+}
+
+@section formContent {
+    @{ FormChangeAccountInfo input = ViewData["input"] as FormChangeAccountInfo;
+        if (input == null)
+        {
+            input = new FormChangeAccountInfo();
+        } }
+    <div class="form-group">
+        <label class="small mb-1" for="inputUsername">Tên đăng nhập</label>
+        <input class="form-control py-4" id="inputUsername" type="text" name="Username" value="@input.Username" placeholder="Tên đăng nhập của bạn">
+    </div>
+    <div class="form-row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="small mb-1" for="inputPassword">Mật khẩu</label>
+                <input class="form-control py-4" id="inputPassword" type="password" name="Password" value="@input.Password" placeholder="Nhập mật khẩu của bạn">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="small mb-1" for="inputConfirmPassword">Nhập lại mậu khẩu</label>
+                <input class="form-control py-4" id="inputConfirmPassword" type="password" name="RePassword" value="@input.RePassword" placeholder="Nhập lại mật khẩu của bạn">
+            </div>
+        </div>
+    </div>
+}
+
+@section formButton {
+    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+        <input class="btn btn-primary btn-block" type="submit" value="Thay đổi thông tin">
+    </div>
+}
+
+@section formExtraLink {
+    <div class="small"><a href="/Login/Register">Bạn muốn tạo tài khoản mới? Đăng ký ngay!</a></div>
+    <div class="small"><a href="/Login/Logout">Đăng xuất</a>-<a href="/Home/Index">Trang chủ</a></div>
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
+    <!-- Optional JavaScript-->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS-->
+    <script type="text/javascript" src="~/liblaries/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/liblaries/bootstrap.bundle.min.js"></script>
+    <!-- Fontawesome-->
+    <script type="text/javascript" src="~/liblaries/fontawesome-all.min.js"></script>
+    <!-- Custom JavaScript-->
+    <script type="text/javascript" src="~/js/main.js"></script>
+}

@@ -1,0 +1,198 @@
+﻿@{
+    Layout = "_Layout_MainAdmin";
+}
+
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+    ViewData["mainTitle"] = "Quản lý tài khoản";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
+    <!-- DataTable-->
+    <link rel="stylesheet" type="text/css" href="~/liblaries/datatables.min.css">
+}
+
+@section navbar {
+    <!-- Navbar -->
+    @await Html.PartialAsync("_Item_Navbar");
+}
+
+@section sidebar {
+    <!-- Sidebar -->
+    @{
+        ViewData["adminSidebarActive"] = "Quanlytaikhoan";
+    }
+    @await Html.PartialAsync("_Item_Sidebar")
+}
+
+@section mainContent {
+    <!-- Breadcrumb đường dẫn đến trang -->
+    @{
+        List<Breadcrumb> breadcrumbs = new List<Breadcrumb>();
+        breadcrumbs.Add(new Breadcrumb() { Name = "Tổng quát", Link = "/Admin/Tongquat", IsActive = false });
+        breadcrumbs.Add(new Breadcrumb() { Name = "Quản lý tài khoản", Link = "/Admin/Quanlytaikhoan", IsActive = true });
+        ViewData["breadcrumbs"] = breadcrumbs;
+    }
+    @await Html.PartialAsync("_Item_Breadcrumb")
+
+    <!-- Thao tác hỗ trợ thực hiện -->
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
+        <div class="card-body">
+            <button class="btn btn-outline-primary mr-3" id="themTaiKhoan" type="button" data-toggle="modal" data-target="#modelThemTaiKhoan" modify="ThemTaiKhoan">Thêm tài khoản</button>
+            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                <button class="btn btn-outline-secondary" id="danhDauTatCa" type="button">Đánh dấu tất cả</button>
+                <button class="btn btn-outline-secondary" id="boDanhDauTatCa" type="button">Bỏ đánh dấu tất cả</button>
+            </div>
+            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                <button class="btn btn-outline-danger" id="xoaDanhDau" type="button">Xóa đánh dấu</button>
+                <button class="btn btn-outline-danger" id="xoaTatCa" type="button">Xóa tất cả</button>
+            </div>
+            <button class="btn btn-outline-info mr-3" id="lamMoi" type="button">Làm mới</button>
+        </div>
+    </div>
+
+    <!-- Model thêm tài khoản-->
+    <div class="modal fade" id="modelThemTaiKhoan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm tài khoản</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div id="themTaiKhoanAlerts">
+                        <!-- Các alert của phần này-->
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="themTaiKhoanUsername">Tên đăng nhập</label>
+                        <input class="form-control py-4 username" id="themTaiKhoanUsername" type="text" placeholder="Nhập tên đăng nhập của bạn">
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themTaiKhoanPassword">Mật khẩu</label>
+                                <input class="form-control py-4 password" id="themTaiKhoanPassword" type="password" placeholder="Nhập mật khẩu của bạn">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themTaiKhoanConfirmPassword">Nhập lại mậu khẩu</label>
+                                <input class="form-control py-4 re_password" id="themTaiKhoanConfirmPassword" type="password" placeholder="Nhập lại mật khẩu của bạn">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="themTaiKhoanLoaiTaiKhoan">Chọn loại tài khoản</label>
+                        <select class="form-control type" id="themTaiKhoanLoaiTaiKhoan">
+                            <option value="0">Người dùng</option>
+                            <option value="1">Nhân viên</option>
+                            <option value="2">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-outline-primary" id="themTaiKhoanConfirm" type="button" value="Thêm Tài khoản">
+                    <input class="btn btn-outline-secondary" id="themTaiKhoanReset" type="reset" value="Cài lại">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model sửa tài khoản-->
+    <div class="modal fade" id="modelSuaTaiKhoan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa tài khoản</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div id="suaTaiKhoanAlerts">
+                        <!-- Các alert của phần này-->
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaTaiKhoanUsername">Tên đăng nhập</label>
+                        <input class="form-control py-4 username" id="suaTaiKhoanUsername" type="text" placeholder="Nhập tên đăng nhập của bạn">
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="suaTaiKhoanPassword">Mật khẩu</label>
+                                <input class="form-control py-4 password" id="suaTaiKhoanPassword" type="password" placeholder="Nhập mật khẩu của bạn">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="suaTaiKhoanConfirmPassword">Nhập lại mậu khẩu</label>
+                                <input class="form-control py-4 re_password" id="suaTaiKhoanConfirmPassword" type="password" placeholder="Nhập lại mật khẩu của bạn">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaTaiKhoanLoaiTaiKhoan">Chọn loại tài khoản</label>
+                        <select class="form-control type" id="suaTaiKhoanLoaiTaiKhoan">
+                            <option value="0">Người dùng</option>
+                            <option value="1">Nhân viên</option>
+                            <option value="2">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-outline-primary" id="suaTaiKhoanConfirm" type="button" value="Sửa Tài khoản">
+                    <input class="btn btn-outline-secondary" id="suaTaiKhoanReset" type="reset" value="Cài lại">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bảng -->
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý tài khoản</div>
+        <div class="card-body">
+            <div id="tableQuanLyTaiKhoanAlert"></div>
+            <div class="table-responsive" id="tableQuanLyTaiKhoanContainer">
+                <table class="table table-bordered table-striped table-hover" id="tableQuanLyTaiKhoan" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Mật khẩu</th>
+                            <th>Loại</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Mật khẩu</th>
+                            <th>Loại</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <!-- Nội dung bảng-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
+    <!-- Datatable Javascript-->
+    <script type="text/javascript" src="~/liblaries/datatables.min.js"></script>
+    <!-- Custom JavaScript-->
+    <script type="text/javascript" src="~/js/custom-toggle-button.js"></script>
+    <script type="text/javascript" src="~/js/quan-ly-tai-khoan.js"></script>
+    <script type="text/javascript" src="~/js/custom-alert.js"></script>
+}

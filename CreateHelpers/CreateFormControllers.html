@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create property</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<div id="content"></div>
+	<script type="text/javascript">
+		let capitalize = (input) => {
+			return input.charAt(0).toUpperCase()+input.slice(1).toLowerCase();
+		};
+		let capitalizeFirst = (input) => {
+			return input.charAt(0).toUpperCase()+input.slice(1);
+		};
+		let convertTableNameToSqlProperty = (name) => {
+			return name.toLowerCase();
+		};
+		let convertNameToSqlProperty = (name) => {
+			return name.toUpperCase();
+		};
+		let convertNameToCSProperty = (name) => {
+			return name
+				.split("_")
+				.map(item => capitalizeFirst(item))
+				.join("");
+		};
+		let createCSCodeConvertFromString = (input, type) => {
+			if (type === "int") {
+				return `Convert.ToInt32(${input})`;
+			}
+			if (type === "float") {
+				return `(float)Convert.ToDouble(${input})`;
+			}
+			return input;
+		};
+		let createCSCodeConditionAccept = (input, type) => {
+			if (type === "int") {
+				return `${input}  >= 0`;
+			}
+			if (type === "float") {
+				return `${input}  >= 0`;
+			}
+			if (type === "String") {
+				return `${input} != null && ${input} != ""`;
+			}
+			return `${input}  != null`;
+		};
+		let createCSCodeDefaultValue = (type) => {
+			if (type === "int") {
+				return `-1`;
+			}
+			if (type === "float") {
+				return `-1`;
+			}
+			if (type === "String") {
+				return `null`;
+			}
+			return `null`;
+		};
+
+		let content = document.querySelector("#content");
+		let datas = [
+			{
+				classname: "Ban", 
+				properties: [
+					{name: "id_Ban", type: "int", speak:"id bàn"},
+					{name: "ten", type: "String", speak:"tên bàn"},
+					{name: "trang_Thai", type: "int", speak:"loại bàn"}
+				],
+				keys: ["id_Ban"]
+			},
+			{
+				classname: "Cthd", 
+				properties: [
+					{name: "id_Hoa_Don", type: "int", speak:"id hóa đơn"},
+					{name: "id_San_Pham", type: "int", speak:"id sản phẩm"},
+					{name: "so_Luong", type: "int", speak:"số lượng"},
+					{name: "don_Gia", type: "int", speak:"đơn giá"},
+					{name: "diem_Tich_Luy", type: "int", speak:"điểm tích lũy"}
+				],
+				keys: ["id_Hoa_Don", "id_San_Pham"]
+			},
+			{
+				classname: "Ctkm", 
+				properties: [
+					{name: "id_Khuyen_Mai", type: "int", speak:"id khuyến mãi"},
+					{name: "id_San_Pham", type: "int", speak:"id sản phẩm"},
+					{name: "so_Luong", type: "int", speak:"số lượng"},
+					{name: "don_Gia", type: "int", speak:"đơn giá"},
+					{name: "diem_Tich_Luy", type: "int", speak:"điểm tích lũy"}
+				],
+				keys: ["id_Khuyen_Mai", "id_San_Pham"]
+			},
+			{
+				classname: "Dat_Ban", 
+				properties: [
+					{name: "username", type: "String", speak:"tên đăng nhập"},
+					{name: "id_Ban", type: "int", speak:"id bàn"},
+					{name: "thoi_GIan_Lap", type: "String", speak:"thời gian lập"},
+					{name: "thoi_GIan_Nhan", type: "String", speak:"thời gian nhận"},
+					{name: "ghi_Chu", type: "String", speak:"ghi chú"}
+				],
+				keys: ["username", "id_Ban", "thoi_GIan_Lap"]
+			},
+			{
+				classname: "Hoa_Don", 
+				properties: [
+					{name: "id_Hoa_Don", type: "int", speak:"id hóa đơn"},
+					{name: "id_Khach_Hang", type: "int", speak:"id khách hàng"},
+					{name: "id_Ban", type: "int", speak:"id bàn"},
+					{name: "id_Nhan_Vien", type: "int", speak:"id nhân viên"},
+					{name: "thoi_GIan", type: "String", speak:"thời gian"},
+					{name: "phan_Tram_Tich_Luy", type: "float", speak:"phần trăm tích lũy"},
+					{name: "so_Luong_Diem_Doi", type: "int", speak:"số lượng điểm đổi"},
+					{name: "ty_Gia_Diem_Doi", type: "float", speak:"tỷ giá quy đổi"}
+				],
+				keys: ["id_Hoa_Don"]
+			},
+			{
+				classname: "Khach_Hang", 
+				properties: [
+					{name: "id_Khach_Hang", type: "int", speak:"id khách hàng"},
+					{name: "ten", type: "String", speak:"tên"},
+					{name: "sdt", type: "String", speak:"số điện thoại"},
+					{name: "username", type: "String", speak:"tên đăng nhập"},
+					{name: "diem_Tich_Luy", type: "int", speak:"điểm tích lũy"}
+				],
+				keys: ["id_Khach_Hang"]
+			},
+			{
+				classname: "Khuyen_Mai", 
+				properties: [
+					{name: "id_Khuyen_Mai", type: "int", speak:"id khuyến mãi"},
+					{name: "ten", type: "String", speak:"tên"},
+					{name: "thoi_GIan_Dien_Ra", type: "String", speak:"thời gian diễn ra"},
+					{name: "thoi_GIan_Ket_Thuc", type: "String", speak:"thời gian kết thúc"}
+				],
+				keys: ["id_Khuyen_Mai"]
+			},
+			{
+				classname: "Loai_San_Pham", 
+				properties: [
+					{name: "id_LoaiSP", type: "int", speak:"id loại sản phẩm"},
+					{name: "ten", type: "String", speak:"tên"}
+				],
+				keys: ["id_LoaiSP"]
+			},
+			{
+				classname: "Nhan_Vien", 
+				properties: [
+					{name: "id_Nhan_Vien", type: "int", speak:"id nhân viên"},
+					{name: "ten", type: "String", speak:"tên"},
+					{name: "sdt", type: "String", speak:"số điện thoại"},
+					{name: "loai", type: "int", speak:"loại"},
+					{name: "username", type: "String", speak:"tên đăng nhập"}
+				],
+				keys: ["id_Nhan_Vien"]
+			},
+			{
+				classname: "San_Pham", 
+				properties: [
+					{name: "id_San_Pham", type: "int", speak:"id sản phẩm"},
+					{name: "id_LoaiSP", type: "int", speak:"id loại sản phẩm"},
+					{name: "ten", type: "String", speak:"tên"},
+					{name: "gia", type: "int", speak:"giá"},
+					{name: "diem_Tich_Luy", type: "int", speak:"điểm tích lũy"},
+					{name: "description", type: "String", speak:"ghi chú"}
+				],
+				keys: ["id_San_Pham", "id_LoaiSP"]
+			},
+			{
+				classname: "Tai_Khoan", 
+				properties: [
+					{name: "username", type: "String", speak:"tên đăng nhập"},
+					{name: "password", type: "String", speak:"mật khẩu"},
+					{name: "type", type: "int", speak:"loại"}
+				],
+				keys: ["username"]
+			}
+		];
+
+		content.innerHTML = "";
+		for (let data of datas) {
+			content.innerHTML += data.classname + "<br>";
+
+			let sqlTableName = convertTableNameToSqlProperty(data.classname);
+			let csTableName =convertNameToCSProperty(data.classname);
+
+			let sqlTablePropertiesNames = data.properties.map(item => convertNameToSqlProperty(item.name));
+			let csTablePropertiesNames = data.properties.map(item => convertNameToCSProperty(item.name));
+
+			let sqlTableKeys = data.keys.map(item => convertNameToSqlProperty(item));
+			let csTableKeys = data.keys.map(item => convertNameToCSProperty(item));
+
+			let csTableKeysProperties = data.properties.filter(item => data.keys.find(key => key === item.name)).map(item => {
+				let newItem = item;
+				newItem.name = convertNameToCSProperty(item.name);
+				return newItem;
+			});
+
+			let csTableNotKeysProperties = data.properties.filter(item => data.keys.find(key => key !== item.name)).map(item => {
+				let newItem = item;
+				newItem.name = convertNameToCSProperty(item.name);
+				return newItem;
+			});
+
+			let formController = `
+<br>
+${csTableName}Controller
+<br>
+<textarea id='${csTableName}' style='width: 100%; height: 500px;' readonly='readonly'>
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using AdminASP.Models;
+using System.Security.Cryptography;
+using AdminASP.Helpers;
+using Newtonsoft.Json;
+
+namespace AdminASP.Controllers
+{
+    public class ${csTableName}Controller : Controller
+    {
+        public IActionResult GetAll()
+        {
+            ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
+            List<BaseModel> baseModels = modelStoreContext.GetAll();
+            List<${csTableName}> thisModels = new List<${csTableName}>();
+            foreach (BaseModel baseModel in baseModels)
+            {
+                thisModels.Add(baseModel as ${csTableName});
+            }
+            ViewData["inputs"] = thisModels;
+            return View();
+        }
+
+        public IActionResult Add(Form${csTableName}AddInput input)
+        {
+            int result = 0;
+            List<String> resultValidate = input.GetValidate();
+            if (resultValidate.Count <= 0)
+            {
+                ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
+                int addResult = modelStoreContext.Add(new ${csTableName}() { 
+                    ${
+                    	csTablePropertiesNames.map(item => `${item} = input.${item}`).join(",")
+                    }
+                });
+
+                result = addResult;
+            }
+            ViewData["input"] = result;
+            ViewData["errors"] = resultValidate;
+            return View();
+        }
+
+        public IActionResult Edit(Form${csTableName}EditInput input)
+        {
+            int result = 0;
+            List<String> resultValidate = input.GetValidate();
+            if (resultValidate.Count <= 0)
+            {
+                ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
+                ${csTableName} old${csTableName} = new ${csTableName}()
+                {
+                    ${
+                    	csTablePropertiesNames.map((item, index) => {
+                    		if (csTableKeysProperties.find(key => key.name === item) !== undefined) {
+                    			return `${item} = input.${item}`;
+                    		}
+                    		else {
+                    			return `${item} = ${createCSCodeDefaultValue(data.properties[index].type)}`;
+                    		}
+                    	}).join(",")
+                    }
+                };
+                ${csTableName} new${csTableName} = new ${csTableName}()
+                {
+                    ${
+                    	csTablePropertiesNames.map(item => `${item} = input.${item}`).join(",")
+                    }
+                };
+                int editResult = modelStoreContext.Edit(old${csTableName}, new${csTableName});
+
+                result = editResult;
+                ViewData["new${csTableName}"] = new${csTableName};
+            }
+            ViewData["input"] = result;
+            ViewData["errors"] = resultValidate;             
+            return View();
+        }
+
+        public IActionResult Delete(Form${csTableName}DeleteInput input)
+        {
+            int result = 0;
+            List<String> resultValidate = input.GetValidate();
+            if (resultValidate.Count <= 0)
+            {
+                ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
+                ${csTableName} taiKhoan = new ${csTableName}()
+                {
+                    ${
+                    	csTablePropertiesNames.map((item, index) => {
+                    		if (csTableKeysProperties.find(key => key.name === item) !== undefined) {
+                    			return `${item} = input.${item}`;
+                    		}
+                    		else {
+                    			return `${item} = ${createCSCodeDefaultValue(data.properties[index].type)}`;
+                    		}
+                    	}).join(",")
+                    }
+                };
+                int deleteResult = modelStoreContext.Delete(taiKhoan);
+
+                result = deleteResult;
+            }
+            ViewData["input"] = result;
+            ViewData["errors"] = resultValidate;
+            return View();
+        }
+
+        public IActionResult DeleteAll()
+        {
+            int result = 0;
+            ${csTableName}StoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(${csTableName}StoreContext)) as ${csTableName}StoreContext;
+            int deleteResult = modelStoreContext.DeleteAll();
+
+            result = deleteResult;
+            ViewData["input"] = result;
+            return View();
+        }
+    }
+}
+
+
+</textarea>
+			`;
+
+			content.innerHTML += formController;
+			content.innerHTML += "<br>-----------------------------------------------------------------<br>";
+		}
+
+	</script>
+</body>
+</html>

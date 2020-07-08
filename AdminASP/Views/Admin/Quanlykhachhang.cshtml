@@ -1,0 +1,187 @@
+﻿@{
+    Layout = "_Layout_MainAdmin";
+}
+
+@{
+    ViewData["Title"] = "Quản lý khách hàng";
+    ViewData["mainTitle"] = "Quản lý khách hàng";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
+    <!-- DataTable-->
+    <link rel="stylesheet" type="text/css" href="~/liblaries/datatables.min.css">
+}
+
+@section navbar {
+    <!-- Navbar -->
+    @await Html.PartialAsync("_Item_Navbar");
+}
+
+@section sidebar {
+    <!-- Sidebar -->
+    @{
+        ViewData["adminSidebarActive"] = "Quanlykhachhang";
+    }
+    @await Html.PartialAsync("_Item_Sidebar")
+}
+
+@section mainContent {
+    <!-- Breadcrumb đường dẫn đến trang -->
+    @{
+        List<Breadcrumb> breadcrumbs = new List<Breadcrumb>();
+        breadcrumbs.Add(new Breadcrumb() { Name = "Tổng quát", Link = "/Admin/Tongquat", IsActive = false });
+        breadcrumbs.Add(new Breadcrumb() { Name = "Quản lý khách hàng", Link = "/Admin/Quanlykhachhang", IsActive = true });
+        ViewData["breadcrumbs"] = breadcrumbs;
+    }
+    @await Html.PartialAsync("_Item_Breadcrumb")
+
+
+    <!-- Thao tác hỗ trợ thực hiện -->
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
+        <div class="card-body">
+            <button class="btn btn-outline-primary mr-3" id="themKhachHang" type="button" data-toggle="modal" data-target="#modelThemKhachHang" modify="ThemKhachHang">Thêm khách hàng</button>
+            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                <button class="btn btn-outline-secondary" id="danhDauTatCa" type="button">Đánh dấu tất cả</button>
+                <button class="btn btn-outline-secondary" id="boDanhDauTatCa" type="button">Bỏ đánh dấu tất cả</button>
+            </div>
+            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                <button class="btn btn-outline-danger" id="xoaDanhDau" type="button">Xóa đánh dấu</button>
+                <button class="btn btn-outline-danger" id="xoaTatCa" type="button">Xóa tất cả</button>
+            </div>
+            <button class="btn btn-outline-info mr-3" id="lamMoi" type="button">Làm mới</button>
+        </div>
+    </div>
+
+    <!-- Model thêm khách hàng-->
+    <div class="modal fade" id="modelThemKhachHang" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm khách hàng</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div id="themKhachHangAlerts">
+                        <!-- Các alert của phần này-->
+                    </div>
+                    <form>
+                        <input class="id_khach_hang" id="suaIdKhachHang" type="hidden">
+                        <div class="form-group">
+                            <label class="small mb-1" for="themTenKhachHang">Tên khách hàng</label>
+                            <input class="form-control py-4 ten" id="themTenKhachHang" type="text" placeholder="Nhập tên khách hàng của bạn">
+                        </div>
+                        <div class="form-group">
+                            <label class="small mb-1" for="themSoDienThoai">Số điện thoại</label>
+                            <input class="form-control py-4 sdt" id="themSoDienThoai" type="text" placeholder="Nhập số điện thoại của bạn">
+                        </div>
+                        <div class="form-group">
+                            <label class="small mb-1" for="themKhachHangUsername">Chọn tên đăng nhập</label>
+                            <select class="form-control id_tai_khoan" id="themKhachHangUsername">
+                                <option value="0">Không có</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="small mb-1" for="themDiemTichLuy">Điểm tích lũy khách hàng</label>
+                            <input class="form-control py-4 diem_tich_luy" id="themDiemTichLuy" type="number" min="0" step="1" placeholder="Nhập Điểm tích lũy khách hàng">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-outline-primary" id="themKhachHangConfirm" type="button" value="Thêm Khách hàng">
+                    <input class="btn btn-outline-secondary" id="themKhachHangReset" type="reset" value="Cài lại">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model sửa khách hàng-->
+    <div class="modal fade" id="modelSuaKhachHang" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa khách hàng</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div id="suaKhachHangAlerts"></div>
+                    <!-- Các alert của phần này-->
+                    <input class="id_khach_hang" id="suaIdKhachHang" type="hidden">
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaTenKhachHang">Tên khách hàng</label>
+                        <input class="form-control py-4 ten" id="suaTenKhachHang" type="text" placeholder="Nhập tên khách hàng của bạn">
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaSoDienThoai">Số điện thoại</label>
+                        <input class="form-control py-4 sdt" id="suaSoDienThoai" type="text" placeholder="Nhập số điện thoại của bạn">
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaKhachHangUsername">Chọn tên đăng nhập</label>
+                        <select class="form-control id_tai_khoan" id="suaKhachHangUsername">
+                            <option value="0">Không có</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaDiemTichLuy">Điểm tích lũy khách hàng</label>
+                        <input class="form-control py-4 diem_tich_luy" id="suaDiemTichLuy" type="number" min="0" step="1" placeholder="Nhập Điểm tích lũy khách hàng">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-outline-primary" id="suaKhachHangConfirm" type="button" value="Sửa Khách hàng">
+                    <input class="btn btn-outline-secondary" id="suaKhachHangReset" type="reset" value="Cài lại">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bảng -->
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý khách hàng</div>
+        <div class="card-body">
+            <div id="tableQuanLyKhachHangAlert"></div>
+            <div class="table-responsive" id="tableQuanLyKhachHangContainer">
+                <table class="table table-bordered table-striped table-hover" id="tableQuanLyKhachHang" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên khách hàng</th>
+                            <th>Số điện thoại</th>
+                            <th>Điểm tích lũy</th>
+                            <th>Username</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên khách hàng</th>
+                            <th>Số điện thoại</th>
+                            <th>Điểm tích lũy</th>
+                            <th>Username</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <!-- Nội dung bảng-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
+    <!-- Datatable Javascript-->
+    <script type="text/javascript" src="~/liblaries/datatables.min.js"></script>
+    <!-- Custom JavaScript-->
+    <script type="text/javascript" src="~/js/custom-toggle-button.js"></script>
+    <script type="text/javascript" src="~/js/quan-ly-khach-hang.js"></script>
+    <script type="text/javascript" src="~/js/custom-alert.js"></script>
+}

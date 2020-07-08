@@ -1,0 +1,20 @@
+﻿@{
+    List<Breadcrumb> breadcrumbs = ViewData["breadcrumbs"] as List<Breadcrumb>;
+}
+
+<ol class="breadcrumb mb-4">
+    @foreach (Breadcrumb breadcrumb in breadcrumbs)
+    {
+        <li class="breadcrumb-item @if (breadcrumb.IsActive) @("active")">
+            @if (breadcrumb.IsActive)
+            {
+                @breadcrumb.Name
+            }
+            else
+            {
+                <a href="@breadcrumb.Link">@breadcrumb.Name</a>
+            }
+
+        </li>
+    }
+</ol>

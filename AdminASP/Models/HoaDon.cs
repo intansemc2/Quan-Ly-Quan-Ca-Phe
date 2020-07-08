@@ -19,8 +19,11 @@ namespace AdminASP.Models
         private int idNhanVien;
         public int IdNhanVien { get { return this.idNhanVien; } set { this.idNhanVien = value; } }
 
-        private String thoiGIan;
-        public String ThoiGIan { get { return this.thoiGIan; } set { this.thoiGIan = value; } }
+        private String thoiGianLap;
+        public String ThoiGianLap { get { return this.thoiGianLap; } set { this.thoiGianLap = value; } }
+
+        private String thoiGianThanhToan;
+        public String ThoiGianThanhToan { get { return this.thoiGianThanhToan; } set { this.thoiGianThanhToan = value; } }
 
         private float phanTramTichLuy;
         public float PhanTramTichLuy { get { return this.phanTramTichLuy; } set { this.phanTramTichLuy = value; } }

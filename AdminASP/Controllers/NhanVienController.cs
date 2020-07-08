@@ -12,108 +12,135 @@ namespace AdminASP.Controllers
 {
     public class NhanVienController : Controller
     {
-        public IActionResult GetAll()
+        public String GetAll()
         {
+            if (!(CheckPermission.CheckStaff(this))) { return ""; }
+
             NhanVienStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(NhanVienStoreContext)) as NhanVienStoreContext;
             List<BaseModel> baseModels = modelStoreContext.GetAll();
-            List<NhanVien> thisModels = new List<NhanVien>();
+            List<NhanVien> outputs = new List<NhanVien>();
             foreach (BaseModel baseModel in baseModels)
             {
-                thisModels.Add(baseModel as NhanVien);
+                outputs.Add(baseModel as NhanVien);
             }
-            ViewData["inputs"] = thisModels;
-            return View();
+            return JsonConvert.SerializeObject(outputs);
         }
 
-        public IActionResult Add(FormNhanVienAddInput input)
+        public String Add(FormNhanVienAddInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
+            NhanVien newNhanVien = null;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 NhanVienStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(NhanVienStoreContext)) as NhanVienStoreContext;
-                int addResult = modelStoreContext.Add(new NhanVien()
+                newNhanVien = new NhanVien()
                 {
-                    IdNhanVien = input.IdNhanVien,
                     Ten = input.Ten,
                     Sdt = input.Sdt,
                     Loai = input.Loai,
-                    Username = input.Username
-                });
+                    IdTaiKhoan = input.IdTaiKhoan
+                };
+                int addResult = modelStoreContext.Add(newNhanVien);
 
-                result = addResult;
+                output = addResult;
+                newNhanVien.IdNhanVien = -1;
+                newNhanVien = modelStoreContext.Find(newNhanVien)[0] as NhanVien;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+            return JsonConvert.SerializeObject(new { output = output, errors = errors, newNhanVien = newNhanVien });
         }
 
-        public IActionResult Edit(FormNhanVienEditInput input)
+        public String Edit(FormNhanVienEditInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 NhanVienStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(NhanVienStoreContext)) as NhanVienStoreContext;
                 NhanVien oldNhanVien = new NhanVien()
                 {
-                    IdNhanVien = input.IdNhanVien,
-                    Ten = null,
-                    Sdt = null,
-                    Loai = -1,
-                    Username = null
+                    IdNhanVien = input.IdNhanVien
                 };
                 NhanVien newNhanVien = new NhanVien()
                 {
-                    IdNhanVien = input.IdNhanVien,
                     Ten = input.Ten,
                     Sdt = input.Sdt,
                     Loai = input.Loai,
-                    Username = input.Username
+                    IdTaiKhoan = input.IdTaiKhoan
                 };
                 int editResult = modelStoreContext.Edit(oldNhanVien, newNhanVien);
 
-                result = editResult;
-                ViewData["newNhanVien"] = newNhanVien;
+                output = editResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+
+            return JsonConvert.SerializeObject(new { output = output, errors = errors });
         }
 
-        public IActionResult Delete(FormNhanVienDeleteInput input)
+        public String Delete(FormNhanVienDeleteInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 NhanVienStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(NhanVienStoreContext)) as NhanVienStoreContext;
-                NhanVien taiKhoan = new NhanVien()
+                NhanVien nhanVien = new NhanVien()
                 {
-                    IdNhanVien = input.IdNhanVien,
-                    Ten = null,
-                    Sdt = null,
-                    Loai = -1,
-                    Username = null
+                    IdNhanVien = input.IdNhanVien
                 };
-                int deleteResult = modelStoreContext.Delete(taiKhoan);
+                int deleteResult = modelStoreContext.Delete(nhanVien);
 
-                result = deleteResult;
+                output = deleteResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+
+            return JsonConvert.SerializeObject(new { output = output, errors = errors });
         }
 
-        public IActionResult DeleteAll()
+        public String DeleteMarked(FormNhanVienDeleteMarked deleteInput)
         {
-            int result = 0;
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            List<String> inputs = JsonConvert.DeserializeObject<List<String>>(deleteInput.JsonInput);
+
+            List<String> outputs = new List<String>();
+            if (inputs.Count > 0)
+            {
+                NhanVienStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(NhanVienStoreContext)) as NhanVienStoreContext;
+                foreach (String input in inputs)
+                {
+                    NhanVien nhanVien = new NhanVien() 
+                    { 
+                        IdNhanVien = Convert.ToInt32(input)
+                    };
+                    int deleteResult = modelStoreContext.Delete(nhanVien);
+                    outputs.Add(JsonConvert.SerializeObject(new { IdNhanVien = input, Result = deleteResult }));
+                }
+            }
+
+            return JsonConvert.SerializeObject(outputs);
+        }
+
+        public String DeleteAll()
+        {
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
             NhanVienStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(NhanVienStoreContext)) as NhanVienStoreContext;
             int deleteResult = modelStoreContext.DeleteAll();
 
-            result = deleteResult;
-            ViewData["input"] = result;
-            return View();
+            output = deleteResult;
+
+            return JsonConvert.SerializeObject(new { output = output });
+        }
+
+        public String GetLoais()
+        {
+            return JsonConvert.SerializeObject(NhanVien.GetTypes());
         }
     }
 }

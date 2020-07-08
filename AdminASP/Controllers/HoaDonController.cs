@@ -12,120 +12,140 @@ namespace AdminASP.Controllers
 {
     public class HoaDonController : Controller
     {
-        public IActionResult GetAll()
+        public String GetAll()
         {
+            if (!(CheckPermission.CheckStaff(this))) { return ""; }
+
             HoaDonStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(HoaDonStoreContext)) as HoaDonStoreContext;
-            List<BaseModel> baseModels = modelStoreContext.GetAll();
+            List<BaseModel> outputs = modelStoreContext.GetAll();
             List<HoaDon> thisModels = new List<HoaDon>();
-            foreach (BaseModel baseModel in baseModels)
+            foreach (BaseModel baseModel in outputs)
             {
                 thisModels.Add(baseModel as HoaDon);
             }
-            ViewData["inputs"] = thisModels;
-            return View();
+
+            return JsonConvert.SerializeObject(outputs);
         }
 
-        public IActionResult Add(FormHoaDonAddInput input)
+        public String Add(FormHoaDonAddInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
+            HoaDon newHoaDon = null;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 HoaDonStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(HoaDonStoreContext)) as HoaDonStoreContext;
-                int addResult = modelStoreContext.Add(new HoaDon()
+                newHoaDon = new HoaDon()
                 {
-                    IdHoaDon = input.IdHoaDon,
                     IdKhachHang = input.IdKhachHang,
                     IdBan = input.IdBan,
                     IdNhanVien = input.IdNhanVien,
-                    ThoiGIan = input.ThoiGIan,
+                    ThoiGianLap = input.ThoiGIanLap,
+                    ThoiGianThanhToan = input.ThoiGIanThanhToan,
                     PhanTramTichLuy = input.PhanTramTichLuy,
                     SoLuongDiemDoi = input.SoLuongDiemDoi,
                     TyGiaDiemDoi = input.TyGiaDiemDoi
-                });
+                };
+                int addResult = modelStoreContext.Add(newHoaDon);
 
-                result = addResult;
+                output = addResult;
+                newHoaDon.IdHoaDon = -1;
+                newHoaDon = modelStoreContext.Find(newHoaDon)[0] as HoaDon;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+
+            return JsonConvert.SerializeObject(new { output = output, errors = errors, newHoaDon = newHoaDon });
         }
 
-        public IActionResult Edit(FormHoaDonEditInput input)
+        public String Edit(FormHoaDonEditInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 HoaDonStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(HoaDonStoreContext)) as HoaDonStoreContext;
                 HoaDon oldHoaDon = new HoaDon()
                 {
                     IdHoaDon = input.IdHoaDon,
-                    IdKhachHang = -1,
-                    IdBan = -1,
-                    IdNhanVien = -1,
-                    ThoiGIan = null,
-                    PhanTramTichLuy = -1,
-                    SoLuongDiemDoi = -1,
-                    TyGiaDiemDoi = -1
                 };
                 HoaDon newHoaDon = new HoaDon()
                 {
-                    IdHoaDon = input.IdHoaDon,
                     IdKhachHang = input.IdKhachHang,
                     IdBan = input.IdBan,
                     IdNhanVien = input.IdNhanVien,
-                    ThoiGIan = input.ThoiGIan,
+                    ThoiGianLap = input.ThoiGIanLap,
+                    ThoiGianThanhToan = input.ThoiGianThanhToan,
                     PhanTramTichLuy = input.PhanTramTichLuy,
                     SoLuongDiemDoi = input.SoLuongDiemDoi,
                     TyGiaDiemDoi = input.TyGiaDiemDoi
                 };
                 int editResult = modelStoreContext.Edit(oldHoaDon, newHoaDon);
 
-                result = editResult;
-                ViewData["newHoaDon"] = newHoaDon;
+                output = editResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+
+            return JsonConvert.SerializeObject(new { output = output, errors = errors });
         }
 
-        public IActionResult Delete(FormHoaDonDeleteInput input)
+        public String Delete(FormHoaDonDeleteInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 HoaDonStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(HoaDonStoreContext)) as HoaDonStoreContext;
                 HoaDon taiKhoan = new HoaDon()
                 {
-                    IdHoaDon = input.IdHoaDon,
-                    IdKhachHang = -1,
-                    IdBan = -1,
-                    IdNhanVien = -1,
-                    ThoiGIan = null,
-                    PhanTramTichLuy = -1,
-                    SoLuongDiemDoi = -1,
-                    TyGiaDiemDoi = -1
+                    IdHoaDon = input.IdHoaDon
                 };
                 int deleteResult = modelStoreContext.Delete(taiKhoan);
 
-                result = deleteResult;
+                output = deleteResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+
+            return JsonConvert.SerializeObject(new { output = output, errors = errors });
         }
 
-        public IActionResult DeleteAll()
+        public String DeleteMarked(FormHoaDonDeleteMarked deleteInput)
         {
-            int result = 0;
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            List<String> inputs = JsonConvert.DeserializeObject<List<String>>(deleteInput.JsonInput);
+
+            List<String> outputs = new List<String>();
+            if (inputs.Count > 0)
+            {
+                HoaDonStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(HoaDonStoreContext)) as HoaDonStoreContext;
+                foreach (String input in inputs)
+                {
+                    HoaDon hoaDon = new HoaDon()
+                    {
+                        IdHoaDon = Convert.ToInt32(input)
+                    };
+                    int deleteResult = modelStoreContext.Delete(hoaDon);
+                    outputs.Add(JsonConvert.SerializeObject(new { IdHoaDon = input, Result = deleteResult }));
+                }
+            }
+
+            return JsonConvert.SerializeObject(outputs);
+        }
+
+        public String DeleteAll()
+        {
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
             HoaDonStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(HoaDonStoreContext)) as HoaDonStoreContext;
             int deleteResult = modelStoreContext.DeleteAll();
 
-            result = deleteResult;
-            ViewData["input"] = result;
-            return View();
+            output = deleteResult;
+
+            return JsonConvert.SerializeObject(new { output = output });
         }
     }
 }

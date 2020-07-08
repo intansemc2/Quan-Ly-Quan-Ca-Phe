@@ -17,8 +17,8 @@ namespace AdminASP.Models
         private String sdt;
         public String Sdt { get { return this.sdt; } set { this.sdt = value; } }
 
-        private String username;
-        public String Username { get { return this.username; } set { this.username = value; } }
+        private int idTaiKhoan;
+        public int IdTaiKhoan { get { return this.idTaiKhoan; } set { this.idTaiKhoan = value; } }
 
         private int diemtichluy;
         public int DiemTichLuy { get { return this.diemtichluy; } set { this.diemtichluy = value; } }
@@ -43,9 +43,9 @@ namespace AdminASP.Models
                 errors.Add("Số điện thoại không thể để trống");
             }
 
-            if (!(Username != null && Username != ""))
+            if (!(IdTaiKhoan >= 0))
             {
-                errors.Add("Tên đăng nhập không thể để trống");
+                errors.Add("Id tài khoản không thể để trống");
             }
 
             if (!(DiemTichLuy >= 0))

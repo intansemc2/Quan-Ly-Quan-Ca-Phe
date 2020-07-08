@@ -12,108 +12,121 @@ namespace AdminASP.Controllers
 {
     public class KhachHangController : Controller
     {
-        public IActionResult GetAll()
+        public String GetAll()
         {
             KhachHangStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(KhachHangStoreContext)) as KhachHangStoreContext;
             List<BaseModel> baseModels = modelStoreContext.GetAll();
-            List<KhachHang> thisModels = new List<KhachHang>();
+            List<KhachHang> outputs = new List<KhachHang>();
             foreach (BaseModel baseModel in baseModels)
             {
-                thisModels.Add(baseModel as KhachHang);
+                outputs.Add(baseModel as KhachHang);
             }
-            ViewData["inputs"] = thisModels;
-            return View();
+
+            return JsonConvert.SerializeObject(outputs);
         }
 
-        public IActionResult Add(FormKhachHangAddInput input)
+        public String Add(FormKhachHangAddInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            int output = 0;
+            KhachHang newKhachHang = null;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 KhachHangStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(KhachHangStoreContext)) as KhachHangStoreContext;
-                int addResult = modelStoreContext.Add(new KhachHang()
+                newKhachHang = new KhachHang()
                 {
-                    IdKhachHang = input.IdKhachHang,
                     Ten = input.Ten,
                     Sdt = input.Sdt,
-                    Username = input.Username,
+                    IdTaiKhoan = input.IdTaiKhoan,
                     DiemTichLuy = input.DiemTichLuy
-                });
+                };
+                int addResult = modelStoreContext.Add(newKhachHang);
 
-                result = addResult;
+                output = addResult;
+                newKhachHang.IdKhachHang = -1;
+                newKhachHang = modelStoreContext.Find(newKhachHang)[0] as KhachHang;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+            return JsonConvert.SerializeObject(new { output = output, errors = errors, newKhachHang = newKhachHang });
         }
 
-        public IActionResult Edit(FormKhachHangEditInput input)
+        public String Edit(FormKhachHangEditInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            int output = 0;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 KhachHangStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(KhachHangStoreContext)) as KhachHangStoreContext;
                 KhachHang oldKhachHang = new KhachHang()
                 {
-                    IdKhachHang = input.IdKhachHang,
-                    Ten = null,
-                    Sdt = null,
-                    Username = null,
-                    DiemTichLuy = -1
+                    IdKhachHang = input.OldIdKhachHang
                 };
                 KhachHang newKhachHang = new KhachHang()
                 {
-                    IdKhachHang = input.IdKhachHang,
                     Ten = input.Ten,
                     Sdt = input.Sdt,
-                    Username = input.Username,
+                    IdTaiKhoan = input.IdTaiKhoan,
                     DiemTichLuy = input.DiemTichLuy
                 };
                 int editResult = modelStoreContext.Edit(oldKhachHang, newKhachHang);
 
-                result = editResult;
-                ViewData["newKhachHang"] = newKhachHang;
+                output = editResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+
+            return JsonConvert.SerializeObject(new { output = output, errors = errors });
         }
 
-        public IActionResult Delete(FormKhachHangDeleteInput input)
+        public String Delete(FormKhachHangDeleteInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            int output = 0;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 KhachHangStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(KhachHangStoreContext)) as KhachHangStoreContext;
-                KhachHang taiKhoan = new KhachHang()
+                KhachHang khachHang = new KhachHang()
                 {
-                    IdKhachHang = input.IdKhachHang,
-                    Ten = null,
-                    Sdt = null,
-                    Username = null,
-                    DiemTichLuy = -1
+                    IdKhachHang = input.IdKhachHang
                 };
-                int deleteResult = modelStoreContext.Delete(taiKhoan);
+                int deleteResult = modelStoreContext.Delete(khachHang);
 
-                result = deleteResult;
+                output = deleteResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+
+            return JsonConvert.SerializeObject(new { output = output, errors = errors });
         }
 
-        public IActionResult DeleteAll()
+        public String DeleteMarked(FormKhachHangDeleteMarked deleteInput)
         {
-            int result = 0;
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            List<String> inputs = JsonConvert.DeserializeObject<List<String>>(deleteInput.JsonInput);
+
+            List<String> outputs = new List<String>();
+            if (inputs.Count > 0)
+            {
+                KhachHangStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(KhachHangStoreContext)) as KhachHangStoreContext;
+                foreach (String input in inputs)
+                {
+                    KhachHang khachHang = new KhachHang()
+                    {
+                        IdKhachHang = Convert.ToInt32(input)
+                    };
+                    int deleteResult = modelStoreContext.Delete(khachHang);
+                    outputs.Add(JsonConvert.SerializeObject(new { IdKhachHang = input, Result = deleteResult }));
+                }
+            }
+
+            return JsonConvert.SerializeObject(outputs);
+        }
+
+        public String DeleteAll()
+        {
+            int output = 0;
             KhachHangStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(KhachHangStoreContext)) as KhachHangStoreContext;
             int deleteResult = modelStoreContext.DeleteAll();
 
-            result = deleteResult;
-            ViewData["input"] = result;
-            return View();
+            output = deleteResult;
+
+            return JsonConvert.SerializeObject(new { output = output });
         }
     }
 }

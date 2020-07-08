@@ -19,7 +19,15 @@ namespace AdminASP.Models
         private int loai;
         public int Loai { get { return this.loai; } set { this.loai = value; } }
 
-        private String username;
-        public String Username { get { return this.username; } set { this.username = value; } }
+        private int idTaiKhoan;
+        public int IdTaiKhoan { get { return this.idTaiKhoan; } set { this.idTaiKhoan = value; } }
+
+        internal static object GetTypes()
+        {
+            List<String> types = new List<String>();
+            types.Add("Staff");
+            types.Add("Admin");
+            return types;
+        }
     }
 }

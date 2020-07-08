@@ -13,9 +13,6 @@
 
 @section navbar {
     <!-- Navbar -->
-    @{
-        ViewData["navbarAccountOptions"] = "This is navbar option!!!";
-    }
     @await Html.PartialAsync("_Item_Navbar");
 }
 
@@ -30,11 +27,16 @@
 @section mainContent {
     @{
         List<Breadcrumb> breadcrumbs = new List<Breadcrumb>();
-        breadcrumbs.Add(new Breadcrumb() { Name = "Tổng quát", Link = "/Admin/Tongquat", IsActive = false });
+        breadcrumbs.Add(new Breadcrumb() { Name = "Tổng quát", Link = "/Admin/Tongquat", IsActive = true });
         ViewData["breadcrumbs"] = breadcrumbs;
     }
     @await Html.PartialAsync("_Item_Breadcrumb")
-    Tổng quát
+
+    <div class="d-flex flex-column justify-content-between align-items-center">
+        <h1>Quản lý quán cà phê</h1>
+        <br />
+        <h5>Chào mừng @ViewData["Username"]</h5>
+    </div>
 }
 
 @section footer {

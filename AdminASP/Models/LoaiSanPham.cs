@@ -12,5 +12,11 @@ namespace AdminASP.Models
 
         private String ten;
         public String Ten { get { return this.ten; } set { this.ten = value; } }
+
+        private String ghiChu;
+        public String GhiChu { get { return this.ghiChu; } set { this.ghiChu = value; } }
+
+        private String linkAnh;
+        public String LinkAnh { get { return this.linkAnh; } set { this.linkAnh = value; } }
     }
 }

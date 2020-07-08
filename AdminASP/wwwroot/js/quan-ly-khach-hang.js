@@ -1,9 +1,8 @@
 let tableQuanLyKhachHang;
-let usernames = [];
-let khachhangTypes = [];
+let taikhoans = [];
 
 $(document).ready(function () {
-//Active dataTable
+    //Active dataTable
     tableQuanLyKhachHang = $("#tableQuanLyKhachHang").DataTable({
         "columnDefs": [
             {
@@ -12,7 +11,7 @@ $(document).ready(function () {
                     let renderData = data;
                     return `<span class="id_khach_hang" data="${data}">${renderData}</span>`;
                 }
-            },            {
+            }, {
                 "targets": 1,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
@@ -29,16 +28,16 @@ $(document).ready(function () {
             {
                 "targets": 3,
                 "render": function (data, type, row, meta) {
-                    let pointIndex = data;
-                    let renderData = khachhangTypes[pointIndex] ? khachhangTypes[pointIndex] : data;
-                    return `<span class="point" data="${data}">${renderData}</span>`;
+                    let renderData = data;
+                    return `<span class="diem_tich_luy" data="${data}">${renderData}</span>`;
                 }
             },
             {
                 "targets": 4,
                 "render": function (data, type, row, meta) {
-                    let renderData = data;
-                    return `<span class="username" data="${data}">${renderData}</span>`;
+                    let taikhoanKHRender = taikhoans.find(item => item.id_tai_khoan == data);
+                    let renderData = `${taikhoanKHRender.id_tai_khoan}`;
+                    return `<span class="id_tai_khoan" data="${data}">${renderData}</span>`;
                 }
             },
             {
@@ -48,13 +47,13 @@ $(document).ready(function () {
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
 <button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaKhachHang" modify="${khachhang.id_khach_hang}"><i class="fas fa-edit"></i></button>
-<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLNVRow(this)"><i class="fas fa-trash"></i></button>`;
+<button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLKHRow(this)"><i class="fas fa-trash"></i></button>`;
                     return `${renderData}`;
                 }
             }]
     });
 
-    refreshDataTableQLNV();
+    refreshDataTableQLKH();
 
     $("#danhDauTatCa").click(function () {
         $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
@@ -63,39 +62,100 @@ $(document).ready(function () {
         $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "false"));
     });
     $("#xoaDanhDau").click(function () {
-        $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton)).each((index, element) => deleteTableQLKHRow($(element)));
+        let markeds = [];
+        let tableRows = [];
+        //Lọc ra dòng được chọn
+        $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton)).each((index, element) => {
+            let tableRow = $(element).parents("tr");
+            tableRows.push(tableRow);
+        });
+        //Lọc ra khách hàng được chọn
+        for (let tableRow of tableRows) {
+            let khachHang = extractDataFromTableQLKHRow(tableRow);
+            markeds.push(khachHang);
+        }
+        //Kiểm tra xem có dòng nào được chọn hay chưa
+        $("#tableQuanLyKhachHangAlert").empty();
 
-
-    });
-    $("#xoaTatCa").click(function () {
-        $.post("/KhachHang/DeleteAll", function (data) {
-            //Lấy thông tin 
+        if (tableRows.length <= 0 || markeds.length <= 0) {
+            $("#tableQuanLyKhachHangAlert").append(createAlerts("warning", "Chưa có dòng nào được chọn"));
+            return;
+        }
+        //Gửi yêu cầu xóa 
+        $.post("/KhachHang/DeleteMarked", { JsonInput: JSON.stringify(markeds.map(item => item.id_khach_hang)) }, function (data) {
+            //Lấy thông tin khách hàng
             let inputJson = data;
-            inputJson = inputJson.replace(/"/g, `"`);
+            inputJson = inputJson.replace(/&quot;/g, `"`);
+            inputJson = inputJson.replace(/IdKhachHang/g, `id_khach_hang`);
+            inputJson = inputJson.replace(/Result/g, `result`);
             let outputs = JSON.parse(inputJson);
 
             //Xóa khỏi bảng
-            if (outputs.output >= 0) {
-                tableQuanLyKhachHang.clear().draw();
+            let deleteSuccess = [];
+            let deleteFail = [];
+            for (let i = 0; i < outputs.length; i += 1) {
+                let output = JSON.parse(outputs[i]);
+                if (output.result >= 0) {
+                    let tableRow = tableRows[i];
+                    tableQuanLyKhachHang.row(tableRow).remove().draw();
+                    deleteSuccess.push(markeds[i].ten);
+                }
+                else {
+                    deleteFail.push(markeds[i].ten);
+                }
             }
+            //Thông báo kết quả xóa
+            if (deleteSuccess.length > 0) {
+                $("#tableQuanLyKhachHangAlert").append(createAlerts("success", `Xóa thành công ${deleteSuccess.length} khách hàng:   ${deleteSuccess.join(",  ")}`));
+            }
+            if (deleteFail.length > 0) {
+                $("#tableQuanLyKhachHangAlert").append(createAlerts("success", `Xóa thất bại ${deleteFail.length} khách hàng: ${deleteFail.join(", ")}`));
+            }
+            //Bỏ đánh dấu nếu có
+            $(".custom-toggle-button").each((index, element) => {
+                setToggleStatus(element, false);
+            });
         })
             .done(function () {
             })
             .fail(function () {
-                alert("Không thể gửi dữ liệu đến server để xóa dữ liệu từ CSDL");
+                $("#tableQuanLyKhachHangAlert").append(createAlerts("danger", "Không gửi dữ liệu đi"));
+                $("#tableQuanLyKhachHangAlert").append(createAlerts("danger", "Xóa thất bại"));
             })
             .always(function () {
             });
+    });
+    $("#xoaTatCa").click(function () {
+        $("#tableQuanLyKhachHangAlert").empty();
 
+        $.post("/KhachHang/DeleteAll", function (data) {
+            //Lấy thông tin khách hàng
+            let inputJson = data;
+            inputJson = inputJson.replace(/&quot;/g, `"`);
+            let outputs = JSON.parse(inputJson);
 
+            //Xóa khỏi bảng
+            if (outputs.output > 0) {
+                tableQuanLyKhachHang.clear().draw();
+                $("#tableQuanLyKhachHangAlert").append(createAlerts("success", "Xóa thành công"));
+            } 
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                $("#tableQuanLyKhachHangAlert").append(createAlerts("danger", "Không gửi dữ liệu đi"));
+                $("#tableQuanLyKhachHangAlert").append(createAlerts("danger", "Xóa thất bại"));
+            })
+            .always(function () {
+            });
     });
     $("#lamMoi").click(function () {
-        refreshDataTableQLNV();
+        refreshDataTableQLKH();
     });
     $("#modelThemKhachHang").find("#themKhachHangConfirm").click(function () {
         //Xóa hết alert cũ
         $("#modelThemKhachHang").find("#themKhachHangAlerts").html("");
-        
+
         //Validate
         let modifyKhachHang = extractModelThemKhachHang();
         let numberValidateError = validateKhachHangInformation($("#modelThemKhachHang").find("#themKhachHangAlerts"), modifyKhachHang);
@@ -107,23 +167,31 @@ $(document).ready(function () {
         let newKhachHang = modifyKhachHang;
         newKhachHang.id_khach_hang = -1;
         //Thêm xuống CSDL
-        $.post("/KhachHang/Add", { IdKhachHang: newKhachHang.id_khach_hang, Ten: newKhachHang.ten, Sdt: newKhachHang.sdt, Username: newKhachHang.username, DiemTichLuy: newKhachHang.diem_tich_luy }, function (data) {
-            //Lấy thông tin tài khoản
+        $("#tableQuanLyKhachHangAlert").empty();
+
+        $.post("/KhachHang/Add", { Ten: newKhachHang.ten, Sdt: newKhachHang.sdt, IdTaiKhoan: newKhachHang.id_tai_khoan, DIemTichLuy: newKhachHang.diem_tich_luy }, function (data) {
+            //Lấy thông tin khách hàng
             let inputJson = data;
-            inputJson = inputJson.replace(/"/g, `"`);
+            inputJson = inputJson.replace(/&quot;/g, `"`);
+            inputJson = inputJson.replace(/IdKhachHang/g, `id_khach_hang`);
+            inputJson = inputJson.replace(/Ten/g, `ten`);
+            inputJson = inputJson.replace(/Sdt/g, `sdt`);
+            inputJson = inputJson.replace(/IdTaiKhoan/g, `id_tai_khoan`);
+            inputJson = inputJson.replace(/DiemTichLuy/g, `diem_tich_luy`);
             let outputs = JSON.parse(inputJson);
 
-            let themModelResult = true;
-            if (outputs.errors.Length > 0 || outputs.output < 0) {
-                themModelResult = false;
+            let themKHResult = true;
+            if (outputs.errors.length > 0 || outputs.output <= 0) {
+                themKHResult = false;
             }
 
             //Thêm thành công
-            if (themModelResult) {
+            if (themKHResult) {
                 $("#modelThemKhachHang").find("#themKhachHangAlerts").append(createAlerts("success", "Thêm thành công"));
-                //Thêm mới vào bảng
+                //Thêm khách hàng mới vào bảng
                 $("#modelThemKhachHang").find(".close").trigger("click");
-                tableQuanLyKhachHang.row.add(createTableQLKHArrayDataRow(newKhachHang)).draw();
+                tableQuanLyKhachHang.row.add(createTableQLKHArrayDataRow(outputs.newKhachHang)).draw();
+                $("#tableQuanLyKhachHangAlert").append(createAlerts("success", `Thêm thành công khách hàng ${newKhachHang.ten}`));
             }
             //Thêm thất bại
             else {
@@ -137,22 +205,20 @@ $(document).ready(function () {
             .done(function () {
             })
             .fail(function () {
-                alert("Không thể gửi dữ liệu đến server để thêm dữ liệu vào CSDL");
+                $("#modelThemKhachHang").find("#themKhachHangAlerts").append(createAlerts("danger", "Không gửi dữ liệu đi"));
                 $("#modelThemKhachHang").find("#themKhachHangAlerts").append(createAlerts("danger", "Thêm thất bại"));
             })
             .always(function () {
             });
-
-
     });
 
-    $("#modelThemKhachHang").find("#themKhachHangReset").click(function() {
+    $("#modelThemKhachHang").find("#themKhachHangReset").click(function () {
         setModelThemKhachHang({});
     });
 
     $("#modelSuaKhachHang").find("#suaKhachHangConfirm").click(function () {
         //Xóa hết alert cũ
-        $("#modelSuaKhachHang").find("#suaKhachHangAlerts").html("");        
+        $("#modelSuaKhachHang").find("#suaKhachHangAlerts").html("");
 
         //Validate
         let modifyKhachHang = extractModelSuaKhachHang();
@@ -163,96 +229,178 @@ $(document).ready(function () {
 
         //Tạo khách hàng mới 
         let newKhachHang = modifyKhachHang;
-        let oldIdkhachHang = $("#modelSuaKhachHang").attr("id_khach_hang");
-        let oldKhachHangRow = $("#tableQuanLyKhachHang").find("button[modify='" + oldIdkhachHang + "']").parents("tr");
+        let oldIdKhachHang = $("#modelSuaKhachHang").attr("id_khach_hang");
+        let oldKhachHangRow = $("#tableQuanLyKhachHang").find("button[modify='" + oldIdKhachHang + "']").parents("tr");
 
         //Sửa xuống CSDL
-        let suaNVResult = true;
+        $("#tableQuanLyKhachHangAlert").empty();
 
-        //Sửa thành công
-        if (suaNVResult) {
-            $("#modelSuaKhachHang").find("#suaKhachHangAlerts").append(createAlerts("success", "Sửa thành công"));
+        $.post("/KhachHang/Edit", { Ten: newKhachHang.ten, Sdt: newKhachHang.sdt, IdTaiKhoan: newKhachHang.id_tai_khoan, DIemTichLuy: newKhachHang.diem_tich_luy, OldIdKhachHang: oldIdKhachHang }, function (data) {
+            //Lấy thông tin khách hàng
+            let inputJson = data;
+            inputJson = inputJson.replace(/&quot;/g, `"`);
+            let outputs = JSON.parse(inputJson);
 
-            //Sửa khách hàng mới vào bảng
-            $("#modelSuaKhachHang").find(".close").trigger("click");
-            tableQuanLyKhachHang.row(oldKhachHangRow).data(createTableQLNVArrayDataRow(newKhachHang)).draw();            
-        }
-        //Sửa thất bại
-        else {
-            $("#modelSuaKhachHang").find("#suaKhachHangAlerts").append(createAlerts("danger", "Sửa thất bại"));
-        }
+            let suaKHResult = true;
+            if (outputs.errors.length > 0 || outputs.output <= 0) {
+                suaKHResult = false;
+            }
+
+            //Sửa thành công
+            if (suaKHResult) {
+                $("#modelSuaKhachHang").find("#suaKhachHangAlerts").append(createAlerts("success", "Sửa thành công"));
+
+                //Sửa khách hàng mới vào bảng
+                $("#modelSuaKhachHang").find(".close").trigger("click");
+                tableQuanLyKhachHang.row(oldKhachHangRow).data(createTableQLKHArrayDataRow(newKhachHang)).draw();
+                $("#tableQuanLyKhachHangAlert").append(createAlerts("success", `Sửa thành công khách hàng ${newKhachHang.ten}`));
+            }
+            //Sửa thất bại
+            else {
+                $("#modelSuaKhachHang").find("#suaKhachHangAlerts").append(createAlerts("danger", "Sửa thất bại"));
+
+                for (let error of outputs.errors) {
+                    $("#modelSuaKhachHang").find("#suaKhachHangAlerts").append(createAlerts("danger", error));
+                }
+            }
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                $("#modelSuaKhachHang").find("#suaKhachHangAlerts").append(createAlerts("danger", "Không thể gửi dữ liệu đi"));
+                $("#modelSuaKhachHang").find("#suaKhachHangAlerts").append(createAlerts("danger", "Sửa thất bại"));
+            })
+            .always(function () {
+            });
     });
 
-    $("#modelSuaKhachHang").find("#suaKhachHangReset").click(function() {
+    $("#modelSuaKhachHang").find("#suaKhachHangReset").click(function () {
         setModelSuaKhachHang({});
     });
 
     $('#modelSuaKhachHang').on('show.bs.modal', function (event) {
         let suaKhachHangTriggered = $(event.relatedTarget); // Button that triggered the modal
 
-        let modifyKhachHang = extractDataFromTableQLNVRow(suaKhachHangTriggered.parents("tr"));
+        let modifyKhachHang = extractDataFromTableQLKHRow(suaKhachHangTriggered.parents("tr"));
 
         $(this).attr("id_khach_hang", modifyKhachHang.id_khach_hang);
         setModelSuaKhachHang(modifyKhachHang);
     });
 });
 
-let createTableQLNVArrayDataRow = (khachhang) => {
-    return [khachhang.id_khach_hang, khachhang.ten, khachhang.sdt, khachhang.point, khachhang.username, khachhang];
+let createTableQLKHArrayDataRow = (khachhang) => {
+    return [khachhang.id_khach_hang, khachhang.ten, khachhang.sdt, khachhang.diem_tich_luy, khachhang.id_tai_khoan, khachhang];
 };
 
-let extractDataFromTableQLNVRow = (tableRow) => {
+let extractDataFromTableQLKHRow = (tableRow) => {
     let id_khach_hang = $(tableRow).find(".id_khach_hang").attr("data");
     let ten = $(tableRow).find(".ten").attr("data");
     let sdt = $(tableRow).find(".sdt").attr("data");
-    let point = $(tableRow).find(".point").attr("data");
-    let username = $(tableRow).find(".username").attr("data");
+    let diem_tich_luy = $(tableRow).find(".diem_tich_luy").attr("data");
+    let id_tai_khoan = $(tableRow).find(".id_tai_khoan").attr("data");
 
-    return {id_khach_hang: id_khach_hang, ten: ten, sdt: sdt, point: point, username: username};
+    return { id_khach_hang: id_khach_hang, ten: ten, sdt: sdt, diem_tich_luy: diem_tich_luy, id_tai_khoan: id_tai_khoan };
 };
 
-let refreshDataTableQLNV = () => {
-    let n = Math.floor(Math.random() * 10);
-    //Lấy thông tin usernames
-    usernames = [];
-    for (let i = 0; i < n; i += 1) { usernames.push(`User${i.toString().padStart(3, "0")}`); }
+let refreshDataTableQLKH = () => {
+    $("#tableQuanLyKhachHangAlert").empty();
 
-    //Thêm option username
-    $("#modelThemKhachHang").find("#themKhachHangUsername").html("");
-    $("#modelSuaKhachHang").find("#suaKhachHangUsername").html("");
-    for (let username of usernames) {
-        let newUsernameOption = `<option value="${username}">${username}</option>`;
-        $("#modelThemKhachHang").find("#themKhachHangUsername").append(newUsernameOption);
-        $("#modelSuaKhachHang").find("#suaKhachHangUsername").append(newUsernameOption);
-    }
+    //Lấy thông tin tài khoản
+    $.post("/TaiKhoan/GetAll", function (data) {
+        //Lấy thông tin tài khoản
+        let inputJson = data;
+        inputJson = inputJson.replace(/&quot;/g, `"`);
+        inputJson = inputJson.replace(/IdTaiKhoan/g, `id_tai_khoan`);
+        inputJson = inputJson.replace(/Username/g, `username`);
+        inputJson = inputJson.replace(/Password/g, `password`);
+        inputJson = inputJson.replace(/Type/g, `type`);
+        let outputs = JSON.parse(inputJson);
 
-    tableQuanLyKhachHang.clear();
-    //Lấy thông tin khách hàng
-    let khachhangs = new Array();    
-    for (let i = 0; i < n; i += 1) {
-        let id_khach_hang = i;
-        let ten = `Khách Văn Hàng ${i.toString().padStart(3, "0")}`;
-
-        let sdt = "";
-        for(let sdtIndex=0; sdtIndex<10; sdtIndex+=1) {
-            sdt += Math.floor(Math.random()*10).toString();
+        //Thêm vào bảng
+        taikhoans = [];
+        for (let output of outputs) {
+            taikhoans.push(output);
         }
 
-        let username = `User${i.toString().padStart(3, "0")}`;
-        let point = Math.floor(Math.random() * 1000);
-        khachhangs.push({id_khach_hang: id_khach_hang, ten: ten, sdt: sdt, point: point, username: username});
-    }
+        //Thêm option taikhoans
+        $("#modelThemKhachHang").find("#themKhachHangUsername").html("");
+        $("#modelSuaKhachHang").find("#suaKhachHangUsername").html("");
+        for (let taikhoan of taikhoans) {
+            let newUsernameOption = `<option value="${taikhoan.id_tai_khoan}">${taikhoan.username}</option>`;
+            $("#modelThemKhachHang").find("#themKhachHangUsername").append(newUsernameOption);
+            $("#modelSuaKhachHang").find("#suaKhachHangUsername").append(newUsernameOption);
+        }
 
-    //Thêm vào bảng
-    for (let khachhang of khachhangs) {
-        tableQuanLyKhachHang.row.add(createTableQLNVArrayDataRow(khachhang));
-    }
-    tableQuanLyKhachHang.draw();
+        $("#tableQuanLyTaiKhoanAlert").append(createAlerts("success", "Làm mới thông tin tài khoản thành công"));
+
+
+        tableQuanLyKhachHang.clear();
+
+
+        //Lấy thông tin khách hàng
+        $.post("/KhachHang/GetAll", function (data) {
+            //Lấy thông tin khách hàng
+            let inputJson = data;
+            inputJson = inputJson.replace(/&quot;/g, `"`);
+            inputJson = inputJson.replace(/IdKhachHang/g, `id_khach_hang`);
+            inputJson = inputJson.replace(/Ten/g, `ten`);
+            inputJson = inputJson.replace(/Sdt/g, `sdt`);
+            inputJson = inputJson.replace(/IdTaiKhoan/g, `id_tai_khoan`);
+            inputJson = inputJson.replace(/DiemTichLuy/g, `diem_tich_luy`);
+            let outputs = JSON.parse(inputJson);
+
+            //Thêm vào bảng
+            for (let output of outputs) {
+                tableQuanLyKhachHang.row.add(createTableQLKHArrayDataRow(output));
+            }
+            tableQuanLyKhachHang.draw();
+            $("#tableQuanLyKhachHangAlert").append(createAlerts("success", "Làm mới thành công"));
+        })
+            .done(function () {
+            })
+            .fail(function () {
+                $("#tableQuanLyKhachHangAlert").append(createAlerts("danger", "Không thể gửi dữ liệu đi"));
+            })
+            .always(function () {
+            });
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            $("#tableQuanLyTaiKhoanAlert").append(createAlerts("danger", "Không thể gửi dữ liệu đi"));
+        })
+        .always(function () {
+        });
 };
 
-let deleteTableQLNVRow = (buttonInside) => {
+let deleteTableQLKHRow = (buttonInside) => {
     let tableRow = $(buttonInside).parents("tr");
-    tableQuanLyKhachHang.row(tableRow).remove().draw();
+    let khachHang = extractDataFromTableQLKHRow(tableRow);
+    $("#tableQuanLyKhachHangAlert").empty();
+
+    $.post("/KhachHang/Delete", { IdKhachHang: khachHang.id_khach_hang }, function (data) {
+        //Lấy thông tin 
+        let inputJson = data;
+        inputJson = inputJson.replace(/&quot;/g, `"`);
+        let outputs = JSON.parse(inputJson);
+
+        //Xóa khỏi bảng
+        if (outputs.output > 0) {
+            tableQuanLyKhachHang.row(tableRow).remove().draw();
+            $("#tableQuanLyKhachHangAlert").append(createAlerts("success", `Xóa thành công khách hàng ${khachHang.ten}`));
+        }
+        //Bỏ đánh dấu nếu có
+        $(".custom-toggle-button").each((index, element) => {
+            setToggleStatus(element, false);
+        });
+    })
+        .done(function () {
+        })
+        .fail(function () {
+            $("#tableQuanLyKhachHangAlert").append(createAlerts("danger", "Không thể gửi dữ liệu đi"));
+        })
+        .always(function () {
+        });
 };
 
 let extractModelThemKhachHang = () => {
@@ -264,13 +412,13 @@ let extractModelSuaKhachHang = () => {
 };
 
 let extractFromModel = (model) => {
-//Lấy thông tin
+    //Lấy thông tin
     let id_khach_hang = $(model).find(".id_khach_hang").val();
     let ten = $(model).find(".ten").val();
     let sdt = $(model).find(".sdt").val();
-    let point = $(model).find(".point").val();
-    let username = $(model).find(".username").val();
-    return {id_khach_hang: id_khach_hang, ten: ten, sdt: sdt, point: point, username: username};
+    let diem_tich_luy = $(model).find(".diem_tich_luy").val();
+    let id_tai_khoan = $(model).find(".id_tai_khoan").val();
+    return { id_khach_hang: id_khach_hang, ten: ten, sdt: sdt, diem_tich_luy: diem_tich_luy, id_tai_khoan: id_tai_khoan };
 };
 
 let setModelThemKhachHang = (modifyKhachHang) => {
@@ -285,8 +433,8 @@ let setToModel = (model, khachhang) => {
     $(model).find(".id_khach_hang").val(khachhang.id_khach_hang);
     $(model).find(".ten").val(khachhang.ten);
     $(model).find(".sdt").val(khachhang.sdt);
-   $(model).find(".point").val(khachhang.point);
-   $(model).find(".username").val(khachhang.username);
+    $(model).find(".diem_tich_luy").val(khachhang.diem_tich_luy);
+    $(model).find(".id_tai_khoan").val(khachhang.id_tai_khoan);
 };
 
 let validateKhachHangInformation = (alertContainer, khachhang) => {
@@ -294,8 +442,8 @@ let validateKhachHangInformation = (alertContainer, khachhang) => {
     let id_khach_hang = khachhang.id_khach_hang;
     let ten = khachhang.ten;
     let sdt = khachhang.sdt;
-    let point =khachhang.point;
-    let username = khachhang.username;
+    let diem_tich_luy = khachhang.diem_tich_luy;
+    let id_tai_khoan = khachhang.id_tai_khoan;
 
     let numberValidateError = 0;
     if (!ten || ten === "") {
@@ -314,19 +462,19 @@ let validateKhachHangInformation = (alertContainer, khachhang) => {
         $(alertContainer).append(createAlerts("danger", "Số điện thoại chỉ được có từ 1 đến 15 số"));
         numberValidateError += 1;
     }
-    if (!point || point === "") {
+    if (!diem_tich_luy || diem_tich_luy === "") {
         $(alertContainer).append(createAlerts("danger", "Điểm tích lũy không được để trống"));
         numberValidateError += 1;
     }
-    else if (point.search(/^[0-9]+$/) < 0) {
+    else if (diem_tich_luy.search(/^[0-9]+$/) < 0) {
         $(alertContainer).append(createAlerts("danger", "Điểm tích lũy chỉ được có số"));
         numberValidateError += 1;
     }
-    else if (parseInt(point) < 0) {
+    else if (parseInt(diem_tich_luy) < 0) {
         $(alertContainer).append(createAlerts("danger", "Điểm tích lũy phải là số không âm"));
         numberValidateError += 1;
     }
-    if (!username || username === "") {
+    if (!id_tai_khoan || id_tai_khoan === "") {
         $(alertContainer).append(createAlerts("danger", "Username không được để trống"));
         numberValidateError += 1;
     }

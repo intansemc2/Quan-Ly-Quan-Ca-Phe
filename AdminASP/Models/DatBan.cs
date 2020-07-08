@@ -21,5 +21,8 @@ namespace AdminASP.Models
 
         private String ghiChu;
         public String GhiChu { get { return this.ghiChu; } set { this.ghiChu = value; } }
+
+        private String idHoaDon;
+        public String IdHoaDon { get { return this.idHoaDon; } set { this.idHoaDon = value; } }
     }
 }

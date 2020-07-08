@@ -12,17 +12,17 @@ namespace AdminASP.Controllers
 {
     public class BanController : Controller
     {
-        public IActionResult GetAll()
+        public String GetAll()
         {
             BanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(BanStoreContext)) as BanStoreContext;
             List<BaseModel> baseModels = modelStoreContext.GetAll();
-            List<Ban> thisModels = new List<Ban>();
+            List<Ban> outputs = new List<Ban>();
             foreach (BaseModel baseModel in baseModels)
             {
-                thisModels.Add(baseModel as Ban);
+                outputs.Add(baseModel as Ban);
             }
-            ViewData["inputs"] = thisModels;
-            return View();
+
+            return JsonConvert.SerializeObject(outputs);
         }
 
         public IActionResult Add(FormBanAddInput input)

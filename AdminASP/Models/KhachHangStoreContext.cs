@@ -16,7 +16,7 @@ namespace AdminASP.Models
                 IdKhachHang = Convert.ToInt32(reader["ID_KHACH_HANG"].ToString()),
                 Ten = reader["TEN"].ToString(),
                 Sdt = reader["SDT"].ToString(),
-                Username = reader["USERNAME"].ToString(),
+                IdTaiKhoan = Convert.ToInt32(reader["ID_TAI_KHOAN"].ToString()),
                 DiemTichLuy = Convert.ToInt32(reader["DIEM_TICH_LUY"].ToString())
             };
 
@@ -30,7 +30,7 @@ namespace AdminASP.Models
                 IdKhachHang = Convert.ToInt32(reader["ID_KHACH_HANG"].ToString()),
                 Ten = reader["TEN"].ToString(),
                 Sdt = reader["SDT"].ToString(),
-                Username = reader["USERNAME"].ToString(),
+                IdTaiKhoan = Convert.ToInt32(reader["ID_TAI_KHOAN"].ToString()),
                 DiemTichLuy = Convert.ToInt32(reader["DIEM_TICH_LUY"].ToString())
             };
 
@@ -40,13 +40,13 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             KhachHang currentModel = (KhachHang)model;
-            String query = "INSERT INTO khach_hang (ID_KHACH_HANG,TEN,SDT,USERNAME,DIEM_TICH_LUY) VALUES (@ID_KHACH_HANG,@TEN,@SDT,@USERNAME,@DIEM_TICH_LUY)";
+            String query = "INSERT INTO khach_hang (ID_KHACH_HANG,TEN,SDT,ID_TAI_KHOAN,DIEM_TICH_LUY) VALUES (@ID_KHACH_HANG,@TEN,@SDT,@ID_TAI_KHOAN,@DIEM_TICH_LUY)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_KHACH_HANG", currentModel.IdKhachHang);
             mySqlCommand.Parameters.AddWithValue("TEN", currentModel.Ten);
             mySqlCommand.Parameters.AddWithValue("SDT", currentModel.Sdt);
-            mySqlCommand.Parameters.AddWithValue("USERNAME", currentModel.Username);
+            mySqlCommand.Parameters.AddWithValue("ID_TAI_KHOAN", currentModel.IdTaiKhoan);
             mySqlCommand.Parameters.AddWithValue("DIEM_TICH_LUY", currentModel.DiemTichLuy);
 
             return mySqlCommand;
@@ -76,13 +76,13 @@ namespace AdminASP.Models
         {
             KhachHang oldcurrentModel = (KhachHang)oldmodel;
             KhachHang newcurrentModel = (KhachHang)newmodel;
-            String query = "UPDATE khach_hang SET ID_KHACH_HANG = @ID_KHACH_HANG,TEN = @TEN,SDT = @SDT,USERNAME = @USERNAME,DIEM_TICH_LUY = @DIEM_TICH_LUY WHERE  khach_hang.ID_KHACH_HANG = @OLD_ID_KHACH_HANG ";
+            String query = "UPDATE khach_hang SET ID_KHACH_HANG = @ID_KHACH_HANG,TEN = @TEN,SDT = @SDT,ID_TAI_KHOAN = @ID_TAI_KHOAN,DIEM_TICH_LUY = @DIEM_TICH_LUY WHERE  khach_hang.ID_KHACH_HANG = @OLD_ID_KHACH_HANG ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_KHACH_HANG", newcurrentModel.IdKhachHang);
             mySqlCommand.Parameters.AddWithValue("TEN", newcurrentModel.Ten);
             mySqlCommand.Parameters.AddWithValue("SDT", newcurrentModel.Sdt);
-            mySqlCommand.Parameters.AddWithValue("USERNAME", newcurrentModel.Username);
+            mySqlCommand.Parameters.AddWithValue("ID_TAI_KHOAN", newcurrentModel.IdTaiKhoan);
             mySqlCommand.Parameters.AddWithValue("DIEM_TICH_LUY", newcurrentModel.DiemTichLuy);
             mySqlCommand.Parameters.AddWithValue("OLD_ID_KHACH_HANG", oldcurrentModel.IdKhachHang);
 
@@ -97,14 +97,14 @@ namespace AdminASP.Models
             if (currentModel.IdKhachHang >= 0) query += " AND khach_hang.ID_KHACH_HANG = @ID_KHACH_HANG ";
             if (currentModel.Ten != null) query += " AND khach_hang.TEN = @TEN ";
             if (currentModel.Sdt != null) query += " AND khach_hang.SDT = @SDT ";
-            if (currentModel.Username != null) query += " AND khach_hang.USERNAME = @USERNAME ";
+            if (currentModel.IdTaiKhoan >= 0) query += " AND khach_hang.ID_TAI_KHOAN = @ID_TAI_KHOAN ";
             if (currentModel.DiemTichLuy >= 0) query += " AND khach_hang.DIEM_TICH_LUY = @DIEM_TICH_LUY ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdKhachHang >= 0) mySqlCommand.Parameters.AddWithValue("ID_KHACH_HANG", currentModel.IdKhachHang);
             if (currentModel.Ten != null) mySqlCommand.Parameters.AddWithValue("TEN", currentModel.Ten);
             if (currentModel.Sdt != null) mySqlCommand.Parameters.AddWithValue("SDT", currentModel.Sdt);
-            if (currentModel.Username != null) mySqlCommand.Parameters.AddWithValue("USERNAME", currentModel.Username);
+            if (currentModel.IdTaiKhoan >= 0) mySqlCommand.Parameters.AddWithValue("ID_TAI_KHOAN", currentModel.IdTaiKhoan);
             if (currentModel.DiemTichLuy >= 0) mySqlCommand.Parameters.AddWithValue("DIEM_TICH_LUY", currentModel.DiemTichLuy);
 
             return mySqlCommand;

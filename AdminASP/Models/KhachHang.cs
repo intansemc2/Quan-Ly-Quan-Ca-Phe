@@ -17,8 +17,8 @@ namespace AdminASP.Models
         private String sdt;
         public String Sdt { get { return this.sdt; } set { this.sdt = value; } }
 
-        private String username;
-        public String Username { get { return this.username; } set { this.username = value; } }
+        private int idTaiKhoan;
+        public int IdTaiKhoan { get { return this.idTaiKhoan; } set { this.idTaiKhoan = value; } }
 
         private int diemTichLuy;
         public int DiemTichLuy { get { return this.diemTichLuy; } set { this.diemTichLuy = value; } }

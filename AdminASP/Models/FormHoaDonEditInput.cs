@@ -20,8 +20,11 @@ namespace AdminASP.Models
         private int idnhanvien;
         public int IdNhanVien { get { return this.idnhanvien; } set { this.idnhanvien = value; } }
 
-        private String thoigian;
-        public String ThoiGIan { get { return this.thoigian; } set { this.thoigian = value; } }
+        private String thoiGianLap;
+        public String ThoiGIanLap { get { return this.thoiGianLap; } set { this.thoiGianLap = value; } }
+
+        private String thoiGianThanhToan;
+        public String ThoiGianThanhToan { get { return this.thoiGianThanhToan; } set { this.thoiGianThanhToan = value; } }
 
         private float phantramtichluy;
         public float PhanTramTichLuy { get { return this.phantramtichluy; } set { this.phantramtichluy = value; } }
@@ -61,7 +64,7 @@ namespace AdminASP.Models
                 errors.Add("Id nhân viên không thể để trống");
             }
 
-            if (!(ThoiGIan != null && ThoiGIan != ""))
+            if (!(ThoiGIanLap != null && ThoiGIanLap != ""))
             {
                 errors.Add("Thời gian không thể để trống");
             }

@@ -8,15 +8,15 @@ namespace AdminASP.Models
     public class FormTaiKhoanDeleteInput
     {
 
-        private String username;
-        public String Username { get { return this.username; } set { this.username = value; } }
+        private String idTaiKhoan;
+        public String IdTaiKhoan { get { return this.idTaiKhoan; } set { this.idTaiKhoan = value; } }
 
         public List<String> GetValidate()
         {
             List<String> errors = new List<String>();
 
 
-            if (!(Username != null && Username != ""))
+            if (!(IdTaiKhoan != null && IdTaiKhoan != ""))
             {
                 errors.Add("Tên đăng nhập không thể để trống");
             }

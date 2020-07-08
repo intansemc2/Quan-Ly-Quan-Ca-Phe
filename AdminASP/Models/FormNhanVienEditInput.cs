@@ -20,8 +20,8 @@ namespace AdminASP.Models
         private int loai;
         public int Loai { get { return this.loai; } set { this.loai = value; } }
 
-        private String username;
-        public String Username { get { return this.username; } set { this.username = value; } }
+        private int idTaiKhoan;
+        public int IdTaiKhoan { get { return this.idTaiKhoan; } set { this.idTaiKhoan = value; } }
 
 
         private int oldidnhanvien;
@@ -52,9 +52,9 @@ namespace AdminASP.Models
                 errors.Add("Loại không thể để trống");
             }
 
-            if (!(Username != null && Username != ""))
+            if (!(IdTaiKhoan >= 0))
             {
-                errors.Add("Tên đăng nhập không thể để trống");
+                errors.Add("Id tài khoản không thể để trống");
             }
 
 

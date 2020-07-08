@@ -52,7 +52,7 @@ let resetToggleEvent = () => {
 };
 
 let resetToggleEventButton = (customToggleButton) => {
-    //Unbind click events
+    //Unbind click events đi
     $(customToggleButton).unbind("click");
 
     //Thêm click event mới

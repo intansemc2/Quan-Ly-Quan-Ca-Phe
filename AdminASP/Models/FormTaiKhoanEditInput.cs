@@ -17,9 +17,8 @@ namespace AdminASP.Models
         private int type;
         public int Type { get { return this.type; } set { this.type = value; } }
 
-
-        private String oldusername;
-        public String OldUsername { get { return this.oldusername; } set { this.oldusername = value; } }
+        private int oldIdTaiKhoan;
+        public int OldIdTaiKhoan { get { return this.oldIdTaiKhoan; } set { this.oldIdTaiKhoan = value; } }
 
         public List<String> GetValidate()
         {
@@ -42,9 +41,9 @@ namespace AdminASP.Models
             }
 
 
-            if (!(OldUsername != null && OldUsername != ""))
+            if (!(OldIdTaiKhoan >=0))
             {
-                errors.Add("Tên đăng nhập cũ không thể để trống");
+                errors.Add("Id tài khoản cũ không thể để trống");
             }
 
             return errors;

@@ -18,7 +18,8 @@ namespace AdminASP.Models
                 Ten = reader["TEN"].ToString(),
                 Gia = Convert.ToInt32(reader["GIA"].ToString()),
                 DiemTichLuy = Convert.ToInt32(reader["DIEM_TICH_LUY"].ToString()),
-                Description = reader["DESCRIPTION"].ToString()
+                GhiChu = reader["GHI_CHU"].ToString(),
+                LinkAnh = reader["LINK_ANH"].ToString()
             };
 
             return model;
@@ -33,7 +34,8 @@ namespace AdminASP.Models
                 Ten = reader["TEN"].ToString(),
                 Gia = Convert.ToInt32(reader["GIA"].ToString()),
                 DiemTichLuy = Convert.ToInt32(reader["DIEM_TICH_LUY"].ToString()),
-                Description = reader["DESCRIPTION"].ToString()
+                GhiChu = reader["GHI_CHU"].ToString(),
+                LinkAnh = reader["LINK_ANH"].ToString()
             };
 
             return model;
@@ -42,7 +44,7 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             SanPham currentModel = (SanPham)model;
-            String query = "INSERT INTO san_pham (ID_SAN_PHAM,ID_LOAISP,TEN,GIA,DIEM_TICH_LUY,DESCRIPTION) VALUES (@ID_SAN_PHAM,@ID_LOAISP,@TEN,@GIA,@DIEM_TICH_LUY,@DESCRIPTION)";
+            String query = "INSERT INTO san_pham (ID_SAN_PHAM,ID_LOAISP,TEN,GIA,DIEM_TICH_LUY,GHI_CHU, LINK_ANH) VALUES (@ID_SAN_PHAM,@ID_LOAISP,@TEN,@GIA,@DIEM_TICH_LUY,@GHI_CHU, @LINK_ANH)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", currentModel.IdSanPham);
@@ -50,7 +52,8 @@ namespace AdminASP.Models
             mySqlCommand.Parameters.AddWithValue("TEN", currentModel.Ten);
             mySqlCommand.Parameters.AddWithValue("GIA", currentModel.Gia);
             mySqlCommand.Parameters.AddWithValue("DIEM_TICH_LUY", currentModel.DiemTichLuy);
-            mySqlCommand.Parameters.AddWithValue("DESCRIPTION", currentModel.Description);
+            mySqlCommand.Parameters.AddWithValue("GHI_CHU", currentModel.GhiChu);
+            mySqlCommand.Parameters.AddWithValue("LINK_ANH", currentModel.LinkAnh);
 
             return mySqlCommand;
         }
@@ -58,11 +61,10 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             SanPham currentModel = (SanPham)model;
-            String query = "DELETE FROM san_pham WHERE  san_pham.ID_SAN_PHAM = @ID_SAN_PHAM  AND  san_pham.ID_LOAISP = @ID_LOAISP ";
+            String query = "DELETE FROM san_pham WHERE  san_pham.ID_SAN_PHAM = @ID_SAN_PHAM ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", currentModel.IdSanPham);
-            mySqlCommand.Parameters.AddWithValue("ID_LOAISP", currentModel.IdLoaiSP);
 
             return mySqlCommand;
         }
@@ -80,7 +82,7 @@ namespace AdminASP.Models
         {
             SanPham oldcurrentModel = (SanPham)oldmodel;
             SanPham newcurrentModel = (SanPham)newmodel;
-            String query = "UPDATE san_pham SET ID_SAN_PHAM = @ID_SAN_PHAM,ID_LOAISP = @ID_LOAISP,TEN = @TEN,GIA = @GIA,DIEM_TICH_LUY = @DIEM_TICH_LUY,DESCRIPTION = @DESCRIPTION WHERE  san_pham.ID_SAN_PHAM = @OLD_ID_SAN_PHAM  AND  san_pham.ID_LOAISP = @OLD_ID_LOAISP ";
+            String query = "UPDATE san_pham SET ID_SAN_PHAM = @ID_SAN_PHAM,ID_LOAISP = @ID_LOAISP,TEN = @TEN,GIA = @GIA,DIEM_TICH_LUY = @DIEM_TICH_LUY,GHI_CHU = @GHI_CHU, LINK_ANH = @LINK_ANH WHERE  san_pham.ID_SAN_PHAM = @OLD_ID_SAN_PHAM";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", newcurrentModel.IdSanPham);
@@ -88,9 +90,9 @@ namespace AdminASP.Models
             mySqlCommand.Parameters.AddWithValue("TEN", newcurrentModel.Ten);
             mySqlCommand.Parameters.AddWithValue("GIA", newcurrentModel.Gia);
             mySqlCommand.Parameters.AddWithValue("DIEM_TICH_LUY", newcurrentModel.DiemTichLuy);
-            mySqlCommand.Parameters.AddWithValue("DESCRIPTION", newcurrentModel.Description);
+            mySqlCommand.Parameters.AddWithValue("GHI_CHU", newcurrentModel.GhiChu);
+            mySqlCommand.Parameters.AddWithValue("LINK_ANH", newcurrentModel.GhiChu);
             mySqlCommand.Parameters.AddWithValue("OLD_ID_SAN_PHAM", oldcurrentModel.IdSanPham);
-            mySqlCommand.Parameters.AddWithValue("OLD_ID_LOAISP", oldcurrentModel.IdLoaiSP);
 
             return mySqlCommand;
         }
@@ -105,7 +107,8 @@ namespace AdminASP.Models
             if (currentModel.Ten != null) query += " AND san_pham.TEN = @TEN ";
             if (currentModel.Gia >= 0) query += " AND san_pham.GIA = @GIA ";
             if (currentModel.DiemTichLuy >= 0) query += " AND san_pham.DIEM_TICH_LUY = @DIEM_TICH_LUY ";
-            if (currentModel.Description != null) query += " AND san_pham.DESCRIPTION = @DESCRIPTION ";
+            if (currentModel.GhiChu != null) query += " AND san_pham.GHI_CHU = @GHI_CHU ";
+            if (currentModel.LinkAnh != null) query += " AND san_pham.LINK_ANH = @LINK_ANH ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdSanPham >= 0) mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", currentModel.IdSanPham);
@@ -113,7 +116,8 @@ namespace AdminASP.Models
             if (currentModel.Ten != null) mySqlCommand.Parameters.AddWithValue("TEN", currentModel.Ten);
             if (currentModel.Gia >= 0) mySqlCommand.Parameters.AddWithValue("GIA", currentModel.Gia);
             if (currentModel.DiemTichLuy >= 0) mySqlCommand.Parameters.AddWithValue("DIEM_TICH_LUY", currentModel.DiemTichLuy);
-            if (currentModel.Description != null) mySqlCommand.Parameters.AddWithValue("DESCRIPTION", currentModel.Description);
+            if (currentModel.GhiChu != null) mySqlCommand.Parameters.AddWithValue("GHI_CHU", currentModel.GhiChu);
+            if (currentModel.GhiChu != null) mySqlCommand.Parameters.AddWithValue("LINK_ANH", currentModel.LinkAnh);
 
             return mySqlCommand;
         }

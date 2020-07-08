@@ -1,427 +1,452 @@
-﻿<!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <title>Quản lý hóa đơn - Quản lý quán cà phê</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Optional Stylesheets-->
-    <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="~/liblaries/bootstrap.min.css">
-    <!-- Custom JavaScript-->
-    <link rel="stylesheet" href="~/css/main.css">
+﻿@{
+    Layout = "_Layout_MainAdmin";
+}
+
+@{
+    ViewData["Title"] = "Quản lý hóa đơn";
+    ViewData["mainTitle"] = "Quản lý hóa đơn";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
     <!-- DataTable-->
     <link rel="stylesheet" type="text/css" href="~/liblaries/datatables.min.css">
-  </head>
-  <body class="sb-nav-fixed">
-    <!-- Start Navbar chính-->
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark"><a class="navbar-brand" href="/Admin/Tongquat">Quản lý quán cà phê</a>
-      <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
-      <!-- Navbar-->
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i>ADMIN</a>
-          <!-- Thông tin tài khoản-->
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown"><a class="dropdown-item" href="/Login/AccountInfo">Thông tin tài khoản</a><a class="dropdown-item" href="/Login/Logout">Đăng xuất</a></div>
-        </li>
-      </ul>
-    </nav>
-    <!-- End Navbar chính-->
-    <!-- Start Sidebar chính-->
-    <div id="layoutSidenav">
-      <div id="layoutSidenav_nav">
-        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-          <!-- Menu của sidebar-->
-          <div class="sb-sidenav-menu">
-            <div class="nav">
-              <div class="sb-sidenav-menu-heading">Nội dung chính</div><a class="nav-link" href="/Admin/Tongquat">
-                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>Tổng quan</a><a class="nav-link" href="/Admin/Quanlytaikhoan">
-                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Quản lý tài khoản</a><a class="nav-link" href="/Admin/Quanlynhanvien">
-                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Quản lý nhân viên</a><a class="nav-link active" href="/Admin/Quanlyhoadon">
-                <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>Quản lý hóa đơn và chi tiết hóa đơn</a><a class="nav-link" href="/Admin/Quanlykhachhang">
-                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Quản lý khách hàng thành viên</a><a class="nav-link" href="/Admin/Quanlyban">
-                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>Quản lý bàn và đặt bàn</a><a class="nav-link" href="/Admin/Quanlyloaisanpham">
-                <div class="sb-nav-link-icon"><i class="fas fa-beer"></i></div>Quản lý sản phẩm và loại sản phẩm</a><a class="nav-link" href="/Admin/Quanlykhuyenmai">
-                <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>Quản lý khuyến mãi và chi tiết khuyến mãi</a>
+}
+
+@section navbar {
+    <!-- Navbar -->
+    @await Html.PartialAsync("_Item_Navbar");
+}
+
+@section sidebar {
+    <!-- Sidebar -->
+    @{
+        ViewData["adminSidebarActive"] = "Quanlyhoadon";
+    }
+    @await Html.PartialAsync("_Item_Sidebar")
+}
+
+@section mainContent {
+    <!-- Breadcrumb đường dẫn đến trang -->
+    @{
+        List<Breadcrumb> breadcrumbs = new List<Breadcrumb>();
+        breadcrumbs.Add(new Breadcrumb() { Name = "Tổng quát", Link = "/Admin/Tongquat", IsActive = false });
+        breadcrumbs.Add(new Breadcrumb() { Name = "Quản lý hóa đơn", Link = "/Admin/Quanlyhoadon", IsActive = true });
+        ViewData["breadcrumbs"] = breadcrumbs;
+    }
+    @await Html.PartialAsync("_Item_Breadcrumb")
+
+    <!-- Các thao tác  được hỗ trợ thực hiện -->
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
+        <div class="card-body">
+            <button class="btn btn-outline-primary mr-3" id="themHoaDon" type="button" data-toggle="modal" data-target="#modelThemHoaDon" modify="ThemHoaDon">Thêm hoá đơn</button>
+            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                <button class="btn btn-outline-secondary" id="danhDauTatCa" type="button">Đánh dấu tất cả</button>
+                <button class="btn btn-outline-secondary" id="boDanhDauTatCa" type="button">Bỏ đánh dấu tất cả</button>
             </div>
-          </div>
-          <!-- Thông tin người dùng đăng nhập-->
-          <div class="sb-sidenav-footer">
-            <div class="small">Bạn đã đăng nhập bằng tài khoản:</div>ADMIN
-          </div>
-        </nav>
-      </div>
-      <!-- End Sidebar chính-->
-      <!-- Start Content-->
-      <div id="layoutSidenav_content">
-        <main>
-          <div class="container-fluid">
-            <!-- Model thêm hoá đơn-->
-            <div class="modal fade" id="modelThemHoaDon" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
+            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                <button class="btn btn-outline-danger" id="xoaDanhDau" type="button">Xóa đánh dấu</button>
+                <button class="btn btn-outline-danger" id="xoaTatCa" type="button">Xóa tất cả</button>
+            </div>
+            <button class="btn btn-outline-info mr-3" id="lamMoi" type="button">Làm mới</button>
+        </div>
+    </div>
+
+    <!-- Model thêm hoá đơn-->
+    <div class="modal fade" id="modelThemHoaDon" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title">Thêm hoá đơn</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                  </div>
-                  <div class="modal-body">
+                </div>
+                <div class="modal-body">
                     <div id="themHoaDonAlerts">
-                      <!-- Các alert của phần này-->
+                        <!-- Các alert của phần này-->
                     </div>
                     <input class="id_hoa_don" type="hidden">
                     <input class="so_san_pham" type="hidden">
                     <div class="form-group">
-                      <label class="small mb-1" for="themHoaDonKhachHang">Khách hàng</label>
-                      <select class="form-control id_khach_hang" id="themHoaDonKhachHang">
-                        <option value="0">Khách hàng</option>
-                      </select>
+                        <label class="small mb-1" for="themHoaDonKhachHang">Khách hàng</label>
+                        <select class="form-control id_khach_hang" id="themHoaDonKhachHang">
+                            <option value="0">Khách hàng</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                      <label class="small mb-1" for="themHoaDonBan">Bàn</label>
-                      <select class="form-control id_ban" id="themHoaDonBan">
-                        <option value="0">Bàn</option>
-                      </select>
+                        <label class="small mb-1" for="themHoaDonBan">Bàn</label>
+                        <select class="form-control id_ban" id="themHoaDonBan">
+                            <option value="0">Bàn</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                      <label class="small mb-1" for="themHoaDonNhanVien">Nhân viên</label>
-                      <select class="form-control id_nhan_vien" id="themHoaDonNhanVien">
-                        <option value="0">Nhân viên</option>
-                      </select>
+                        <label class="small mb-1" for="themHoaDonNhanVien">Nhân viên</label>
+                        <select class="form-control id_nhan_vien" id="themHoaDonNhanVien">
+                            <option value="0">Nhân viên</option>
+                        </select>
                     </div>
+
                     <div class="form-row">
-                      <div class="col-md-5">
-                        <div class="form-group">
-                          <label class="small mb-1" for="themHoaDonNgayThang">Ngày tháng</label>
-                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian" id="themHoaDonNgayThang" type="date" placeholder="Nhập thời gian tạo hóa đơn">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themHoaDonNgayThang">Ngày tháng</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themHoaDonNgayThang" type="date" placeholder="Nhập thời gian tạo hóa đơn">
+                            </div>
                         </div>
-                      </div>
-                      <div class="col-md-5">
-                        <div class="form-group">
-                          <label class="small mb-1" for="themHoaDonThoiGian">Thời gian</label>
-                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian" id="themHoaDonThoiGian" type="time" step="1" placeholder="Nhập thời gian tạo hóa đơn">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themHoaDonThoiGian">Thời gian</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themHoaDonThoiGian" type="time" step="1" placeholder="Nhập thời gian tạo hóa đơn">
+                            </div>
                         </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="form-group">
-                          <label class="small mb-1" for="themHoaDonCurrentTime">&nbsp;</label>
-                          <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian" id="themHoaDonCurrentTime" type="button" value="Lấy">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themHoaDonCurrentTime">&nbsp;</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_lap" id="themHoaDonCurrentTime" type="button" value="Lấy">
+                            </div>
                         </div>
-                      </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themHoaDonNgayThangThanhToan">Ngày tháng</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_thanh_toan" id="themHoaDonNgayThangThanhToan" type="date" placeholder="Nhập thời gian thanh toán hóa đơn">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themHoaDonThoiGianThanhToan">Thời gian</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_thanh_toan" id="themHoaDonThoiGianThanhToan" type="time" step="1" placeholder="Nhập thời gian thanh toán hóa đơn">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themHoaDonCurrentTimeThanhToan">&nbsp;</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_thanh_toan" id="themHoaDonCurrentTimeThanhToan" type="button" value="Lấy">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="small mb-1" for="themHoaDonPhanTram">Phần trăm tích lũy</label>
+                        <input class="form-control py-4 username phan_tram_tich_luy" id="themHoaDonPhanTram" type="number" min="0.0" max="1.0" step="0.01" placeholder="Nhập phần trăm tích lũy">
                     </div>
                     <div class="form-group">
-                      <label class="small mb-1" for="themHoaDonPhanTram">Phần trăm tích lũy</label>
-                      <input class="form-control py-4 username phan_tram_tich_luy" id="themHoaDonPhanTram" type="number" min="0.0" max="1.0" step="0.01" placeholder="Nhập phần trăm tích lũy">
+                        <label class="small mb-1" for="themHoaDonDiem">Số lượng điểm đổi</label>
+                        <input class="form-control py-4 username so_luong_diem_doi" id="themHoaDonDiem" type="number" min="0" step="1" placeholder="Nhập số lượng điểm đổi">
                     </div>
                     <div class="form-group">
-                      <label class="small mb-1" for="themHoaDonDiem">Số lượng điểm đổi</label>
-                      <input class="form-control py-4 username so_luong_diem_doi" id="themHoaDonDiem" type="number" min="0" step="1" placeholder="Nhập số lượng điểm đổi">
+                        <label class="small mb-1" for="themHoaDonTyLe">Tỷ lệ quy đổi</label>
+                        <input class="form-control py-4 username ty_gia_diem_doi" id="themHoaDonTyLe" type="number" min="0.0" max="1.0" step="0.01" placeholder="Nhập tỷ lệ quy đổi">
                     </div>
-                    <div class="form-group">
-                      <label class="small mb-1" for="themHoaDonTyLe">Tỷ lệ quy đổi</label>
-                      <input class="form-control py-4 username ty_gia_diem_doi" id="themHoaDonTyLe" type="number" min="0.0" max="1.0" step="0.01" placeholder="Nhập tỷ lệ quy đổi">
-                    </div>
-                  </div>
-                  <div class="modal-footer">
+                </div>
+                <div class="modal-footer">
                     <input class="btn btn-outline-primary" id="themHoaDonConfirm" type="button" value="Thêm Hoá đơn">
                     <input class="btn btn-outline-secondary" id="themHoaDonReset" type="reset" value="Cài lại">
-                  </div>
                 </div>
-              </div>
             </div>
-            <!-- Model sửa hoá đơn-->
-            <div class="modal fade" id="modelSuaHoaDon" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
+        </div>
+    </div>
+
+    <!-- Model sửa hoá đơn-->
+    <div class="modal fade" id="modelSuaHoaDon" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title">Sửa hoá đơn</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                  </div>
-                  <div class="modal-body">
+                </div>
+                <div class="modal-body">
                     <div id="suaHoaDonAlerts">
-                      <!-- Các alert của phần này-->
+                        <!-- Các alert của phần này-->
                     </div>
                     <input class="id_hoa_don" type="hidden">
                     <input class="so_san_pham" type="hidden">
                     <div class="form-group">
-                      <label class="small mb-1" for="suaHoaDonKhachHang">Khách hàng</label>
-                      <select class="form-control id_khach_hang" id="suaHoaDonKhachHang">
-                        <option value="0">Khách hàng</option>
-                      </select>
+                        <label class="small mb-1" for="suaHoaDonKhachHang">Khách hàng</label>
+                        <select class="form-control id_khach_hang" id="suaHoaDonKhachHang">
+                            <option value="0">Khách hàng</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                      <label class="small mb-1" for="suaHoaDonBan">Bàn</label>
-                      <select class="form-control id_ban" id="suaHoaDonBan">
-                        <option value="0">Bàn</option>
-                      </select>
+                        <label class="small mb-1" for="suaHoaDonBan">Bàn</label>
+                        <select class="form-control id_ban" id="suaHoaDonBan">
+                            <option value="0">Bàn</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                      <label class="small mb-1" for="suaHoaDonNhanVien">Nhân viên</label>
-                      <select class="form-control id_nhan_vien" id="suaHoaDonNhanVien">
-                        <option value="0">Nhân viên</option>
-                      </select>
+                        <label class="small mb-1" for="suaHoaDonNhanVien">Nhân viên</label>
+                        <select class="form-control id_nhan_vien" id="suaHoaDonNhanVien">
+                            <option value="0">Nhân viên</option>
+                        </select>
                     </div>
+
                     <div class="form-row">
-                      <div class="col-md-5">
-                        <div class="form-group">
-                          <label class="small mb-1" for="suaHoaDonNgayThang">Ngày tháng</label>
-                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian" id="suaHoaDonNgayThang" type="date" placeholder="Nhập thời gian tạo hóa đơn">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="small mb-1" for="suaHoaDonNgayThang">Ngày tháng</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="suaHoaDonNgayThang" type="date" placeholder="Nhập thời gian tạo hóa đơn">
+                            </div>
                         </div>
-                      </div>
-                      <div class="col-md-5">
-                        <div class="form-group">
-                          <label class="small mb-1" for="suaHoaDonThoiGian">Thời gian</label>
-                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian" id="suaHoaDonThoiGian" type="time" step="1" placeholder="Nhập thời gian tạo hóa đơn">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="small mb-1" for="suaHoaDonThoiGian">Thời gian</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="suaHoaDonThoiGian" type="time" step="1" placeholder="Nhập thời gian tạo hóa đơn">
+                            </div>
                         </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="form-group">
-                          <label class="small mb-1" for="suaHoaDonCurrentTime">&nbsp;</label>
-                          <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian" id="suaHoaDonCurrentTime" type="button" value="Lấy">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="small mb-1" for="suaHoaDonCurrentTime">&nbsp;</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_lap" id="suaHoaDonCurrentTime" type="button" value="Lấy">
+                            </div>
                         </div>
-                      </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themHoaDonNgayThangThanhToan">Ngày tháng</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_thanh_toan" id="themHoaDonNgayThangThanhToan" type="date" placeholder="Nhập thời gian thanh toán hóa đơn">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themHoaDonThoiGianThanhToan">Thời gian</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_thanh_toan" id="themHoaDonThoiGianThanhToan" type="time" step="1" placeholder="Nhập thời gian thanh toán hóa đơn">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="small mb-1" for="themHoaDonCurrentTimeThanhToan">&nbsp;</label>
+                                <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_thanh_toan" id="themHoaDonCurrentTimeThanhToan" type="button" value="Lấy">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="small mb-1" for="suaHoaDonPhanTram">Phần trăm tích lũy</label>
+                        <input class="form-control py-4 username phan_tram_tich_luy" id="suaHoaDonPhanTram" type="number" min="0.0" max="1.0" step="0.01" placeholder="Nhập phần trăm tích lũy">
                     </div>
                     <div class="form-group">
-                      <label class="small mb-1" for="suaHoaDonPhanTram">Phần trăm tích lũy</label>
-                      <input class="form-control py-4 username phan_tram_tich_luy" id="suaHoaDonPhanTram" type="number" min="0.0" max="1.0" step="0.01" placeholder="Nhập phần trăm tích lũy">
+                        <label class="small mb-1" for="suaHoaDonDiem">Số lượng điểm đổi</label>
+                        <input class="form-control py-4 username so_luong_diem_doi" id="suaHoaDonDiem" type="number" min="0" step="1" placeholder="Nhập số lượng điểm đổi">
                     </div>
                     <div class="form-group">
-                      <label class="small mb-1" for="suaHoaDonDiem">Số lượng điểm đổi</label>
-                      <input class="form-control py-4 username so_luong_diem_doi" id="suaHoaDonDiem" type="number" min="0" step="1" placeholder="Nhập số lượng điểm đổi">
+                        <label class="small mb-1" for="suaHoaDonTyLe">Tỷ lệ quy đổi</label>
+                        <input class="form-control py-4 username ty_gia_diem_doi" id="suaHoaDonTyLe" type="number" min="0.0" max="1.0" step="0.01" placeholder="Nhập tỷ lệ quy đổi">
                     </div>
-                    <div class="form-group">
-                      <label class="small mb-1" for="suaHoaDonTyLe">Tỷ lệ quy đổi</label>
-                      <input class="form-control py-4 username ty_gia_diem_doi" id="suaHoaDonTyLe" type="number" min="0.0" max="1.0" step="0.01" placeholder="Nhập tỷ lệ quy đổi">
-                    </div>
-                  </div>
-                  <div class="modal-footer">
+                </div>
+                <div class="modal-footer">
                     <input class="btn btn-outline-primary" id="suaHoaDonConfirm" type="button" value="Sửa Hoá đơn">
                     <input class="btn btn-outline-secondary" id="suaHoaDonReset" type="reset" value="Cài lại">
-                  </div>
                 </div>
-              </div>
             </div>
-            <!-- Model chi tiết hoá đơn-->
-            <div class="modal fade" id="modelCthd" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
-              <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
+        </div>
+    </div>
+
+    <!-- Model chi tiết hoá đơn-->
+    <div class="modal fade" id="modelCthd" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title">Chi tiết hoá đơn <span id="hoaDonTitleInformation"></span></h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                  </div>
-                  <div class="modal-body">
+                </div>
+                <div class="modal-body">
                     <!-- Thông tin nội dung trang-->
+                    <!-- Các thao tác  được hỗ trợ thực hiện -->
                     <div class="card mb-4">
-                      <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
-                      <div class="card-body">
-                        <button class="btn btn-outline-primary mr-3" id="themCthd" type="button" data-toggle="modal" data-target="#modelThemCthd" modify="ThemCthd">Thêm chi tiết hóa đơn</button>
-                        <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
-                          <button class="btn btn-outline-secondary" id="danhDauTatCaCthd" type="button">Đánh dấu tất cả</button>
-                          <button class="btn btn-outline-secondary" id="boDanhDauTatCaCthd" type="button">Bỏ đánh dấu tất cả</button>
+                        <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
+                        <div class="card-body">
+                            <button class="btn btn-outline-primary mr-3" id="themCthd" type="button" data-toggle="modal" data-target="#modelThemCthd" modify="ThemCthd">Thêm chi tiết hóa đơn</button>
+                            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                                <button class="btn btn-outline-secondary" id="danhDauTatCaCthd" type="button">Đánh dấu tất cả</button>
+                                <button class="btn btn-outline-secondary" id="boDanhDauTatCaCthd" type="button">Bỏ đánh dấu tất cả</button>
+                            </div>
+                            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                                <button class="btn btn-outline-danger" id="xoaDanhDauCthd" type="button">Xóa đánh dấu</button>
+                                <button class="btn btn-outline-danger" id="xoaTatCaCthd" type="button">Xóa tất cả</button>
+                            </div>
+                            <button class="btn btn-outline-info mr-3" id="lamMoiCthd" type="button">Làm mới</button>
                         </div>
-                        <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
-                          <button class="btn btn-outline-danger" id="xoaDanhDauCthd" type="button">Xóa đánh dấu</button>
-                          <button class="btn btn-outline-danger" id="xoaTatCaCthd" type="button">Xóa tất cả</button>
-                        </div>
-                        <button class="btn btn-outline-info mr-3" id="lamMoiCthd" type="button">Làm mới</button>
-                      </div>
                     </div>
-                    <div class="card mb-4">
-                      <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý chi tiết hóa đơn</div>
-                      <div class="card-body">
-                        <div class="table-responsive" id="tableQuanLyCthdContainer">
-                          <table class="table table-bordered table-striped table-hover" id="tableQuanLyCthd" width="100%" cellspacing="0">
-                            <thead>
-                              <tr>
-                                <th>ID chi tiết hóa đơn</th>
-                                <th>Sản phẩm</th>
-                                <th>Số lượng </th>
-                                <th>Đơn giá </th>
-                                <th>Điểm tích lũy </th>
-                                <th>Thao tác </th>
-                              </tr>
-                            </thead>
-                            <tfoot>
-                              <tr>
-                                <th>ID chi tiết hóa đơn</th>
-                                <th>Sản phẩm</th>
-                                <th>Số lượng </th>
-                                <th>Đơn giá </th>
-                                <th>Điểm tích lũy </th>
-                                <th>Thao tác </th>
-                              </tr>
-                            </tfoot>
-                            <tbody>
-                              <!-- Nội dung bảng-->
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Model thêm hoá đơn-->
+
+                    <!-- Model thêm chi tiết hoá đơn-->
                     <div class="modal fade" id="modelThemCthd" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title">Thêm chi tiết hoá đơn</h5>
-                            <button class="close" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
-                          </div>
-                          <div class="modal-body">
-                            <div id="themCthdAlerts">
-                              <!-- Các alert của phần này-->
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Thêm chi tiết hoá đơn</h5>
+                                    <button class="close" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="themCthdAlerts">
+                                        <!-- Các alert của phần này-->
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="themCthdHoaDon">Hóa đơn</label>
+                                        <input class="form-control py-1 px-2 d-flex align-item-center id_hoa_don" id="themCthdHoaDon" type="text" placeholder="Hóa đơn hiện tại" readonly="readonly">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="themCthdSanPham">Sản phẩm</label>
+                                        <select class="form-control id_san_pham" id="themCthdSanPham"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="themCthdSoLuong">Số lượng</label>
+                                        <input class="form-control py-4 username so_luong" id="themCthdSoLuong" type="number" min="1" step="1" placeholder="Nhập Số lượng">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="themCthdDonGia">Đơn giá</label>
+                                        <input class="form-control py-4 username don_gia" id="themCthdDonGia" type="number" min="1" step="1" placeholder="Đơn giá hiện tại" readonly="readonly">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="themCthdDiemTichLuy">Điểm tích lũy </label>
+                                        <input class="form-control py-4 username diem_tich_luy" id="themCthdDiemTichLuy" type="number" min="1" step="1" placeholder="Điểm tích lũy hiện tại" readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <input class="btn btn-outline-primary" id="themCthdConfirm" type="button" value="Thêm Hoá đơn">
+                                    <input class="btn btn-outline-secondary" id="themCthdReset" type="reset" value="Cài lại">
+                                </div>
                             </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="themCthdHoaDon">Hóa đơn</label>
-                              <input class="form-control py-1 px-2 d-flex align-item-center id_hoa_don" id="themCthdHoaDon" type="text" placeholder="Hóa đơn hiện tại" readonly="readonly">
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="themCthdSanPham">Sản phẩm</label>
-                              <select class="form-control id_san_pham" id="themCthdSanPham"></select>
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="themCthdSoLuong">Số lượng</label>
-                              <input class="form-control py-4 username so_luong" id="themCthdSoLuong" type="number" min="1" step="1" placeholder="Nhập Số lượng">
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="themCthdDonGia">Đơn giá</label>
-                              <input class="form-control py-4 username don_gia" id="themCthdDonGia" type="number" min="1" step="1" placeholder="Đơn giá hiện tại" readonly="readonly">
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="themCthdDiemTichLuy">Điểm tích lũy </label>
-                              <input class="form-control py-4 username diem_tich_luy" id="themCthdDiemTichLuy" type="number" min="1" step="1" placeholder="Điểm tích lũy hiện tại" readonly="readonly">
-                            </div>
-                          </div>
-                          <div class="modal-footer">
-                            <input class="btn btn-outline-primary" id="themCthdConfirm" type="button" value="Thêm Hoá đơn">
-                            <input class="btn btn-outline-secondary" id="themCthdReset" type="reset" value="Cài lại">
-                          </div>
                         </div>
-                      </div>
                     </div>
-                    <!-- Model sửa hoá đơn-->
+
+                    <!-- Model sửa chi tiết hoá đơn-->
                     <div class="modal fade" id="modelSuaCthd" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title">Sửa hoá đơn</h5>
-                            <button class="close" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
-                          </div>
-                          <div class="modal-body">
-                            <div id="suaCthdAlerts">
-                              <!-- Các alert của phần này-->
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Sửa hoá đơn</h5>
+                                    <button class="close" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="suaCthdAlerts">
+                                        <!-- Các alert của phần này-->
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="suaCthdHoaDon">Hóa đơn</label>
+                                        <input class="form-control py-1 px-2 d-flex align-item-center id_hoa_don" id="suaCthdHoaDon" type="text" placeholder="Hóa đơn hiện tại" readonly="readonly">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="suaCthdSanPham">Sản phẩm</label>
+                                        <select class="form-control id_san_pham" id="suaCthdSanPham">
+                                            <option value="0">Sản phẩm</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="suaCthdSoLuong">Số lượng</label>
+                                        <input class="form-control py-4 username so_luong" id="suaCthdSoLuong" type="number" min="1" step="1" placeholder="Nhập Số lượng">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="suaCthdDonGia">Đơn giá</label>
+                                        <input class="form-control py-4 username don_gia" id="suaCthdDonGia" type="number" min="1" step="1" placeholder="Đơn giá">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="suaCthdDiemTichLuy">Điểm tích lũy </label>
+                                        <input class="form-control py-4 username diem_tich_luy" id="suaCthdDiemTichLuy" type="number" min="1" step="1" placeholder="Điểm tích lũy">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <input class="btn btn-outline-primary" id="suaCthdConfirm" type="button" value="Sửa Hoá đơn">
+                                    <input class="btn btn-outline-secondary" id="suaCthdReset" type="reset" value="Cài lại">
+                                </div>
                             </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="suaCthdHoaDon">Hóa đơn</label>
-                              <input class="form-control py-1 px-2 d-flex align-item-center id_hoa_don" id="suaCthdHoaDon" type="text" placeholder="Hóa đơn hiện tại" readonly="readonly">
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="suaCthdSanPham">Sản phẩm</label>
-                              <select class="form-control id_san_pham" id="suaCthdSanPham">
-                                <option value="0">Sản phẩm</option>
-                              </select>
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="suaCthdSoLuong">Số lượng</label>
-                              <input class="form-control py-4 username so_luong" id="suaCthdSoLuong" type="number" min="1" step="1" placeholder="Nhập Số lượng">
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="suaCthdDonGia">Đơn giá</label>
-                              <input class="form-control py-4 username don_gia" id="suaCthdDonGia" type="number" min="1" step="1" placeholder="Đơn giá">
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="suaCthdDiemTichLuy">Điểm tích lũy </label>
-                              <input class="form-control py-4 username diem_tich_luy" id="suaCthdDiemTichLuy" type="number" min="1" step="1" placeholder="Điểm tích lũy">
-                            </div>
-                          </div>
-                          <div class="modal-footer">
-                            <input class="btn btn-outline-primary" id="suaCthdConfirm" type="button" value="Sửa Hoá đơn">
-                            <input class="btn btn-outline-secondary" id="suaCthdReset" type="reset" value="Cài lại">
-                          </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
+
+                    <!-- Bảng -->
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý chi tiết hóa đơn</div>
+                        <div class="card-body">
+                            <div class="tableQuanLyCthdAlert"></div>
+                            <div class="table-responsive" id="tableQuanLyCthdContainer">
+                                <table class="table table-bordered table-striped table-hover" id="tableQuanLyCthd" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID chi tiết hóa đơn</th>
+                                            <th>Sản phẩm</th>
+                                            <th>Số lượng </th>
+                                            <th>Đơn giá </th>
+                                            <th>Điểm tích lũy </th>
+                                            <th>Thao tác </th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>ID chi tiết hóa đơn</th>
+                                            <th>Sản phẩm</th>
+                                            <th>Số lượng </th>
+                                            <th>Đơn giá </th>
+                                            <th>Điểm tích lũy </th>
+                                            <th>Thao tác </th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <!-- Nội dung bảng-->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-              </div>
             </div>
-            <!-- Thông tin nội dung trang-->
-            <h1 class="mt-4">Quản lý hóa đơn</h1>
-            <ol class="breadcrumb mb-4">
-              <li class="breadcrumb-item"><a href="/Admin/Tongquat">Tổng quát</a></li>
-              <li class="breadcrumb-item active">Quản lý hoá đơn</li>
-            </ol>
-            <div class="card mb-4">
-              <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
-              <div class="card-body">
-                <button class="btn btn-outline-primary mr-3" id="themHoaDon" type="button" data-toggle="modal" data-target="#modelThemHoaDon" modify="ThemHoaDon">Thêm hoá đơn</button>
-                <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
-                  <button class="btn btn-outline-secondary" id="danhDauTatCa" type="button">Đánh dấu tất cả</button>
-                  <button class="btn btn-outline-secondary" id="boDanhDauTatCa" type="button">Bỏ đánh dấu tất cả</button>
-                </div>
-                <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
-                  <button class="btn btn-outline-danger" id="xoaDanhDau" type="button">Xóa đánh dấu</button>
-                  <button class="btn btn-outline-danger" id="xoaTatCa" type="button">Xóa tất cả</button>
-                </div>
-                <button class="btn btn-outline-info mr-3" id="lamMoi" type="button">Làm mới</button>
-              </div>
-            </div>
-            <div class="card mb-4">
-              <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý hoá đơn</div>
-              <div class="card-body">
-                <div class="table-responsive" id="tableQuanLyHoaDonContainer">
-                  <table class="table table-bordered table-striped table-hover" id="tableQuanLyHoaDon" width="100%" cellspacing="0">
+        </div>
+    </div>
+
+    <!-- Bảng -->
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý hoá đơn</div>
+        <div class="card-body">
+            <div class="tableQuanLyHoaDonAlert"></div>
+            <div class="table-responsive" id="tableQuanLyHoaDonContainer">
+                <table class="table table-bordered table-striped table-hover" id="tableQuanLyHoaDon" width="100%" cellspacing="0">
                     <thead>
-                      <tr>
-                        <th>ID hoá đơn</th>
-                        <th>Khách hàng</th>
-                        <th>Bàn</th>
-                        <th>Nhân viên</th>
-                        <th>Thời gian</th>
-                        <th>Phần trăm tích lũy</th>
-                        <th>Số điểm quy đổi </th>
-                        <th>Tỷ lệ quy đổi</th>
-                        <th>Thao tác</th>
-                      </tr>
+                        <tr>
+                            <th>ID hoá đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Bàn</th>
+                            <th>Nhân viên</th>
+                            <th>Thời gian lập</th>
+                            <th>Thời gian thanh toán</th>
+                            <th>Phần trăm tích lũy</th>
+                            <th>Số điểm quy đổi </th>
+                            <th>Tỷ lệ quy đổi</th>
+                            <th>Thao tác</th>
+                        </tr>
                     </thead>
                     <tfoot>
-                      <tr>
-                        <th>ID hoá đơn</th>
-                        <th>Khách hàng</th>
-                        <th>Bàn</th>
-                        <th>Nhân viên</th>
-                        <th>Thời gian</th>
-                        <th>Phần trăm tích lũy</th>
-                        <th>Số điểm quy đổi </th>
-                        <th>Tỷ lệ quy đổi</th>
-                        <th>Thao tác</th>
-                      </tr>
+                        <tr>
+                            <th>ID hoá đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Bàn</th>
+                            <th>Nhân viên</th>
+                            <th>Thời gian lập</th>
+                            <th>Thời gian thanh toán</th>
+                            <th>Phần trăm tích lũy</th>
+                            <th>Số điểm quy đổi </th>
+                            <th>Tỷ lệ quy đổi</th>
+                            <th>Thao tác</th>
+                        </tr>
                     </tfoot>
                     <tbody>
-                      <!-- Nội dung bảng-->
+                        <!-- Nội dung bảng-->
                     </tbody>
-                  </table>
-                </div>
-              </div>
+                </table>
             </div>
-          </div>
-        </main>
-        <!-- Footer của content-->
-        <footer class="py-4 bg-light mt-auto">
-          <div class="container-fluid">
-            <div class="d-flex align-items-center justify-content-between small">
-              <div class="text-muted">Nhóm framework số 1</div>
-              <div><a href="/Info/Thongtinungdung">Thông tin ứng dụng</a></div>
-            </div>
-          </div>
-        </footer>
-      </div>
-      <!-- End Content-->
+        </div>
     </div>
-    <!-- Optional JavaScript-->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS-->
-    <script type="text/javascript" src="~/liblaries/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="~/liblaries/bootstrap.bundle.min.js"></script>
-    <!-- Fontawesome-->
-    <script type="text/javascript" src="~/liblaries/fontawesome-all.min.js"></script>
-    <!-- Custom JavaScript-->
-    <script type="text/javascript" src="~/js/main.js"></script>
+
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
     <!-- Datatable Javascript-->
     <script type="text/javascript" src="~/liblaries/datatables.min.js"></script>
     <!-- Custom JavaScript-->
@@ -429,6 +454,5 @@
     <script type="text/javascript" src="~/js/custom-alert.js"></script>
     <script type="text/javascript" src="~/js/convert-thoi-gian.js"></script>
     <script type="text/javascript" src="~/js/quan-ly-chi-tiet-hoa-don.js"></script>
-    <script type="text/javascript" src="~/js/quan-ly-hoa-don.js">   </script>
-  </body>
-</html>
+    <script type="text/javascript" src="~/js/quan-ly-hoa-don.js"></script>
+}

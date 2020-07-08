@@ -13,6 +13,7 @@ namespace AdminASP.Models
         {
             BaseModel model = new TaiKhoan()
             {
+                IdTaiKhoan = Convert.ToInt32(reader["ID_TAI_KHOAN"].ToString()),
                 Username = reader["USERNAME"].ToString(),
                 Password = reader["PASSWORD"].ToString(),
                 Type = Convert.ToInt32(reader["TYPE"].ToString())
@@ -25,6 +26,7 @@ namespace AdminASP.Models
         {
             BaseModel model = new TaiKhoan()
             {
+                IdTaiKhoan =Convert.ToInt32(reader["ID_TAI_KHOAN"].ToString()),
                 Username = reader["USERNAME"].ToString(),
                 Password = reader["PASSWORD"].ToString(),
                 Type = Convert.ToInt32(reader["TYPE"].ToString())
@@ -36,9 +38,10 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             TaiKhoan currentModel = (TaiKhoan)model;
-            String query = "INSERT INTO tai_khoan (USERNAME,PASSWORD,TYPE) VALUES (@USERNAME,@PASSWORD,@TYPE)";
+            String query = "INSERT INTO tai_khoan (ID_TAI_KHOAN,USERNAME,PASSWORD,TYPE) VALUES (@ID_TAI_KHOAN,@USERNAME,@PASSWORD,@TYPE)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
+            mySqlCommand.Parameters.AddWithValue("ID_TAI_KHOAN", currentModel.IdTaiKhoan);
             mySqlCommand.Parameters.AddWithValue("USERNAME", currentModel.Username);
             mySqlCommand.Parameters.AddWithValue("PASSWORD", currentModel.Password);
             mySqlCommand.Parameters.AddWithValue("TYPE", currentModel.Type);
@@ -49,10 +52,10 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryDelete(MySqlConnection conn, BaseModel model)
         {
             TaiKhoan currentModel = (TaiKhoan)model;
-            String query = "DELETE FROM tai_khoan WHERE  tai_khoan.USERNAME = @USERNAME ";
+            String query = "DELETE FROM tai_khoan WHERE  tai_khoan.ID_TAI_KHOAN = @ID_TAI_KHOAN ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
-            mySqlCommand.Parameters.AddWithValue("USERNAME", currentModel.Username);
+            mySqlCommand.Parameters.AddWithValue("ID_TAI_KHOAN", currentModel.IdTaiKhoan);
 
             return mySqlCommand;
         }
@@ -61,13 +64,13 @@ namespace AdminASP.Models
         {
             TaiKhoan oldcurrentModel = (TaiKhoan)oldmodel;
             TaiKhoan newcurrentModel = (TaiKhoan)newmodel;
-            String query = "UPDATE tai_khoan SET USERNAME = @USERNAME,PASSWORD = @PASSWORD,TYPE = @TYPE WHERE  tai_khoan.USERNAME = @OLD_USERNAME ";
+            String query = "UPDATE tai_khoan SET USERNAME = @USERNAME,PASSWORD = @PASSWORD,TYPE = @TYPE WHERE  tai_khoan.ID_TAI_KHOAN = @ID_TAI_KHOAN ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("USERNAME", newcurrentModel.Username);
             mySqlCommand.Parameters.AddWithValue("PASSWORD", newcurrentModel.Password);
             mySqlCommand.Parameters.AddWithValue("TYPE", newcurrentModel.Type);
-            mySqlCommand.Parameters.AddWithValue("OLD_USERNAME", oldcurrentModel.Username);
+            mySqlCommand.Parameters.AddWithValue("ID_TAI_KHOAN", oldcurrentModel.IdTaiKhoan);
 
             return mySqlCommand;
         }
@@ -109,7 +112,7 @@ namespace AdminASP.Models
 
             int numberAccountsMatch = 0;
 
-            String query = "SELECT COUNT(tai_khoan.USERNAME) AS 'NUMBER_ACCOUNTS'  FROM tai_khoan WHERE USERNAME = @USERNAME AND PASSWORD = @PASSWORD";
+            String query = "SELECT COUNT(tai_khoan.ID_TAI_KHOAN) AS 'NUMBER_ACCOUNTS'  FROM tai_khoan WHERE USERNAME = @USERNAME AND PASSWORD = @PASSWORD";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("USERNAME", model.Username);

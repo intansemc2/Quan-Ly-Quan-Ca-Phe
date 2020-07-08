@@ -18,7 +18,7 @@ namespace AdminASP.Helpers
             HttpOnly = true,
 
             //Thời gian mà cookie hết hiệu lực, mặc định là trong 30 ngày 
-            Expires = DateTime.Now.AddMinutes(30d)
+            Expires = DateTime.Now.AddDays(30)
         };
 
         public static void SetObjectAsJson(this IResponseCookies cookies, string key, object value, CookieOptions cookieOptions = null)

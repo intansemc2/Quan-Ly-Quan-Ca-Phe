@@ -6,7 +6,15 @@
     @foreach (Breadcrumb breadcrumb in breadcrumbs)
     {
         <li class="breadcrumb-item @if (breadcrumb.IsActive) @("active")">
-            <a href="@breadcrumb.Link">@breadcrumb.Name</a>
+            @if (breadcrumb.IsActive)
+            {
+                @breadcrumb.Name
+            }
+            else
+            {
+                <a href="@breadcrumb.Link">@breadcrumb.Name</a>
+            }
+
         </li>
     }
 </ol>

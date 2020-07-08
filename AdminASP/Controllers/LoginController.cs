@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using AdminASP.Models;
 using System.Security.Cryptography;
 using AdminASP.Helpers;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace AdminASP.Controllers
 {
@@ -97,16 +98,21 @@ namespace AdminASP.Controllers
                 TaiKhoanStoreContext taiKhoanStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
                 KhachHangStoreContext khachHangStoreContext = HttpContext.RequestServices.GetService(typeof(KhachHangStoreContext)) as KhachHangStoreContext;
 
-                int addAccountResult = taiKhoanStoreContext.Add(new TaiKhoan()
+                TaiKhoan newTaiKhoan = new TaiKhoan()
                 {
                     Username = input.Username,
                     Password = PasswordHashHelper.ComputeSha256Hash(input.Password),
                     Type = TaiKhoan.TAI_KHOAN_USER
-                });
+                };
+
+                int addAccountResult = taiKhoanStoreContext.Add(newTaiKhoan);
+
+                newTaiKhoan.IdTaiKhoan = -1;
+                newTaiKhoan = taiKhoanStoreContext.Find(newTaiKhoan)[0] as TaiKhoan;
 
                 int addUserResult = khachHangStoreContext.Add(new KhachHang()
                 {
-                    Username = input.Username,
+                    IdTaiKhoan = newTaiKhoan.IdTaiKhoan,
                     Ten = input.Lastname + " " + input.Firstname,
                     Sdt = input.Sdt,
                     DiemTichLuy = 0

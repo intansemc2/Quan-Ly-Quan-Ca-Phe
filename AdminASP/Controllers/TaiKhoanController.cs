@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,52 +12,59 @@ namespace AdminASP.Controllers
 {
     public class TaiKhoanController : Controller
     {
-        public IActionResult GetAll()
+        public String GetAll()
         {
+            if (!(CheckPermission.CheckStaff(this))) { return ""; }
+
             TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
             List<BaseModel> baseModels = modelStoreContext.GetAll();
-            List<TaiKhoan> thisModels = new List<TaiKhoan>();
+            List<TaiKhoan> outputs = new List<TaiKhoan>();
             foreach (BaseModel baseModel in baseModels)
             {
-                thisModels.Add(baseModel as TaiKhoan);
+                outputs.Add(baseModel as TaiKhoan);
             }
-            ViewData["inputs"] = thisModels;
-            return View();
+            return JsonConvert.SerializeObject(outputs);
         }
 
-        public IActionResult Add(FormTaiKhoanAddInput input)
+        public String Add(FormTaiKhoanAddInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
+            TaiKhoan newTaiKhoan = null;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
-                int addResult = modelStoreContext.Add(new TaiKhoan()
+                newTaiKhoan  = new TaiKhoan()
                 {
                     Username = input.Username,
-                    Password = input.Password,
+                    Password = PasswordHashHelper.ComputeSha256Hash(input.Password),
                     Type = input.Type
-                });
+                };
+                int addResult = modelStoreContext.Add(newTaiKhoan);
 
-                result = addResult;
+                output = addResult;
+                newTaiKhoan.IdTaiKhoan = -1;
+                newTaiKhoan = modelStoreContext.Find(newTaiKhoan)[0] as TaiKhoan;
+
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+
+            return JsonConvert.SerializeObject(new { output = output, errors = errors, newTaiKhoan = newTaiKhoan });
         }
 
-        public IActionResult Edit(FormTaiKhoanEditInput input)
+        public String Edit(FormTaiKhoanEditInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
                 TaiKhoan oldTaiKhoan = new TaiKhoan()
                 {
-                    Username = input.Username,
-                    Password = null,
-                    Type = -1
+                    IdTaiKhoan = input.OldIdTaiKhoan
                 };
                 TaiKhoan newTaiKhoan = new TaiKhoan()
                 {
@@ -68,45 +74,74 @@ namespace AdminASP.Controllers
                 };
                 int editResult = modelStoreContext.Edit(oldTaiKhoan, newTaiKhoan);
 
-                result = editResult;
+                output = editResult;
                 ViewData["newTaiKhoan"] = newTaiKhoan;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+
+            return JsonConvert.SerializeObject(new { output = output, errors = errors });
         }
 
-        public IActionResult Delete(FormTaiKhoanDeleteInput input)
+        public String Delete(FormTaiKhoanDeleteInput input)
         {
-            int result = 0;
-            List<String> resultValidate = input.GetValidate();
-            if (resultValidate.Count <= 0)
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
+            List<String> errors = input.GetValidate();
+            if (errors.Count <= 0)
             {
                 TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
                 TaiKhoan taiKhoan = new TaiKhoan()
                 {
-                    Username = input.Username,
-                    Password = null,
-                    Type = -1
+                    IdTaiKhoan = Convert.ToInt32(input.IdTaiKhoan)
                 };
                 int deleteResult = modelStoreContext.Delete(taiKhoan);
 
-                result = deleteResult;
+                output = deleteResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+
+            return JsonConvert.SerializeObject(new { output = output, errors = errors });
         }
 
-        public IActionResult DeleteAll()
+        public String DeleteMarked(FormTaiKhoanDeleteMarked deleteInput)
         {
-            int result = 0;
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            List<String> inputs = JsonConvert.DeserializeObject<List<String>>(deleteInput.JsonInput);
+
+            List<String> outputs = new List<String>();
+            if (inputs.Count > 0)
+            {
+                TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
+                foreach (String input in inputs)
+                {
+                    TaiKhoan taiKhoan = new TaiKhoan()
+                    {
+                        IdTaiKhoan = Convert.ToInt32(input)
+                    };
+                    int deleteResult = modelStoreContext.Delete(taiKhoan);
+                    outputs.Add(JsonConvert.SerializeObject(new { IdTaiKhoan = input, Result = deleteResult }));
+                }
+            }
+
+            return JsonConvert.SerializeObject(outputs);
+        }
+
+        public String DeleteAll()
+        {
+            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+
+            int output = 0;
             TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
             int deleteResult = modelStoreContext.DeleteAll();
 
-            result = deleteResult;
-            ViewData["input"] = result;
-            return View();
+            output = deleteResult;
+
+            return JsonConvert.SerializeObject(new { output = output });
+        }
+
+        public String GetLoais()
+        {
+            return JsonConvert.SerializeObject(TaiKhoan.GetTypes());
         }
     }
 }

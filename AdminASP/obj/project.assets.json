@@ -5992,19 +5992,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Love\\.nuget\\packages\\": {}
+    "C:\\Users\\USER\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Love\\Documents\\Quan-Ly-Quan-Ca-Phe\\AdminASP\\AdminASP.csproj",
+      "projectUniqueName": "C:\\Users\\USER\\Documents\\Source\\ASP Net Core\\Quan-Ly-Quan-Ca-Phe\\AdminASP\\AdminASP.csproj",
       "projectName": "AdminASP",
-      "projectPath": "C:\\Users\\Love\\Documents\\Quan-Ly-Quan-Ca-Phe\\AdminASP\\AdminASP.csproj",
-      "packagesPath": "C:\\Users\\Love\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Love\\Documents\\Quan-Ly-Quan-Ca-Phe\\AdminASP\\obj\\",
+      "projectPath": "C:\\Users\\USER\\Documents\\Source\\ASP Net Core\\Quan-Ly-Quan-Ca-Phe\\AdminASP\\AdminASP.csproj",
+      "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\USER\\Documents\\Source\\ASP Net Core\\Quan-Ly-Quan-Ca-Phe\\AdminASP\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Love\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6047,12 +6047,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[3.1.2, 3.1.2]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -6061,7 +6055,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -25,25 +25,24 @@ namespace AdminASP.Controllers
             return JsonConvert.SerializeObject(outputs);
         }
 
-        public IActionResult Add(FormBanAddInput input)
+        public String Add(FormBanAddInput input)
         {
             int result = 0;
+
             List<String> resultValidate = input.GetValidate();
             if (resultValidate.Count <= 0)
             {
                 BanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(BanStoreContext)) as BanStoreContext;
                 int addResult = modelStoreContext.Add(new Ban() { 
-                    IdBan = input.IdBan,Ten = input.Ten,TrangThai = input.TrangThai
+                   Ten = input.Ten
                 });
 
                 result = addResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+            return JsonConvert.SerializeObject(new { output = result, errors = resultValidate });
         }
 
-        public IActionResult Edit(FormBanEditInput input)
+        public String Edit(FormBanEditInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
@@ -52,23 +51,21 @@ namespace AdminASP.Controllers
                 BanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(BanStoreContext)) as BanStoreContext;
                 Ban oldBan = new Ban()
                 {
-                    IdBan = input.IdBan,Ten = null,TrangThai = -1
+                    IdBan = input.IdBan,Ten = null
                 };
                 Ban newBan = new Ban()
                 {
-                    IdBan = input.IdBan,Ten = input.Ten,TrangThai = input.TrangThai
+                    IdBan = input.IdBan,Ten = input.Ten
                 };
                 int editResult = modelStoreContext.Edit(oldBan, newBan);
 
                 result = editResult;
                 ViewData["newBan"] = newBan;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;             
-            return View();
+            return JsonConvert.SerializeObject(new { output = result, errors = resultValidate });
         }
 
-        public IActionResult Delete(FormBanDeleteInput input)
+        public String Delete(FormBanDeleteInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
@@ -77,26 +74,23 @@ namespace AdminASP.Controllers
                 BanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(BanStoreContext)) as BanStoreContext;
                 Ban taiKhoan = new Ban()
                 {
-                    IdBan = input.IdBan,Ten = null,TrangThai = -1
+                    IdBan = input.IdBan,Ten = null
                 };
                 int deleteResult = modelStoreContext.Delete(taiKhoan);
 
                 result = deleteResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+            return JsonConvert.SerializeObject(new { output = result, errors = resultValidate });
         }
 
-        public IActionResult DeleteAll()
+        public String DeleteAll()
         {
             int result = 0;
             BanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(BanStoreContext)) as BanStoreContext;
             int deleteResult = modelStoreContext.DeleteAll();
 
             result = deleteResult;
-            ViewData["input"] = result;
-            return View();
+            return JsonConvert.SerializeObject(new { output = result});
         }
     }
 }

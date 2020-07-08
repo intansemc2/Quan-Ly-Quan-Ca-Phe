@@ -1,404 +1,166 @@
-﻿<!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <title>Quản lý bàn - Quản lý quán cà phê</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Optional Stylesheets-->
-    <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="~/liblaries/bootstrap.min.css">
-    <!-- Custom JavaScript-->
-    <link rel="stylesheet" href="~/css/main.css">
+﻿@{    
+ Layout = "_Layout_MainAdmin";
+}
+
+@{
+    ViewData["Title"] = "Quản lý bàn";
+    ViewData["mainTitle"] = "Quản lý bàn";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
     <!-- DataTable-->
     <link rel="stylesheet" type="text/css" href="~/liblaries/datatables.min.css">
-  </head>
-  <body class="sb-nav-fixed">
-    <!-- Start Navbar chính-->
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark"><a class="navbar-brand" href="/Admin/Tongquat">Quản lý quán cà phê</a>
-      <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
-      <!-- Navbar-->
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i>ADMIN</a>
-          <!-- Thông tin tài khoản-->
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown"><a class="dropdown-item" href="/Login/AccountInfo">Thông tin tài khoản</a><a class="dropdown-item" href="/Login/Logout">Đăng xuất</a></div>
-        </li>
-      </ul>
-    </nav>
-    <!-- End Navbar chính-->
-    <!-- Start Sidebar chính-->
-    <div id="layoutSidenav">
-      <div id="layoutSidenav_nav">
-        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-          <!-- Menu của sidebar-->
-          <div class="sb-sidenav-menu">
-            <div class="nav">
-              <div class="sb-sidenav-menu-heading">Nội dung chính</div><a class="nav-link" href="/Admin/Tongquat">
-                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>Tổng quan</a><a class="nav-link" href="/Admin/Quanlytaikhoan">
-                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>Quản lý tài khoản</a><a class="nav-link" href="/Admin/Quanlynhanvien">
-                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Quản lý nhân viên</a><a class="nav-link" href="/Admin/Quanlyhoadon">
-                <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>Quản lý hóa đơn và chi tiết hóa đơn</a><a class="nav-link" href="/Admin/Quanlykhachhang">
-                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Quản lý khách hàng thành viên</a><a class="nav-link active" href="/Admin/Quanlyban">
-                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>Quản lý bàn và đặt bàn</a><a class="nav-link" href="/Admin/Quanlyloaisanpham">
-                <div class="sb-nav-link-icon"><i class="fas fa-beer"></i></div>Quản lý sản phẩm và loại sản phẩm</a><a class="nav-link" href="/Admin/Quanlykhuyenmai">
-                <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>Quản lý khuyến mãi và chi tiết khuyến mãi</a>
+}
+
+@section navbar {
+    <!-- Navbar -->
+    @await Html.PartialAsync("_Item_Navbar");
+}
+
+@section sidebar {
+    <!-- Sidebar -->
+    @{
+        ViewData["adminSidebarActive"] = "Quanlytaikhoan";
+    }
+    @await Html.PartialAsync("_Item_Sidebar")
+}
+
+@section mainContent {
+    <!-- Breadcrumb đường dẫn đến trang -->
+    @{
+        List<Breadcrumb> breadcrumbs = new List<Breadcrumb>();
+        breadcrumbs.Add(new Breadcrumb() { Name = "Tổng quát", Link = "/Admin/Tongquat", IsActive = false });
+        breadcrumbs.Add(new Breadcrumb() { Name = "Quản lý bàn", Link = "/Admin/Quanlyban", IsActive = true });
+        ViewData["breadcrumbs"] = breadcrumbs;
+    }
+    @await Html.PartialAsync("_Item_Breadcrumb")
+
+    <!-- Thao tác hỗ trợ thực hiện-->
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
+        <div class="card-body">
+            <button class="btn btn-outline-primary mr-3" id="themBan" type="button" data-toggle="modal" data-target="#modelThemBan" modify="ThemBan">Thêm bàn</button>
+            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                <button class="btn btn-outline-secondary" id="danhDauTatCa" type="button">Đánh dấu tất cả</button>
+                <button class="btn btn-outline-secondary" id="boDanhDauTatCa" type="button">Bỏ đánh dấu tất cả</button>
             </div>
-          </div>
-          <!-- Thông tin người dùng đăng nhập-->
-          <div class="sb-sidenav-footer">
-            <div class="small">Bạn đã đăng nhập bằng tài khoản:</div>ADMIN
-          </div>
-        </nav>
-      </div>
-      <!-- End Sidebar chính-->
-      <!-- Start Content-->
-      <div id="layoutSidenav_content">
-        <main>
-          <div class="container-fluid">
-            <!-- Model thêm bàn-->
-            <div class="modal fade" id="modelThemBan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
+            <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
+                <button class="btn btn-outline-danger" id="xoaDanhDau" type="button">Xóa đánh dấu</button>
+                <button class="btn btn-outline-danger" id="xoaTatCa" type="button">Xóa tất cả</button>
+            </div>
+            <button class="btn btn-outline-info mr-3" id="lamMoi" type="button">Làm mới</button>
+        </div>
+    </div>
+
+    <!-- Model thêm bàn-->
+    <div class="modal fade" id="modelThemBan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title">Thêm bàn</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                  </div>
-                  <div class="modal-body">
+                </div>
+                <div class="modal-body">
                     <div id="themBanAlerts">
-                      <!-- Các alert của phần này-->
+                        <!-- Các alert của phần này-->
                     </div>
                     <input class="id_ban" type="hidden">
                     <div class="form-group">
-                      <label class="small mb-1" for="themBanTen">Tên</label>
-                      <input class="form-control py-4 username ten" id="themBanTen" type="text" placeholder="Nhập Tên">
+                        <label class="small mb-1" for="themBanTen">Tên</label>
+                        <input class="form-control py-4 username ten" id="themBanTen" type="text" placeholder="Nhập Tên">
                     </div>
+                    <!--
                     <div class="form-group">
-                      <label class="small mb-1" for="themBanTrangThai">Trạng thái</label>
-                      <select class="form-control trang_thai" id="themBanTrangThai">
-                        <option value="0">Trạng thái                    </option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
+                        <label class="small mb-1" for="themBanTrangThai">Trạng thái</label>
+                        <select class="form-control trang_thai" id="themBanTrangThai">
+                            <option value="0">Trạng thái                    </option>
+                        </select>
+                    </div>-->
+
+                </div>
+                <div class="modal-footer">
                     <input class="btn btn-outline-primary" id="themBanConfirm" type="button" value="Thêm Bàn">
                     <input class="btn btn-outline-secondary" id="themBanReset" type="reset" value="Cài lại">
-                  </div>
                 </div>
-              </div>
             </div>
-            <!-- Model sửa bàn-->
-            <div class="modal fade" id="modelSuaBan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
+        </div>
+    </div>
+
+    <!-- Model sửa bàn-->
+    <div class="modal fade" id="modelSuaBan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title">Sửa bàn</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                  </div>
-                  <div class="modal-body">
+                </div>
+                <div class="modal-body">
                     <div id="suaBanAlerts">
-                      <!-- Các alert của phần này-->
+                        <!-- Các alert của phần này-->
                     </div>
                     <input class="id_ban" type="hidden">
                     <div class="form-group">
-                      <label class="small mb-1" for="suaBanTen">Tên</label>
-                      <input class="form-control py-4 username ten" id="suaBanTen" type="text" placeholder="Nhập Tên">
+                        <label class="small mb-1" for="suaBanTen">Tên</label>
+                        <input class="form-control py-4 username ten" id="suaBanTen" type="text" placeholder="Nhập Tên">
                     </div>
+                    <!--
                     <div class="form-group">
-                      <label class="small mb-1" for="suaBanTrangThai">Trạng thái</label>
-                      <select class="form-control trang_thai" id="suaBanTrangThai">
-                        <option value="0">Trạng thái  </option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
+                        <label class="small mb-1" for="suaBanTrangThai">Trạng thái</label>
+                        <select class="form-control trang_thai" id="suaBanTrangThai">
+                            <option value="0">Trạng thái  </option>
+                        </select>
+                    </div>-->
+                </div>
+                <div class="modal-footer">
                     <input class="btn btn-outline-primary" id="suaBanConfirm" type="button" value="Sửa Bàn">
                     <input class="btn btn-outline-secondary" id="suaBanReset" type="reset" value="Cài lại">
-                  </div>
                 </div>
-              </div>
             </div>
-            <!-- Model chi tiết bàn-->
-            <div class="modal fade" id="modelChiTietBan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
-              <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Chi tiết đặt bàn <span id="banTitleInformation"></span></h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                  </div>
-                  <div class="modal-body">
-                    <!-- Thông tin nội dung trang-->
-                    <div class="card mb-4">
-                      <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
-                      <div class="card-body">
-                        <button class="btn btn-outline-primary mr-3" id="themDatBan" type="button" data-toggle="modal" data-target="#modelThemDatBan" modify="ThemDatBan">Thêm chi tiết bàn</button>
-                        <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
-                          <button class="btn btn-outline-secondary" id="danhDauTatCaDatBan" type="button">Đánh dấu tất cả</button>
-                          <button class="btn btn-outline-secondary" id="boDanhDauTatCaDatBan" type="button">Bỏ đánh dấu tất cả</button>
-                        </div>
-                        <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
-                          <button class="btn btn-outline-danger" id="xoaDanhDauDatBan" type="button">Xóa đánh dấu</button>
-                          <button class="btn btn-outline-danger" id="xoaTatCaDatBan" type="button">Xóa tất cả</button>
-                        </div>
-                        <button class="btn btn-outline-info mr-3" id="lamMoiDatBan" type="button">Làm mới</button>
-                      </div>
-                    </div>
-                    <div class="card mb-4">
-                      <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý chi tiết bàn</div>
-                      <div class="card-body">
-                        <div class="table-responsive" id="tableQuanLyDatBanContainer">
-                          <table class="table table-bordered table-striped table-hover" id="tableQuanLyDatBan" width="100%" cellspacing="0">
-                            <thead>
-                              <tr>
-                                <th>ID bàn</th>
-                                <th>Username</th>
-                                <th>Thời gian lập</th>
-                                <th>Thời gian nhận</th>
-                                <th>Ghi chú</th>
-                                <th>Thao tác </th>
-                              </tr>
-                            </thead>
-                            <tfoot>
-                              <tr>
-                                <th>ID bàn</th>
-                                <th>Username</th>
-                                <th>Thời gian lập</th>
-                                <th>Thời gian nhận</th>
-                                <th>Ghi chú</th>
-                                <th>Thao tác </th>
-                              </tr>
-                            </tfoot>
-                            <tbody>
-                              <!-- Nội dung bảng-->
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Model thêm hoá đơn-->
-                    <div class="modal fade" id="modelThemDatBan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title">Thêm chi tiết hoá đơn</h5>
-                            <button class="close" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
-                          </div>
-                          <div class="modal-body">
-                            <div id="themDatBanAlerts">
-                              <!-- Các alert của phần này-->
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="themDatBanIDBan">Bàn</label>
-                              <input class="form-control py-1 px-2 d-flex align-item-center id_ban" id="themDatBanIDBan" type="text" placeholder="Bàn hiện tại" readonly="readonly">
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="themDatBanUsername">Username</label>
-                              <select class="form-control username" id="themDatBanUsername"></select>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-md-5">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="themDatBanNgayThangLap">Ngày tháng lập </label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themDatBanNgayThangLap" type="date" placeholder="Nhập thời gian lập">
-                                </div>
-                              </div>
-                              <div class="col-md-5">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="themDatBanThoiGianLap">Thời gian lập </label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themDatBanThoiGianLap" type="time" step="1" placeholder="Nhập thời gian lập">
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="themDatBanCurrentTimeLap">&nbsp;</label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_lap" id="themDatBanCurrentTimeLap" type="button" value="Lấy">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-md-5">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="themDatBanNgayThangNhan">Ngày tháng nhận </label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_nhan" id="themDatBanNgayThangNhan" type="date" placeholder="Nhập thời gian nhận ">
-                                </div>
-                              </div>
-                              <div class="col-md-5">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="themDatBanThoiGianNhan">Thời gian nhận </label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_nhan" id="themDatBanThoiGianNhan" type="time" step="1" placeholder="Nhập thời gian nhận">
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="themDatBanCurrentTimeNhan">&nbsp;</label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_nhan" id="themDatBanCurrentTimeNhan" type="button" value="Lấy">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="themDatBanGhiChu">Ghi chú</label>
-                              <input class="form-control py-4 ghi_chu" id="themDatBanGhiChu" type="text" placeholder="Ghi chú">
-                            </div>
-                          </div>
-                          <div class="modal-footer">
-                            <input class="btn btn-outline-primary" id="themDatBanConfirm" type="button" value="Thêm Hoá đơn">
-                            <input class="btn btn-outline-secondary" id="themDatBanReset" type="reset" value="Cài lại">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Model sửa hoá đơn-->
-                    <div class="modal fade" id="modelSuaDatBan" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title">Sửa hoá đơn</h5>
-                            <button class="close" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
-                          </div>
-                          <div class="modal-body">
-                            <div id="suaDatBanAlerts">
-                              <!-- Các alert của phần này-->
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="suaDatBanIDBan">Bàn</label>
-                              <input class="form-control py-1 px-2 d-flex align-item-center id_ban" id="suaDatBanIDBan" type="text" placeholder="Bàn hiện tại" readonly="readonly">
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="suaDatBanUsername">Username</label>
-                              <select class="form-control username" id="suaDatBanUsername"></select>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-md-5">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="suaDatBanNgayThangLap">Ngày tháng lập </label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="suaDatBanNgayThangLap" type="date" placeholder="Nhập thời gian lập">
-                                </div>
-                              </div>
-                              <div class="col-md-5">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="suaDatBanThoiGianLap">Thời gian lập </label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="suaDatBanThoiGianLap" type="time" step="1" placeholder="Nhập thời gian lập">
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="suaDatBanCurrentTimeLap">&nbsp;</label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_lap" id="suaDatBanCurrentTimeLap" type="button" value="Lấy">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-md-5">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="suaDatBanNgayThangNhan">Ngày tháng nhận </label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_nhan" id="suaDatBanNgayThangNhan" type="date" placeholder="Nhập thời gian nhận ">
-                                </div>
-                              </div>
-                              <div class="col-md-5">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="suaDatBanThoiGianNhan">Thời gian nhận </label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_nhan" id="suaDatBanThoiGianNhan" type="time" step="1" placeholder="Nhập thời gian nhận">
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="form-group">
-                                  <label class="small mb-1" for="suaDatBanCurrentTimeNhan">&nbsp;</label>
-                                  <input class="form-control py-1 px-2 d-flex align-item-center btn btn-outline-info thoi_gian_nhan" id="suaDatBanCurrentTimeNhan" type="button" value="Lấy">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="small mb-1" for="suaDatBanGhiChu">Ghi chú</label>
-                              <input class="form-control py-4 ghi_chu" id="suaDatBanGhiChu" type="text" placeholder="Ghi chú">
-                            </div>
-                          </div>
-                          <div class="modal-footer">
-                            <input class="btn btn-outline-primary" id="suaDatBanConfirm" type="button" value="Sửa Hoá đơn">
-                            <input class="btn btn-outline-secondary" id="suaDatBanReset" type="reset" value="Cài lại">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Thông tin nội dung trang-->
-            <h1 class="mt-4">Quản lý bàn</h1>
-            <ol class="breadcrumb mb-4">
-              <li class="breadcrumb-item"><a href="/Admin/Tongquat">Tổng quát</a></li>
-              <li class="breadcrumb-item active">Quản lý bàn</li>
-            </ol>
-            <div class="card mb-4">
-              <div class="card-header"><i class="fas fa-wrench mr-1"></i>Các thao tác  được hỗ trợ thực hiện</div>
-              <div class="card-body">
-                <button class="btn btn-outline-primary mr-3" id="themBan" type="button" data-toggle="modal" data-target="#modelThemBan" modify="ThemBan">Thêm bàn</button>
-                <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
-                  <button class="btn btn-outline-secondary" id="danhDauTatCa" type="button">Đánh dấu tất cả</button>
-                  <button class="btn btn-outline-secondary" id="boDanhDauTatCa" type="button">Bỏ đánh dấu tất cả</button>
-                </div>
-                <div class="btn-group mr-3" role="group" aria-label="Các nút chức năng xóa">
-                  <button class="btn btn-outline-danger" id="xoaDanhDau" type="button">Xóa đánh dấu</button>
-                  <button class="btn btn-outline-danger" id="xoaTatCa" type="button">Xóa tất cả</button>
-                </div>
-                <button class="btn btn-outline-info mr-3" id="lamMoi" type="button">Làm mới</button>
-              </div>
-            </div>
-            <div class="card mb-4">
-              <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý bàn</div>
-              <div class="card-body">
-                <div class="table-responsive" id="tableQuanLyBanContainer">
-                  <table class="table table-bordered table-striped table-hover" id="tableQuanLyBan" width="100%" cellspacing="0">
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Bảng quản lý bàn</div>
+        <div class="card-body">
+            <div id="tableQuanLyBanAlert"></div>
+            <div class="table-responsive" id="tableQuanLyBanContainer">
+                <table class="table table-bordered table-striped table-hover" id="tableQuanLyBan" width="100%" cellspacing="0">
                     <thead>
-                      <tr>
-                        <th>ID bàn                            </th>
-                        <th>Tên bàn</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
-                      </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên bàn</th>
+                            <th>Thao tác</th>
+                        </tr>
                     </thead>
                     <tfoot>
-                      <tr>
-                        <th>ID bàn                            </th>
-                        <th>Tên bàn</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
-                      </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên bàn</th>
+                            <th>Thao tác</th>
+                        </tr>
                     </tfoot>
                     <tbody>
-                      <!-- Nội dung bảng-->
+                        <!-- Nội dung bảng-->
                     </tbody>
-                  </table>
-                </div>
-              </div>
+                </table>
             </div>
-          </div>
-        </main>
-        <!-- Footer của content-->
-        <footer class="py-4 bg-light mt-auto">
-          <div class="container-fluid">
-            <div class="d-flex align-items-center justify-content-between small">
-              <div class="text-muted">Nhóm framework số 1</div>
-              <div><a href="/Info/Thongtinungdung">Thông tin ứng dụng</a></div>
-            </div>
-          </div>
-        </footer>
-      </div>
-      <!-- End Content-->
+        </div>
     </div>
-    <!-- Optional JavaScript-->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS-->
-    <script type="text/javascript" src="~/liblaries/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="~/liblaries/bootstrap.bundle.min.js"></script>
-    <!-- Fontawesome-->
-    <script type="text/javascript" src="~/liblaries/fontawesome-all.min.js"></script>
-    <!-- Custom JavaScript-->
-    <script type="text/javascript" src="~/js/main.js"></script>
+
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
     <!-- Datatable Javascript-->
     <script type="text/javascript" src="~/liblaries/datatables.min.js"></script>
     <!-- Custom JavaScript-->
     <script type="text/javascript" src="~/js/custom-toggle-button.js"></script>
+    <script type="text/javascript" src="~/js/quan-ly-ban.js"></script>
     <script type="text/javascript" src="~/js/custom-alert.js"></script>
-    <script type="text/javascript" src="~/js/convert-thoi-gian.js"></script>
-    <script type="text/javascript" src="~/js/quan-ly-chi-tiet-dat-ban.js"></script>
-    <script type="text/javascript" src="~/js/quan-ly-ban.js">   </script>
-  </body>
-</html>
+}
+

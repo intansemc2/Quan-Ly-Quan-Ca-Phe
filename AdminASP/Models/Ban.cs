@@ -13,8 +13,6 @@ namespace AdminASP.Models
         private String ten;
         public String Ten { get { return this.ten; } set { this.ten = value; } }
 
-        private int trangThai;
-        public int TrangThai { get { return this.trangThai; } set { this.trangThai = value; } }
 
         public static int BAN_CON_TRONG = 0;
         public static int BAN_DA_DUOC_DAT = 1;

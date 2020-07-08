@@ -15,9 +15,8 @@ namespace AdminASP.Models
             {
                 IdBan = Convert.ToInt32(reader["ID_BAN"].ToString()),
                 Ten = reader["TEN"].ToString(),
-                TrangThai = Convert.ToInt32(reader["TRANG_THAI"].ToString())
-            };
 
+            };
             return model;
         }
 
@@ -27,7 +26,6 @@ namespace AdminASP.Models
             {
                 IdBan = Convert.ToInt32(reader["ID_BAN"].ToString()),
                 Ten = reader["TEN"].ToString(),
-                TrangThai = Convert.ToInt32(reader["TRANG_THAI"].ToString())
             };
 
             return model;
@@ -36,13 +34,10 @@ namespace AdminASP.Models
         public override MySqlCommand CreateQueryAdd(MySqlConnection conn, BaseModel model)
         {
             Ban currentModel = (Ban)model;
-            String query = "INSERT INTO ban (ID_BAN,TEN,TRANG_THAI) VALUES (@ID_BAN,@TEN,@TRANG_THAI)";
+            String query = "INSERT INTO ban (TEN) VALUES (@TEN)";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
-            mySqlCommand.Parameters.AddWithValue("ID_BAN", currentModel.IdBan);
             mySqlCommand.Parameters.AddWithValue("TEN", currentModel.Ten);
-            mySqlCommand.Parameters.AddWithValue("TRANG_THAI", currentModel.TrangThai);
-
             return mySqlCommand;
         }
 
@@ -70,12 +65,12 @@ namespace AdminASP.Models
         {
             Ban oldcurrentModel = (Ban)oldmodel;
             Ban newcurrentModel = (Ban)newmodel;
-            String query = "UPDATE ban SET ID_BAN = @ID_BAN,TEN = @TEN,TRANG_THAI = @TRANG_THAI WHERE  ban.ID_BAN = @OLD_ID_BAN ";
+            String query = "UPDATE ban SET ID_BAN = @ID_BAN,ban.TEN = @TEN WHERE ban.ID_BAN = @OLD_ID_BAN ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             mySqlCommand.Parameters.AddWithValue("ID_BAN", newcurrentModel.IdBan);
             mySqlCommand.Parameters.AddWithValue("TEN", newcurrentModel.Ten);
-            mySqlCommand.Parameters.AddWithValue("TRANG_THAI", newcurrentModel.TrangThai);
+
             mySqlCommand.Parameters.AddWithValue("OLD_ID_BAN", oldcurrentModel.IdBan);
 
             return mySqlCommand;
@@ -88,19 +83,17 @@ namespace AdminASP.Models
             String query = "SELECT * FROM ban WHERE 1=1 ";
             if (currentModel.IdBan >= 0) query += " AND ban.ID_BAN = @ID_BAN ";
             if (currentModel.Ten != null) query += " AND ban.TEN = @TEN ";
-            if (currentModel.TrangThai >= 0) query += " AND ban.TRANG_THAI = @TRANG_THAI ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdBan >= 0) mySqlCommand.Parameters.AddWithValue("ID_BAN", currentModel.IdBan);
             if (currentModel.Ten != null) mySqlCommand.Parameters.AddWithValue("TEN", currentModel.Ten);
-            if (currentModel.TrangThai >= 0) mySqlCommand.Parameters.AddWithValue("TRANG_THAI", currentModel.TrangThai);
 
             return mySqlCommand;
         }
 
         public override MySqlCommand CreateQueryGetAll(MySqlConnection conn)
         {
-            String query = "SELECT * FROM ban";
+            String query = "SELECT ban.ID_BAN, ban.TEN FROM ban";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 

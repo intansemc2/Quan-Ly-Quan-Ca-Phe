@@ -143,6 +143,8 @@ $(document).ready(function () {
     $("#lamMoi").click(function () {
         refreshDataTableQLTK();
     });
+
+    //thêm tk
     $("#modelThemTaiKhoan").find("#themTaiKhoanConfirm").click(function () {
         //Xóa hết alert cũ
         $("#modelThemTaiKhoan").find("#themTaiKhoanAlerts").html("");
@@ -156,6 +158,7 @@ $(document).ready(function () {
 
         //Tạo tài khoản mới 
         let newTaiKhoan = modifyTaiKhoan;
+
         //Thêm xuống CSDL     
         $("#tableQuanLyTaiKhoanAlert").empty();
         $.post("/TaiKhoan/Add", { Username: newTaiKhoan.username, Password: newTaiKhoan.password, RePassword: newTaiKhoan.re_password, Type: newTaiKhoan.type }, function (data) {

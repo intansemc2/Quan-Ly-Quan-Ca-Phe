@@ -66,7 +66,7 @@ namespace AdminASP.Controllers
             return View();
         }
 
-        public IActionResult Quanlyloaisanpham()
+        public IActionResult Quanlysanpham()
         {
             if (!(CheckPermission.CheckAdmin(this)))
             {

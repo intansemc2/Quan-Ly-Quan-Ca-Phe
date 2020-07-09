@@ -12,20 +12,19 @@ namespace AdminASP.Controllers
 {
     public class SanPhamController : Controller
     {
-        public IActionResult GetAll()
+        public String GetAll()
         {
             SanPhamStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(SanPhamStoreContext)) as SanPhamStoreContext;
             List<BaseModel> baseModels = modelStoreContext.GetAll();
-            List<SanPham> thisModels = new List<SanPham>();
+            List<SanPham> outputs= new List<SanPham>();
             foreach (BaseModel baseModel in baseModels)
             {
-                thisModels.Add(baseModel as SanPham);
+                outputs.Add(baseModel as SanPham);
             }
-            ViewData["inputs"] = thisModels;
-            return View();
+            return JsonConvert.SerializeObject(outputs);
         }
 
-        public IActionResult Add(FormSanPhamAddInput input)
+        public String Add(FormSanPhamAddInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
@@ -35,21 +34,18 @@ namespace AdminASP.Controllers
                 int addResult = modelStoreContext.Add(new SanPham()
                 {
                     IdSanPham = input.IdSanPham,
-                    IdLoaiSP = input.IdLoaiSP,
                     Ten = input.Ten,
                     Gia = input.Gia,
                     DiemTichLuy = input.DiemTichLuy,
-                    GhiChu = input.Description
+                    GhiChu = input.GhiChu
                 });
 
                 result = addResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+            return JsonConvert.SerializeObject(new { output = result, errors = resultValidate });
         }
 
-        public IActionResult Edit(FormSanPhamEditInput input)
+        public String Edit(FormSanPhamEditInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
@@ -59,7 +55,6 @@ namespace AdminASP.Controllers
                 SanPham oldSanPham = new SanPham()
                 {
                     IdSanPham = input.IdSanPham,
-                    IdLoaiSP = input.IdLoaiSP,
                     Ten = null,
                     Gia = -1,
                     DiemTichLuy = -1,
@@ -68,7 +63,6 @@ namespace AdminASP.Controllers
                 SanPham newSanPham = new SanPham()
                 {
                     IdSanPham = input.IdSanPham,
-                    IdLoaiSP = input.IdLoaiSP,
                     Ten = input.Ten,
                     Gia = input.Gia,
                     DiemTichLuy = input.DiemTichLuy,
@@ -79,12 +73,10 @@ namespace AdminASP.Controllers
                 result = editResult;
                 ViewData["newSanPham"] = newSanPham;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+            return JsonConvert.SerializeObject(new { output = result, errors = resultValidate });
         }
 
-        public IActionResult Delete(FormSanPhamDeleteInput input)
+        public String Delete(FormSanPhamDeleteInput input)
         {
             int result = 0;
             List<String> resultValidate = input.GetValidate();
@@ -94,7 +86,6 @@ namespace AdminASP.Controllers
                 SanPham taiKhoan = new SanPham()
                 {
                     IdSanPham = input.IdSanPham,
-                    IdLoaiSP = input.IdLoaiSP,
                     Ten = null,
                     Gia = -1,
                     DiemTichLuy = -1,
@@ -104,20 +95,17 @@ namespace AdminASP.Controllers
 
                 result = deleteResult;
             }
-            ViewData["input"] = result;
-            ViewData["errors"] = resultValidate;
-            return View();
+            return JsonConvert.SerializeObject(new { output = result, errors = resultValidate });
         }
 
-        public IActionResult DeleteAll()
+        public String DeleteAll()
         {
             int result = 0;
             SanPhamStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(SanPhamStoreContext)) as SanPhamStoreContext;
             int deleteResult = modelStoreContext.DeleteAll();
 
             result = deleteResult;
-            ViewData["input"] = result;
-            return View();
+            return JsonConvert.SerializeObject(new { output = result });
         }
     }
 }

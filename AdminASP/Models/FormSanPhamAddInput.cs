@@ -11,9 +11,6 @@ namespace AdminASP.Models
         private int idsanpham;
         public int IdSanPham { get { return this.idsanpham; } set { this.idsanpham = value; } }
 
-        private int idloaisp;
-        public int IdLoaiSP { get { return this.idloaisp; } set { this.idloaisp = value; } }
-
         private String ten;
         public String Ten { get { return this.ten; } set { this.ten = value; } }
 
@@ -23,8 +20,8 @@ namespace AdminASP.Models
         private int diemtichluy;
         public int DiemTichLuy { get { return this.diemtichluy; } set { this.diemtichluy = value; } }
 
-        private String description;
-        public String Description { get { return this.description; } set { this.description = value; } }
+        private String ghichu;
+        public String GhiChu { get { return this.ghichu; } set { this.ghichu = value; } }
 
         public List<String> GetValidate()
         {
@@ -34,11 +31,6 @@ namespace AdminASP.Models
             if (!(IdSanPham >= 0))
             {
                 errors.Add("Id sản phẩm không thể để trống");
-            }
-
-            if (!(IdLoaiSP >= 0))
-            {
-                errors.Add("Id loại sản phẩm không thể để trống");
             }
 
             if (!(Ten != null && Ten != ""))
@@ -56,7 +48,7 @@ namespace AdminASP.Models
                 errors.Add("Điểm tích lũy không thể để trống");
             }
 
-            if (!(Description != null && Description != ""))
+            if (!(GhiChu != null && GhiChu != ""))
             {
                 errors.Add("Ghi chú không thể để trống");
             }

@@ -198,7 +198,6 @@ C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\bin\Deb
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\bin\Debug\netcoreapp3.1\System.Xml.XPath.XmlDocument.dll
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.csprojAssemblyReference.cache
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.csproj.CoreCompileInputs.cache
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.RazorAssemblyInfo.cache
@@ -212,8 +211,8 @@ C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Deb
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Quanlyhoadon.cshtml.g.cs
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Quanlykhachhang.cshtml.g.cs
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Quanlykhuyenmai.cshtml.g.cs
-C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Quanlyloaisanpham.cshtml.g.cs
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Quanlynhanvien.cshtml.g.cs
+C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Quanlysanpham.cshtml.g.cs
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Quanlytaikhoan.cshtml.g.cs
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Tongquat.cshtml.g.cs
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Ban\Add.cshtml.g.cs
@@ -283,3 +282,4 @@ C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Deb
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.dll
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.pdb
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.genruntimeconfig.cache
+C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.csprojAssemblyReference.cache

@@ -11,9 +11,6 @@ namespace AdminASP.Models
         private int idsanpham;
         public int IdSanPham { get { return this.idsanpham; } set { this.idsanpham = value; } }
 
-        private int idloaisp;
-        public int IdLoaiSP { get { return this.idloaisp; } set { this.idloaisp = value; } }
-
         private String ten;
         public String Ten { get { return this.ten; } set { this.ten = value; } }
 
@@ -30,9 +27,6 @@ namespace AdminASP.Models
         private int oldidsanpham;
         public int OldIdSanPham { get { return this.oldidsanpham; } set { this.oldidsanpham = value; } }
 
-        private int oldidloaisp;
-        public int OldIdLoaiSP { get { return this.oldidloaisp; } set { this.oldidloaisp = value; } }
-
         public List<String> GetValidate()
         {
             List<String> errors = new List<String>();
@@ -41,11 +35,6 @@ namespace AdminASP.Models
             if (!(IdSanPham >= 0))
             {
                 errors.Add("Id sản phẩm không thể để trống");
-            }
-
-            if (!(IdLoaiSP >= 0))
-            {
-                errors.Add("Id loại sản phẩm không thể để trống");
             }
 
             if (!(Ten != null && Ten != ""))
@@ -63,20 +52,9 @@ namespace AdminASP.Models
                 errors.Add("Điểm tích lũy không thể để trống");
             }
 
-            if (!(Description != null && Description != ""))
-            {
-                errors.Add("Ghi chú không thể để trống");
-            }
-
-
             if (!(OldIdSanPham >= 0))
             {
                 errors.Add("Id sản phẩm cũ không thể để trống");
-            }
-
-            if (!(OldIdLoaiSP >= 0))
-            {
-                errors.Add("Id loại sản phẩm cũ không thể để trống");
             }
 
             return errors;

@@ -45,6 +45,8 @@ $(document).ready(function () {
     $("#xoaDanhDau").click(function () {
         $(".custom-toggle-button").filter((index, toggleButton) => getToggleStatus(toggleButton)).each((index, element) => deleteTableQLBanRow($(element)));
     });
+
+    //DELETE ALL
     $("#xoaTatCa").click(function () {
         $.post("/Ban/DeleteAll", function (data) {
             //Lấy thông tin 
@@ -62,6 +64,8 @@ $(document).ready(function () {
     $("#lamMoi").click(function () {
         refreshDataTableQLBan();
     });
+
+    //THÊM
     $("#modelThemBan").find("#themBanConfirm").click(function () {
         //Xóa hết alert cũ
         $("#modelThemBan").find("#themBanAlerts").html("");
@@ -105,10 +109,11 @@ $(document).ready(function () {
         setModelThemBan({});
     });
 
+
+    //SỬA
     $("#modelSuaBan").find("#suaBanConfirm").click(function () {
         //Xóa hết alert cũ
         $("#modelSuaBan").find("#suaBanAlerts").html("");        
-
         //Validate
         let modifyBan = extractModelSuaBan();
         let numberValidateError = validateBanInformation($("#modelSuaBan").find("#suaBanAlerts"), modifyBan);
@@ -177,7 +182,7 @@ let extractDataFromTableQLBanRow = (tableRow) => {
 
 let refreshDataTableQLBan = () => {
     $("#tableQuanLyBanAlert").empty();
-    //Thêm option khachhangs
+    //Thêm option ban
     $("#modelThemBan").find("#themBanTrangThai").html("");
     $("#modelSuaBan").find("#suaBanTrangThai").html("");
     for (let i=0; i<trangThaiBans.length; i+=1) {
@@ -188,11 +193,12 @@ let refreshDataTableQLBan = () => {
 
     tableQuanLyBan.clear();
 
+    //GET ALL
     $.post("/Ban/GetAll", function (data) {
         //Lấy thông tin tài khoản
         let inputJson = data;
-        inputJson = inputJson.replace(/IdBan/g, `id_ban`);;
-        inputJson = inputJson.replace(/Ten/g, `ten`);;
+        inputJson = inputJson.replace(/IdBan/g, `id_ban`);
+        inputJson = inputJson.replace(/Ten/g, `ten`);
         let outputs = JSON.parse(inputJson);
 
         //Thêm vào bảng
@@ -209,15 +215,13 @@ let refreshDataTableQLBan = () => {
         })
         .always(function () {
         });
-
-
 };
 
+// XÓA 1 DÒNG
 const deleteTableQLBanRow = (buttonInside) => {
     let tableRow = $(buttonInside).parents("tr");
     let ban = extractDataFromTableQLBanRow(tableRow);
-    ban = extractDataFromTableQLBanRow(tableRow);
-    ban = extractDataFromTableQLBanRow(tableRow);
+
     $.post("/Ban/Delete", { IdBan: ban.id_ban }, function (data) {
         //Lấy thông tin 
         let inputJson = data;
@@ -226,7 +230,7 @@ const deleteTableQLBanRow = (buttonInside) => {
 
         //Xóa khỏi bảng
         if (outputs.output >= 0) {
-            //$("#modelXoaBan").find(".close").trigger("click");
+
             alert("Xóa thành công");
             refreshDataTableQLBan();
         }

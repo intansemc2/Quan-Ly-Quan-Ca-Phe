@@ -108,6 +108,11 @@ namespace AdminASP.Models
                 conn = this.GenerateNewConnection().MySqlConnection;
             }
 
+            if (model == null)
+            {
+                return false;
+            }
+
             conn.Open();
 
             int numberAccountsMatch = 0;

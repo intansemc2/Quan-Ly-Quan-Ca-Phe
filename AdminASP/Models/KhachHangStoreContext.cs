@@ -76,10 +76,9 @@ namespace AdminASP.Models
         {
             KhachHang oldcurrentModel = (KhachHang)oldmodel;
             KhachHang newcurrentModel = (KhachHang)newmodel;
-            String query = "UPDATE khach_hang SET ID_KHACH_HANG = @ID_KHACH_HANG,TEN = @TEN,SDT = @SDT,ID_TAI_KHOAN = @ID_TAI_KHOAN,DIEM_TICH_LUY = @DIEM_TICH_LUY WHERE  khach_hang.ID_KHACH_HANG = @OLD_ID_KHACH_HANG ";
+            String query = "UPDATE khach_hang SET TEN = @TEN,SDT = @SDT,ID_TAI_KHOAN = @ID_TAI_KHOAN,DIEM_TICH_LUY = @DIEM_TICH_LUY WHERE  khach_hang.ID_KHACH_HANG = @OLD_ID_KHACH_HANG ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
-            mySqlCommand.Parameters.AddWithValue("ID_KHACH_HANG", newcurrentModel.IdKhachHang);
             mySqlCommand.Parameters.AddWithValue("TEN", newcurrentModel.Ten);
             mySqlCommand.Parameters.AddWithValue("SDT", newcurrentModel.Sdt);
             mySqlCommand.Parameters.AddWithValue("ID_TAI_KHOAN", newcurrentModel.IdTaiKhoan);

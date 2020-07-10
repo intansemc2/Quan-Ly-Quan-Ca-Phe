@@ -33,6 +33,8 @@ namespace AdminASP.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
+            TaiKhoan taiKhoan = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+            ViewData["Username"] = taiKhoan.Username;
             return View();
         }
 
@@ -43,6 +45,8 @@ namespace AdminASP.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
+            TaiKhoan taiKhoan = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+            ViewData["Username"] = taiKhoan.Username;
             return View();
         }
 
@@ -53,6 +57,8 @@ namespace AdminASP.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
+            TaiKhoan taiKhoan = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+            ViewData["Username"] = taiKhoan.Username;
             return View();
         }
 
@@ -63,6 +69,8 @@ namespace AdminASP.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
+            TaiKhoan taiKhoan = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+            ViewData["Username"] = taiKhoan.Username;
             return View();
         }
 
@@ -73,6 +81,8 @@ namespace AdminASP.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
+            TaiKhoan taiKhoan = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+            ViewData["Username"] = taiKhoan.Username;
             return View();
         }
 
@@ -83,6 +93,8 @@ namespace AdminASP.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
+            TaiKhoan taiKhoan = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+            ViewData["Username"] = taiKhoan.Username;
             return View();
         }
 
@@ -93,6 +105,8 @@ namespace AdminASP.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
+            TaiKhoan taiKhoan = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+            ViewData["Username"] = taiKhoan.Username;
             return View();
         }
 

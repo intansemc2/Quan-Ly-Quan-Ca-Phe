@@ -12,17 +12,19 @@ namespace AdminASP.Controllers
 {
     public class SanPhamController : Controller
     {
-        public IActionResult GetAll()
+        public String GetAll()
         {
+            if (!(CheckPermission.CheckStaff(this))) { return ""; }
+            
             SanPhamStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(SanPhamStoreContext)) as SanPhamStoreContext;
             List<BaseModel> baseModels = modelStoreContext.GetAll();
-            List<SanPham> thisModels = new List<SanPham>();
+            List<SanPham> outputs = new List<SanPham>();
             foreach (BaseModel baseModel in baseModels)
             {
-                thisModels.Add(baseModel as SanPham);
+                outputs.Add(baseModel as SanPham);
             }
-            ViewData["inputs"] = thisModels;
-            return View();
+            
+            return JsonConvert.SerializeObject(outputs);
         }
 
         public IActionResult Add(FormSanPhamAddInput input)

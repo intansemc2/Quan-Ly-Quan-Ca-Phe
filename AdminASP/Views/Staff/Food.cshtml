@@ -1,0 +1,163 @@
+@{ Layout = "_Layout_MainStaff"; }
+
+@{ ViewData["Title"] = "Bàn "; }
+
+@section stylesheets {
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="~/css/staff-food.css">
+}
+
+@section navbar {
+    <!-- Navbar -->
+}
+
+@section sidebar {
+    <!-- Sidebar -->
+    @{ ViewData["staffSidebarActive"] = "Table"; }
+    @await Html.PartialAsync("_Item_Staff_Sidebar")
+}
+
+@{ List<SanPham> sanphams = ViewData["Sanphams"] as List<SanPham>;
+    List<CartItem> cart = ViewData["Cart"] as List<CartItem>;
+    List<KhachHang> khachhangs = ViewData["Khachhangs"] as List<KhachHang>;
+    int IdBan = Convert.ToInt32(ViewData["IdBan"] as String); }
+
+@section mainContent {
+    <button class="btn btn-outline-info btn-sm order-1 order-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+    <br>
+    <h1 class="text-info" id="IdBan" IdBan="@ViewData["IdBan"]" IdNhanVien="@ViewData["IdNhanVien"]">Thông tin bàn số @ViewData["IdBan"]</h1>
+    <br>
+
+    <!-- Model thêm sản phẩm -->
+    <div class="modal fade" id="modelThemSanPham" tabindex="-1" role="dialog" aria-labelledby="Model aria-labelledby" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm sản phẩm</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="small mb-1" for="themSanPhamIdSanPham">Sản phẩm</label>
+                        <select class="form-control" id="themSanPhamIdSanPham">
+                            @{ foreach (SanPham modelSanPham in sanphams)
+                                {
+                <option value="@modelSanPham.IdSanPham">@modelSanPham.Ten</option> } }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="themSanPhamSoLuong">Số lượng sản phẩm</label>
+                        <input class="form-control" id="themSanPhamSoLuong" type="number" min="1" step="1" value="1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-outline-info" id="themSanPhamConfirm" type="button" value="Thêm">
+                    <input class="btn btn-outline-secondary" id="themSanPhamReset" type="reset" value="Cài lại">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Sản phẩm -->
+        <div class="col-8">
+            <!-- Hiển thị danh sách sản phẩm -->
+            <div class="danhsach-sanpham">
+                @{ foreach (CartItem cartItem in cart)
+                    {
+                        SanPham modelSanPham = sanphams.Find(item => item.IdSanPham == cartItem.IdSanPham);
+
+    <div class="card card-sanpham" IdSanPham="@modelSanPham.IdSanPham">
+        <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+                <h5 class="card-title">@modelSanPham.Ten</h5>
+                <p class="card-text">@modelSanPham.GhiChu</p>
+            </div>
+            <div>
+                <small class="Gia" data="@modelSanPham.Gia"></small>
+                &nbsp;
+                <small class="DiemTichLuy" data="@modelSanPham.DiemTichLuy"></small>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+            <span>
+                <button class="tangSanPham" >+</button>
+                <span class="soSanPham" >@cartItem.SoLuong</span>
+                <button class="giamSanPham" >-</button>
+            </span>
+            <span>
+                <button class="xoaSanPham" >&times;</button>
+            </span>
+        </div>
+    </div> } }
+            </div>
+        </div>
+
+        <!-- Giỏ hàng -->
+        <div class="col-4 d-flex flex-column">
+            <div class="card m-1">
+                <div class="card-header">Sản phẩm</div>
+                <div class="card-body">
+                    <button class="btn btn-outline-info" id="themSanPham" data-toggle="modal" data-target="#modelThemSanPham">Thêm sản phẩm</button>
+                    <button class="btn btn-outline-secondary" id="xoaTatCa">Xóa tất cả</button>
+                    <button class="btn btn-outline-secondary" id="lamMoi">Làm mới</button>
+                </div>
+            </div>
+
+            <div class="card m-1">
+                <div class="card-header">Thông tin khách hàng</div>
+                <div class="card-body">
+                    <select class="form-control" id="selectKhachHang">
+                        <option value="" selected>Không có thông tin</option>
+                        @{ foreach (KhachHang modelKhachHang in khachhangs)
+                            {
+            <option value="@modelKhachHang.IdKhachHang" DiemTichLuy="@modelKhachHang.DiemTichLuy" Ten="@modelKhachHang.Ten" Sdt="@modelKhachHang.Sdt" IdTaiKhoan="@modelKhachHang.IdTaiKhoan">@modelKhachHang.Ten</option> } }
+                    </select>
+                    <form class="d-none" id="selectKhachHangDiemDoi">
+                        <div class="form-group">
+                            <label for="soDiemDoi">Điểm đổi</label>
+                            <input class="form-control" id="soDiemDoi" type="number" value="0" max="0" min="0" step="0" />
+                        </div>
+                        <div class="form-group">
+                            <label for="tyGia">Tỷ giá quy đổi</label>
+                            <input class="form-control" id="tyGia" type="number" value="0" min="0" step="1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="tichLuy">Phần trăm tích lũy</label>
+                            <input class="form-control" id="tichLuy" type="number" value="0" max="1" min="0" step="0.000001" />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control btn btn-outline-secondary" id="resetKhachHangInfo" type="button" value="Cài lại" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card m-1">
+                <div class="card-header">Tổng quát</div>
+                <div class="card-body">
+                    <table align="center" border="0" celspacing="10" cellpadding="10">
+                        <tr><td>Tổng tiền sản phẩm</td><td><span id="tongTienSanPham" data="0"></span></td></tr>
+                        <tr><td>Tổng tiền Chuyển đổi từ điểm thưởng</td><td><span id="tongTienChuyenDoi" data="0"></span></td></tr>
+                        <tr><td colspan="2"><hr></td></tr>
+                        <tr><td>Tổng tiền Cần thanh toán</td><td><span id="tongTienCanThanhToan" data="0"></span></td></tr>
+                        <tr><td>Điểm tích lũy</td><td><span id="diemTichLuyHoaDon" data="0"></span></td></tr>
+                        <tr><td><button class="btn btn-outline-info" id="thanhToan">Thanh toán</button></td><td>&nbsp;</td></tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
+    <script type="text/javascript" src="~/js/convert-thoi-gian.js"></script>
+    <script type="text/javascript" src="~/js/staff-food.js"></script>
+}

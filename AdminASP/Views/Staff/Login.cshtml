@@ -1,0 +1,67 @@
+@{
+    Layout = "_Layout_Main";
+}
+
+@{
+    ViewData["Title"] = "Quán Coffee";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
+	<link rel="stylesheet" type="text/css" href="~/css/style-login.css">
+}
+
+@section content {
+    @{
+        List<String> errors = ViewData["errors"] as List<String>;
+        if (errors != null && errors.Count > 0)
+        {
+            //Làm gì đó với lỗi mà chưa biết 
+        }
+    }
+
+    @{
+        FormLoginInput input = ViewData["input"] as FormLoginInput;
+        if (input == null)
+        {
+            input = new FormLoginInput();
+        }
+    }
+    
+    <!-- Main Content -->
+    <img class="wave" src="~/img/wave.png">
+    <img class="wave2" src="~/img/wave2.png">
+
+    <div class="container">
+        <div class="login-content">
+            <form action="/Staff/Login" method="POST">
+                <h2 class="title">Xin chào</h2>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Tên đăng nhập</h5>
+                        <input type="text" class="input" name="Username" value="@input.Username">
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i"> 
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Mật khẩu</h5>
+                        <input type="password" class="input" name="Password" value="@input.Password">
+                    </div>
+                </div>
+                <a href="#">Quên mật khẩu rồi? Liên hệ với Admin đi :))</a>
+                <input type="submit" class="btn" value="Đăng nhập">
+            </form>
+        </div>
+    </div>
+}
+
+@section javascripts {
+    <!-- Javascripts -->
+    <script type="text/javascript" src="~/js/main-login.js"></script>
+}

@@ -1,0 +1,47 @@
+@{
+    Layout = "_Layout_Main";
+}
+
+@section stylesheets {
+    <!-- Optional Stylesheets-->
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="~/liblaries/bootstrap.min.css">
+    <!-- Custom Stylesheets-->
+    <link rel="stylesheet" href="~/css/main.css">
+    <link rel="stylesheet" href="~/css/main-staff.css">
+    @RenderSection("stylesheets", required: false)
+}
+
+@section content {
+    <div class="sb-nav-fixed">
+        <!-- Start Navbar chính-->
+        @RenderSection("navbar", required: false)
+        <!-- End Navbar chính-->
+        <!-- Start Sidebar chính-->
+        @RenderSection("sidebar", required: false)
+        <!-- End Sidebar chính-->
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+                    @RenderSection("mainContent", required: true)
+                </div>
+            </main>
+            <!-- Footer của content-->
+            <footer class="py-4 text-white bg-light mt-auto">
+                @RenderSection("footer", required: true)
+            </footer>
+        </div>
+    </div>
+}
+
+@section javascripts {
+    <!-- Optional JavaScript-->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS-->
+    <script type="text/javascript" src="~/liblaries/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/liblaries/bootstrap.bundle.min.js"></script>
+    <!-- Fontawesome-->
+    <script type="text/javascript" src="~/liblaries/fontawesome-all.min.js"></script>
+    <!-- Custom JavaScript-->
+    <script type="text/javascript" src="~/js/main.js"></script>
+    @RenderSection("javascripts", required: false)
+}

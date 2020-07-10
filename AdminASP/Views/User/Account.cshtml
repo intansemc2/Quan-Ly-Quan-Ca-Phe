@@ -1,0 +1,231 @@
+@{
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cafeteria</title>
+
+    <link rel="stylesheet" href="~/css/all.css">
+    <link rel="stylesheet" href="~/css/aos.css">
+    <link rel="stylesheet" href="~/css/Style.css">
+    <link rel="stylesheet" href="~/css/Style-menu.css">
+
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="nav-menu flex-row">
+            <div class="nav-brand">
+                <a href="#" class="text-gray">Cafeteria</a>
+            </div>
+            <div class="toggle-collapse">
+                <div class="toggle-icons">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <div>
+                @await Html.PartialAsync("_Item_User_NavbarLink")
+            </div>
+        </div>
+    </nav>
+
+    <!-- <main>
+        <section class="site-title">
+            <div class="site-background" data-aos="fade-up" data-aos-delay="100">
+                <h3>Drinks & coffee</h3>
+                <h1>Welcome to cafeteria</h1>
+                <a href="javascript:" class="btn-upl-food" onclick="hien()"><button class="btn">Book</button></a>
+            </div>
+        </section>
+    </main> -->
+
+    <!--  -->
+    <main>
+        <div class="container">
+    <div class="content">
+        <div class="main-width">
+            <section>
+                <div class="layouts-login">
+                    <div class="left">
+                        <h3>Thông tin tài khoản</h3>
+                        <hr/>
+                        <section id="registerForm" class="hh-form">
+                            <form action="" class="form-horizontal" method="post" role="form">
+                                <input type="hidden" >
+                                <div class="form-label-row">
+                                    <label class="form-label">
+                                        Tài khoản đăng nhập
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input">
+                                        <input type="text" name="Username" id="Username" placeholder="Tài khoản đăng nhập">
+                                    </div>
+                                </div>
+                                <div class="form-label-row">
+                                    <label class="form-label">
+                                        Mật khẩu
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input">
+                                        <input type="Password" name="Password" id="Password" placeholder="Mật khẩu">
+                                    </div>
+                                </div>
+                                <div class="form-label-row">
+                                    <label class="form-label">
+                                        Nhập lại mật khẩu
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input">
+                                        <input type="Password" name="RePassword" id="RePassword" placeholder="Nhập lại mật khẩu">
+                                    </div>
+                                </div>
+                                <div class="form-label-row">
+                                    <div class="form-label-row">
+                                        <label class="form-label"></label>
+                                        <div class="input no-border">
+                                            <button type="submit" class="btn btn-default" name="Submit" value="Xác nhận thay đổi">
+                                            Xác nhận thay đổi
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+                    <div class="right">
+                        <section class="regNote">
+                            <h3>Thông báo</h3>
+                            <hr>
+                            <p>
+                                Bạn cần lưu ý, các trường có dấu
+                                <span class="text-danger">
+                                    <strong>*</strong>
+                                </span>
+                                yêu cầu phải nhập.
+                            </p>
+                            @{
+                                List<String> errors = ViewData["errors"] as List<String>;
+                                if (errors == null) { errors = new List<String>(); }
+                                foreach (var error in errors)
+                                {
+                                    <p style="color: red;">Lỗi: @error</p>
+                                }
+                            }
+                            @{
+                                String output = ViewData["output"] as String;
+                                if (output != null) 
+                                {
+                                    if (output == "success")
+                                    {
+                                        <p style="color: green;">Sửa thành công</p>
+                                    } 
+                                    else if (output == "error")
+                                    {
+                                        <p style="color: red;">Sửa thất bại </p>
+                                    } 
+                                }
+                            }
+                            <a href="/User/Logout">Đăng xuất </a>&nbsp;<a href="/User/DeleteAccount">Xóa tài khoản này </a>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    </div>
+    </main>
+    <!--  -->
+
+    @await Html.PartialAsync("_Item_User_Footer")
+
+    <!--                      Modal                               -->
+
+    <div id="upl-food" class="frame-upl-food" style="z-index: 2072;">
+      <div class="modal">
+        <span class="text-box">Đặt bàn</span>
+        <div class="out-add-cus">
+          <h3>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="an()">×</button>
+          </h3>
+        </div>
+
+        <div class="body-box">
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Tên đăng ký
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Số điện thoại
+              </span>
+              </label>
+            </div>
+            <div class="input-cus3">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themChiTietDatBanNgayThangLap">Ngày tháng lập </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themChiTietDatBanNgayThangLap" type="date" placeholder="Nhập thời gian lập">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themChiTietDatBanThoiGianLap">Thời gian lập </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themChiTietDatBanThoiGianLap" type="time" step="1" placeholder="Nhập thời gian lập">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="input-cus3">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themChiTietDatBanNgayThangLap">Ngày tháng nhận </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themChiTietDatBanNgayThangLap" type="date" placeholder="Nhập thời gian lập">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themChiTietDatBanThoiGianLap">Thời gian nhận </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themChiTietDatBanThoiGianLap" type="time" step="1" placeholder="Nhập thời gian lập">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-cus4">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Ghi chú
+              </span>
+              </label>
+            </div>
+
+
+
+            <a href="" class="btn-box-add-cus"><i class="fas fa-check"></i>Xác nhận</a>
+            <a  class="btn-box-canl-cus" onClick="an()"><i class="fas fa-times" ></i>Huỷ bỏ</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="~/js/Jquery3.4.1.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/aos.js"></script>
+    <script src="~/js/main.js"></script>
+</body>
+</html>

@@ -29,7 +29,7 @@ namespace AdminASP.Controllers
 
         public String Add(FormCthdAddInput input)
         {
-            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+            if (!(CheckPermission.CheckStaff(this))) { return ""; }
 
             int output = 0;
             Cthd newCthd = null;

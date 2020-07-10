@@ -29,7 +29,7 @@ namespace AdminASP.Controllers
 
         public String Add(FormHoaDonAddInput input)
         {
-            if (!(CheckPermission.CheckAdmin(this))) { return ""; }
+            if (!(CheckPermission.CheckStaff(this))) { return ""; }
 
             int output = 0;
             HoaDon newHoaDon = null;

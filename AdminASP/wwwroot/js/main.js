@@ -1,42 +1,57 @@
-/*!
- * Start Bootstrap - SB Admin v6.0.0 (https://startbootstrap.com/templates/sb-admin)
- * Copyright 2013-2020 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-sb-admin/blob/master/LICENSE)
- */
-// (function($) {
-// "use strict";
+const responsive = {
+    0: {
+        items: 1
+    },
+    320: {
+        items: 1
+    },
+    560: {
+        items: 2
+    },
+    960: {
+        items: 3
+    }
+}
+
 $(document).ready(function () {
 
-//    // Add active state to sidbar nav links
-//    var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
-//    $("#layoutSidenav_nav .sb-sidenav a.nav-link").each(function () {
-//        if (this.href === path) {
-//            $(this).addClass("active");
-//        }
-//    });
+    $nav = $('.nav');
+    $toggleCollapse = $('.toggle-collapse');
 
-    // Toggle the side navigation
-    $("#sidebarToggle").on("click", function (e) {
-        e.preventDefault();
-        $("body").toggleClass("sb-sidenav-toggled");
-    });
+    /** click event on toggle menu */
+    $toggleCollapse.click(function () {
+        $nav.toggleClass('collapse');
+    })
 
-    // toggle-checked-button
-    $(".toggle-checked-button").hover(function () {
-        if ($(this).hasClass("btn-outline-info")) {
-            $(this).removeClass("btn-outline-info");
-            $(this).addClass("btn-outline-success");
-        } else {
-            $(this).removeClass("btn-outline-success");
-            $(this).addClass("btn-outline-info");
-        }
+    // owl-crousel for blog
+    $('.owl-carousel').owlCarousel({
+        loop: true,
+        autoplay: false,
+        autoplayTimeout: 3000,
+        dots: false,
+        nav: true,
+        navText: [$('.owl-navigation .owl-nav-prev'), $('.owl-navigation .owl-nav-next')],
+        responsive: responsive
     });
 
-    $(".modal").on("hidden.bs.modal", function () {
-        $('.modal').css('overflow-y', 'auto');
-    });
-    $(".modal").on("shown.bs.modal", function () {
-        $('.modal').css('overflow-y', 'auto');
-    });
+
+    // click to scroll top
+    $('.move-up span').click(function () {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 1000);
+    })
+
+    // AOS Instance
+    AOS.init();
+
 });
-// })(jQuery);
+
+
+function hien(){
+    document.getElementById("upl-food").style.display = 'inline';
+}
+
+function an(){
+    document.getElementById("upl-food").style.display = 'none';
+}

@@ -1,0 +1,47 @@
+@{
+    Layout = "_Layout_MainStaff";
+}
+
+@{
+    ViewData["Title"] = "Bàn ";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="~/css/staff-table.css">
+}
+
+@section navbar {
+    <!-- Navbar -->
+}
+
+@section sidebar {
+    <!-- Sidebar -->
+    @{
+        ViewData["staffSidebarActive"] = "Table";
+    }
+    @await Html.PartialAsync("_Item_Staff_Sidebar")
+}
+
+@section mainContent {
+    <button class="btn btn-outline-info btn-sm order-1 order-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+    <br>
+    <div class="row">
+        @{
+            //Hiển thị danh sách bàn 
+            List<Ban> bans = ViewData["Bans"] as List<Ban>;
+              foreach (Ban ban in bans)
+              {
+                  <a href="/Staff/Food/@ban.IdBan" class="btn btn-outline-info w-30 staff-table">@ban.Ten</a>
+              }
+          }
+    </div>
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
+}

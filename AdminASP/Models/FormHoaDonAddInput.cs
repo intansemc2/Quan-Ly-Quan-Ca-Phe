@@ -44,45 +44,45 @@ namespace AdminASP.Models
             List<String> errors = new List<String>();
 
 
-            if (!(IdHoaDon >= 0))
-            {
-                errors.Add("Id hóa đơn không thể để trống");
-            }
+            //if (!(IdHoaDon >= 0))
+            //{
+            //    errors.Add("Id hóa đơn không thể để trống");
+            //}
 
-            if (!(IdKhachHang >= 0))
-            {
-                errors.Add("Id khách hàng không thể để trống");
-            }
+            //if (!(IdKhachHang >= 0))
+            //{
+            //    errors.Add("Id khách hàng không thể để trống");
+            //}
 
-            if (!(IdBan >= 0))
-            {
-                errors.Add("Id bàn không thể để trống");
-            }
+            //if (!(IdBan >= 0))
+            //{
+            //    errors.Add("Id bàn không thể để trống");
+            //}
 
-            if (!(IdNhanVien >= 0))
-            {
-                errors.Add("Id nhân viên không thể để trống");
-            }
+            //if (!(IdNhanVien >= 0))
+            //{
+            //    errors.Add("Id nhân viên không thể để trống");
+            //}
 
-            if (!(ThoiGIanLap != null && ThoiGIanLap != ""))
-            {
-                errors.Add("Thời gian không thể để trống");
-            }
+            //if (!(ThoiGIanLap != null && ThoiGIanLap != ""))
+            //{
+            //    errors.Add("Thời gian không thể để trống");
+            //}
 
-            if (!(PhanTramTichLuy >= 0))
-            {
-                errors.Add("Phần trăm tích lũy không thể để trống");
-            }
+            //if (!(PhanTramTichLuy >= 0))
+            //{
+            //    errors.Add("Phần trăm tích lũy không thể để trống");
+            //}
 
-            if (!(SoLuongDiemDoi >= 0))
-            {
-                errors.Add("Số lượng điểm đổi không thể để trống");
-            }
+            //if (!(SoLuongDiemDoi >= 0))
+            //{
+            //    errors.Add("Số lượng điểm đổi không thể để trống");
+            //}
 
-            if (!(TyGiaDiemDoi >= 0))
-            {
-                errors.Add("Tỷ giá quy đổi không thể để trống");
-            }
+            //if (!(TyGiaDiemDoi >= 0))
+            //{
+            //    errors.Add("Tỷ giá quy đổi không thể để trống");
+            //}
 
             return errors;
         }

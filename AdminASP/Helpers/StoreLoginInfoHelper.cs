@@ -3,6 +3,7 @@ using AdminASP.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Crypto.Engines;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,7 @@ namespace AdminASP.Models
             }
             else if (checkTaiKhoanSession == false && checkTaiKhoanCookie)
             {
-                StoreLoginInfoHelper.StoreLoginInSession(controller.HttpContext.Session, taiKhoanSession);
+                StoreLoginInfoHelper.StoreLoginInSession(controller.HttpContext.Session, taiKhoanCookie);
                 return true;
             }
             else

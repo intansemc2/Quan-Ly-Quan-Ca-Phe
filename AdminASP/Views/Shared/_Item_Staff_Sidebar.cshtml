@@ -1,0 +1,35 @@
+﻿@{ String staffSidebarActive = ViewData["staffSidebarActive"] as String; }
+
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-light text-light bg-info" id="sidenavAccordion">
+            <!-- Menu của sidebar-->
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading text-white">Nội dung chính</div>
+                    <a class="nav-link @if (staffSidebarActive == "Home") @("active")" href="/Staff/Home">
+                        <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>Tổng quan
+                    </a>
+                    <a class="nav-link @if (staffSidebarActive == "Table") @("active")" href="/Staff/Table">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>Bàn
+                    </a>
+                    <a class="nav-link @if (staffSidebarActive == "History") @("active")" href="/Staff/History">
+                        <div class="sb-nav-link-icon"><i class="fas fa-history"></i></div>Lịch sử giao dịch
+                    </a>
+                    <a class="nav-link @if (staffSidebarActive == "Graph") @("active")" href="/Staff/Graph">
+                        <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>Biểu đồ thu nhập
+                    </a>
+                    <a class="nav-link @if (staffSidebarActive == "Info") @("active")" href="/Info/Index">
+                        <div class="sb-nav-link-icon"><i class="far fa-envelope"></i></div>Liên hệ
+                    </a>
+                    <a class="nav-link @if (staffSidebarActive == "Logout") @("active")" href="/Staff/Logout">
+                        <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>Đăng xuất
+                    </a>
+                </div>
+            </div>
+            <!-- Thông tin người dùng đăng nhập-->
+            <div class="sb-sidenav-footer text-light bg-info">
+                <div class="small">Bạn đã đăng nhập bằng tài khoản:</div>@ViewData["Username"]
+            </div>
+        </nav>
+    </div>

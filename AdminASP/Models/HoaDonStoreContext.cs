@@ -116,9 +116,9 @@ namespace AdminASP.Models
             if (currentModel.IdNhanVien >= 0) query += " AND hoa_don.ID_NHAN_VIEN = @ID_NHAN_VIEN ";
             if (currentModel.ThoiGianLap != null) query += " AND hoa_don.THOI_GIAN_LAP = @THOI_GIAN_LAP ";
             if (currentModel.ThoiGianThanhToan != null) query += " AND hoa_don.THOI_GIAN_THANH_TOAN = @THOI_GIAN_THANH_TOAN ";
-            if (currentModel.PhanTramTichLuy >= 0) query += " AND hoa_don.PHAN_TRAM_TICH_LUY = @PHAN_TRAM_TICH_LUY ";
+            //if (currentModel.PhanTramTichLuy >= 0) query += " AND hoa_don.PHAN_TRAM_TICH_LUY = @PHAN_TRAM_TICH_LUY ";
             if (currentModel.SoLuongDiemDoi >= 0) query += " AND hoa_don.SO_LUONG_DIEM_DOI = @SO_LUONG_DIEM_DOI ";
-            if (currentModel.TyGiaDiemDoi >= 0) query += " AND hoa_don.TY_GIA_DIEM_DOI = @TY_GIA_DIEM_DOI ";
+            //if (currentModel.TyGiaDiemDoi >= 0) query += " AND hoa_don.TY_GIA_DIEM_DOI = @TY_GIA_DIEM_DOI ";
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdHoaDon >= 0) mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", currentModel.IdHoaDon);
@@ -127,9 +127,9 @@ namespace AdminASP.Models
             if (currentModel.IdNhanVien >= 0) mySqlCommand.Parameters.AddWithValue("ID_NHAN_VIEN", currentModel.IdNhanVien);
             if (currentModel.ThoiGianLap != null) mySqlCommand.Parameters.AddWithValue("THOI_GIAN_LAP", currentModel.ThoiGianLap);
             if (currentModel.ThoiGianThanhToan != null) mySqlCommand.Parameters.AddWithValue("THOI_GIAN_THANH_TOAN", currentModel.ThoiGianThanhToan);
-            if (currentModel.PhanTramTichLuy >= 0) mySqlCommand.Parameters.AddWithValue("PHAN_TRAM_TICH_LUY", currentModel.PhanTramTichLuy);
+            //if (currentModel.PhanTramTichLuy >= 0) mySqlCommand.Parameters.AddWithValue("PHAN_TRAM_TICH_LUY", currentModel.PhanTramTichLuy);
             if (currentModel.SoLuongDiemDoi >= 0) mySqlCommand.Parameters.AddWithValue("SO_LUONG_DIEM_DOI", currentModel.SoLuongDiemDoi);
-            if (currentModel.TyGiaDiemDoi >= 0) mySqlCommand.Parameters.AddWithValue("TY_GIA_DIEM_DOI", currentModel.TyGiaDiemDoi);
+            //if (currentModel.TyGiaDiemDoi >= 0) mySqlCommand.Parameters.AddWithValue("TY_GIA_DIEM_DOI", currentModel.TyGiaDiemDoi);
 
             return mySqlCommand;
         }

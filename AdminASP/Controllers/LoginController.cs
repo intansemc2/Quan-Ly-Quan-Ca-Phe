@@ -63,15 +63,15 @@ namespace AdminASP.Controllers
 
                         if (taiKhoan.Type == TaiKhoan.TAI_KHOAN_ADMIN)
                         {
-                            return RedirectToAction("Index", "Admin");
+                            return RedirectToAction("Index", "Home");
                         }
                         else if (taiKhoan.Type == TaiKhoan.TAI_KHOAN_STAFF)
                         {
-                            return RedirectToAction("Index", "Staff");
+                            return RedirectToAction("Index", "Home");
                         }
                         else
                         {
-                            return RedirectToAction("Index", "User");
+                            return RedirectToAction("Index", "Home");
                         }
                     }
                 }

@@ -1,0 +1,206 @@
+@{
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cafeteria</title>
+
+    <link rel="stylesheet" href="~/css/all.css">
+    <link rel="stylesheet" href="~/css/aos.css">
+    <link rel="stylesheet" href="~/css/Style.css">
+    <link rel="stylesheet" href="~/css/Style-menu.css">
+
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="nav-menu flex-row">
+            <div class="nav-brand">
+                <a href="#" class="text-gray">Cafeteria</a>
+            </div>
+            <div class="toggle-collapse">
+                <div class="toggle-icons">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <div>
+                @await Html.PartialAsync("_Item_User_NavbarLink")
+            </div>
+        </div>
+    </nav>
+
+    <!-- <main>
+        <section class="site-title">
+            <div class="site-background" data-aos="fade-up" data-aos-delay="100">
+                <h3>Drinks & coffee</h3>
+                <h1>Welcome to cafeteria</h1>
+                <a href="javascript:" class="btn-upl-food" onclick="hien()"><button class="btn">Book</button></a>
+            </div>
+        </section>
+    </main> -->
+
+    <!--  -->
+    <main>
+        <div class="container">
+            <div class="heading">Lịch sử giao dịch</div>
+            <div class="table-cus">
+                <table id="table">
+                  <thead>
+                    <tr>
+                        <th>ID Hoá đơn</th>
+                        <th>Bàn</th>
+                        <th>Nhân viên</th>
+                        <th>Thời gian</th>
+                        <th>Số điểm quy đổi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>Nhân Viên 1</td>
+                        <td>08-07-2020</td>
+                        <td>609</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>Nhân Viên 1</td>
+                        <td>08-07-2020</td>
+                        <td>609</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>Nhân Viên 1</td>
+                        <td>08-07-2020</td>
+                        <td>609</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>Nhân Viên 1</td>
+                        <td>08-07-2020</td>
+                        <td>609</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>Nhân Viên 1</td>
+                        <td>08-07-2020</td>
+                        <td>609</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>Nhân Viên 1</td>
+                        <td>08-07-2020</td>
+                        <td>609</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>Nhân Viên 1</td>
+                        <td>08-07-2020</td>
+                        <td>609</td>
+                    </tr> 
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <!--  -->
+
+    @await Html.PartialAsync("_Item_User_Footer")
+
+    <!--                      Modal                               -->
+
+    <div id="upl-food" class="frame-upl-food" style="z-index: 2072;">
+      <div class="modal">
+        <span class="text-box">Đặt bàn</span>
+        <div class="out-add-cus">
+          <h3>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="an()">×</button>
+          </h3>
+        </div>
+
+        <div class="body-box">
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Tên đăng ký
+              </span>
+              </label>
+            </div>
+
+            <div class="input-cus2">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Số điện thoại
+              </span>
+              </label>
+            </div>
+            <div class="input-cus3">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themChiTietDatBanNgayThangLap">Ngày tháng lập </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themChiTietDatBanNgayThangLap" type="date" placeholder="Nhập thời gian lập">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themChiTietDatBanThoiGianLap">Thời gian lập </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themChiTietDatBanThoiGianLap" type="time" step="1" placeholder="Nhập thời gian lập">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="input-cus3">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themChiTietDatBanNgayThangLap">Ngày tháng nhận </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themChiTietDatBanNgayThangLap" type="date" placeholder="Nhập thời gian lập">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="small mb-1" for="themChiTietDatBanThoiGianLap">Thời gian nhận </label>
+                          <input class="form-control py-1 px-2 d-flex align-item-center thoi_gian_lap" id="themChiTietDatBanThoiGianLap" type="time" step="1" placeholder="Nhập thời gian lập">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-cus4">
+              <input type="text" name="full-name" required >
+              <label for="full-name">
+              <span>
+                  Ghi chú
+              </span>
+              </label>
+            </div>
+
+
+
+            <a href="" class="btn-box-add-cus"><i class="fas fa-check"></i>Xác nhận</a>
+            <a  class="btn-box-canl-cus" onClick="an()"><i class="fas fa-times" ></i>Huỷ bỏ</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="~/js/Jquery3.4.1.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/aos.js"></script>
+    <script src="~/js/main.js"></script>
+</body>
+</html>

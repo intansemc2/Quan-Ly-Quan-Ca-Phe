@@ -1,0 +1,10 @@
+.danhsach-sanpham {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.card-sanpham {
+    width: 250px;
+    margin: 5px;
+}

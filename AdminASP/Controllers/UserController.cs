@@ -23,24 +23,26 @@ namespace AdminASP.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
-            if (input != null && !input.IsSkip()) 
-            {
-                List<String> errors = input.GetValidate();
-                ViewData["errors"] = errors;
+            TaiKhoan taiKhoanSession = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+            ViewData["Username"] = taiKhoanSession.Username;
 
-                if (errors.Count <= 0) 
+            if (input != null && !input.IsSkip())
+            {
+                List<String> errors = input.GetValidate();                
+
+                if (errors.Count <= 0)
                 {
                     TaiKhoanStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
-                    TaiKhoan taiKhoanSession = StoreLoginInfoHelper.GetLoginInSession(controller.HttpContext.Session);
+                    
                     TaiKhoan oldTaiKhoan = new TaiKhoan()
                     {
-                        IdTaiKhoan = taiKhoanSession.IdTaiKhoan;
+                        IdTaiKhoan = taiKhoanSession.IdTaiKhoan
                     };
                     TaiKhoan newTaiKhoan = new TaiKhoan()
                     {
                         Username = input.Username,
-                        Password = input.Password,
-                        Type = TaiKhoan.TAI_KHOAN_USER;
+                        Password = PasswordHashHelper.ComputeSha256Hash(input.Password),
+                        Type = TaiKhoan.TAI_KHOAN_USER
                     };
                     int editResult = modelStoreContext.Edit(oldTaiKhoan, newTaiKhoan);
 
@@ -48,10 +50,12 @@ namespace AdminASP.Controllers
                     {
                         ViewData["output"] = "success";
                     }
-                    else {
+                    else
+                    {
                         ViewData["output"] = "fail";
                     }
                 }
+                ViewData["errors"] = errors;
             }
             return View();
         }
@@ -61,8 +65,65 @@ namespace AdminASP.Controllers
             return View();
         }
 
-        public IActionResult Infor()
+        public IActionResult Infor(FormUserInforInput input)
         {
+            if (!(CheckPermission.CheckUser(this)))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            TaiKhoan taiKhoanSession = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+            ViewData["Username"] = taiKhoanSession.Username;
+
+            if (input != null && !input.IsSkip())
+            {
+                List<String> errors = input.GetValidate();         
+                
+                if (PasswordHashHelper.ComputeSha256Hash(input.Password != null ? input.Password : "") != taiKhoanSession.Password)
+                {
+                    errors.Add("Mật khẩu không chính xác");
+                }
+
+                if (errors.Count <= 0)
+                {
+                    KhachHangStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(KhachHangStoreContext)) as KhachHangStoreContext;                    
+                    List<BaseModel> khachhangs = modelStoreContext.Find(new KhachHang() 
+                    { 
+                        IdTaiKhoan = taiKhoanSession.IdTaiKhoan,
+                        DiemTichLuy = -1,
+                        Sdt = null,
+                        IdKhachHang = -1,
+                        Ten = null
+                    });
+                    if (khachhangs.Count <= 0)
+                    {
+                        errors.Add("Khách hàng ứng với tài khoản không tồn tại");
+                    }
+                    else
+                    {
+                        KhachHang khachhang = khachhangs[0] as KhachHang;
+                        int editResult = modelStoreContext.Edit(
+                            new KhachHang() { IdKhachHang = khachhang.IdKhachHang },
+                            new KhachHang() 
+                            { 
+                                IdTaiKhoan = taiKhoanSession.IdTaiKhoan,
+                                Sdt = input.Sdt,
+                                Ten = input.Ten
+                            }
+                        );
+                        if (editResult > 0)
+                        {
+                            ViewData["output"] = "success";
+                        }
+                        else
+                        {
+                            ViewData["output"] = "fail";
+                        }
+                    }                 
+                }
+
+                ViewData["errors"] = errors;
+            }            
             return View();
         }
 
@@ -73,12 +134,12 @@ namespace AdminASP.Controllers
 
         public IActionResult DeleteAccount()
         {
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("DeleteAccount", "Login");
         }
 
         public IActionResult Logout()
         {
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("Logout", "Login");
         }
     }
 }

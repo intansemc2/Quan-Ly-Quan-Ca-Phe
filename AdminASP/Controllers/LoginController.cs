@@ -230,5 +230,38 @@ namespace AdminASP.Controllers
             StoreLoginInfoHelper.RemoveLoginInCookie(this.Response.Cookies);
             return RedirectToAction("Login", "Login");
         }
+
+        public IActionResult DeleteAccount()
+        {
+            if (StoreLoginInfoHelper.AutoLogin(this))
+            {
+                TaiKhoanStoreContext taiKhoanStoreContext = HttpContext.RequestServices.GetService(typeof(TaiKhoanStoreContext)) as TaiKhoanStoreContext;
+                //Lấy tài khoản trong session
+                TaiKhoan oldSessionModel = StoreLoginInfoHelper.GetLoginInSession(this.HttpContext.Session);
+                List<String> errors = new List<String>();
+                //Xóa
+                int deleteResult = taiKhoanStoreContext.Delete(new TaiKhoan()
+                {
+                    IdTaiKhoan = oldSessionModel.IdTaiKhoan
+                });
+
+                if (deleteResult <= 0)
+                {
+                    errors.Add("Không thể xóa tài khản");
+                }
+                else
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+                
+                //Đăng xuất
+                StoreLoginInfoHelper.RemoveLoginInSession(this.HttpContext.Session);
+                StoreLoginInfoHelper.RemoveLoginInCookie(this.Response.Cookies);
+
+                ViewData["errors"] = errors;
+                return View();
+            }
+            return RedirectToAction("Login", "Login");
+        }
     }
 }

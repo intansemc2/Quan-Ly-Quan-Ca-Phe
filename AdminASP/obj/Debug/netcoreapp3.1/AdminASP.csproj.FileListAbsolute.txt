@@ -283,3 +283,4 @@ C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Deb
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.pdb
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.genruntimeconfig.cache
 C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\AdminASP.csprojAssemblyReference.cache
+C:\Users\USER\Documents\Source\ASP Net Core\Quan-Ly-Quan-Ca-Phe\AdminASP\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Chitiethoadon.cshtml.g.cs

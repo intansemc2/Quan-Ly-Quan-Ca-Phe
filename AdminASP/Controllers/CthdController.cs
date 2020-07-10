@@ -12,12 +12,13 @@ namespace AdminASP.Controllers
 {
     public class CthdController : Controller
     {
-        public String GetAll()
+        [Route("/Cthd/GetAll/{IdHoaDon}")]
+        public String GetAll(String IdHoaDon)
         {
             if (!(CheckPermission.CheckStaff(this))) { return ""; }
 
             CthdStoreContext modelStoreContext = HttpContext.RequestServices.GetService(typeof(CthdStoreContext)) as CthdStoreContext;
-            List<BaseModel> baseModels = modelStoreContext.GetAll();
+            List<BaseModel> baseModels = modelStoreContext.GetAll(IdHoaDon);
             List<Cthd> outputs = new List<Cthd>();
             foreach (BaseModel baseModel in baseModels)
             {
@@ -42,8 +43,7 @@ namespace AdminASP.Controllers
                     IdHoaDon = input.IdHoaDon,
                     IdSanPham = input.IdSanPham,
                     SoLuong = input.SoLuong,
-                    DonGia = input.DonGia,
-                    DiemTichLuy = input.DiemTichLuy
+
                 };
                 int addResult = modelStoreContext.Add(newCthd);
 
@@ -72,8 +72,7 @@ namespace AdminASP.Controllers
                     IdHoaDon = input.IdHoaDon,
                     IdSanPham = input.IdSanPham,
                     SoLuong = input.SoLuong,
-                    DonGia = input.DonGia,
-                    DiemTichLuy = input.DiemTichLuy
+
                 };
                 int editResult = modelStoreContext.Edit(oldCthd, newCthd);
 

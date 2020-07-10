@@ -36,7 +36,6 @@ namespace AdminASP.Controllers
                     IdSanPham = input.IdSanPham,
                     Ten = input.Ten,
                     Gia = input.Gia,
-                    DiemTichLuy = input.DiemTichLuy,
                     GhiChu = input.GhiChu
                 });
 
@@ -57,7 +56,7 @@ namespace AdminASP.Controllers
                     IdSanPham = input.IdSanPham,
                     Ten = null,
                     Gia = -1,
-                    DiemTichLuy = -1,
+
                     GhiChu = null
                 };
                 SanPham newSanPham = new SanPham()
@@ -65,7 +64,7 @@ namespace AdminASP.Controllers
                     IdSanPham = input.IdSanPham,
                     Ten = input.Ten,
                     Gia = input.Gia,
-                    DiemTichLuy = input.DiemTichLuy,
+
                     GhiChu = input.Description
                 };
                 int editResult = modelStoreContext.Edit(oldSanPham, newSanPham);
@@ -88,7 +87,7 @@ namespace AdminASP.Controllers
                     IdSanPham = input.IdSanPham,
                     Ten = null,
                     Gia = -1,
-                    DiemTichLuy = -1,
+
                     GhiChu = null
                 };
                 int deleteResult = modelStoreContext.Delete(taiKhoan);

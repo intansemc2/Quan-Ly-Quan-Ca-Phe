@@ -19,19 +19,19 @@ namespace AdminASP.Models
         private int idNhanVien;
         public int IdNhanVien { get { return this.idNhanVien; } set { this.idNhanVien = value; } }
 
-        private String thoiGianLap;
-        public String ThoiGianLap { get { return this.thoiGianLap; } set { this.thoiGianLap = value; } }
+        private String thoiGian;
+        public String ThoiGian { get { return this.thoiGian; } set { this.thoiGian = value; } }
 
-        private String thoiGianThanhToan;
-        public String ThoiGianThanhToan { get { return this.thoiGianThanhToan; } set { this.thoiGianThanhToan = value; } }
+        private int tongTien;
+        public int TongTien { get { return this.tongTien; } set { this.tongTien = value; } }
 
-        private float phanTramTichLuy;
-        public float PhanTramTichLuy { get { return this.phanTramTichLuy; } set { this.phanTramTichLuy = value; } }
+        private int diemDoi;
+        public int DiemDoi { get { return this.diemDoi; } set { this.diemDoi = value; } }
 
-        private int soLuongDiemDoi;
-        public int SoLuongDiemDoi { get { return this.soLuongDiemDoi; } set { this.soLuongDiemDoi = value; } }
+        private int thanhToan;
+        public int ThanhToan { get { return this.thanhToan; } set { this.thanhToan = value; } }
 
-        private float tyGiaDiemDoi;
-        public float TyGiaDiemDoi { get { return this.tyGiaDiemDoi; } set { this.tyGiaDiemDoi = value; } }
+        private int diemTichLuy;
+        public int DiemTichLuy { get { return this.diemTichLuy; } set { this.diemTichLuy = value; } }
     }
 }

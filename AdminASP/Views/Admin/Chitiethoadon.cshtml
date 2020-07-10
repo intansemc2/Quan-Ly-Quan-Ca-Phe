@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "_Layout_MainAdmin";
+}
+
+@{
+    ViewData["Title"] = "Chi tiết hóa đon";
+    ViewData["mainTitle"] = "Chi tiết hóa đơn";
+}
+
+@section stylesheets {
+    <!-- Stylesheets -->
+    <!-- DataTable-->
+    <link rel="stylesheet" type="text/css" href="~/liblaries/datatables.min.css">
+}
+
+@section navbar {
+    <!-- Navbar -->
+
+}
+
+@section sidebar {
+    <!-- Sidebar -->
+
+}
+
+@section mainContent {
+    <!-- Breadcrumb đường dẫn đến trang -->
+    @{
+        List<Breadcrumb> breadcrumbs = new List<Breadcrumb>();
+        breadcrumbs.Add(new Breadcrumb() { Name = "Admin", Link = "/Admin/", IsActive = false });
+        breadcrumbs.Add(new Breadcrumb() { Name = "Chi tiết hóa đơn", Link = "/Admin/Chitiethoadon/@ViewData['IdHoaDon']", IsActive = true });
+        ViewData["breadcrumbs"] = breadcrumbs;
+    }
+    @await Html.PartialAsync("_Item_Breadcrumb")
+
+    <span class='' id="IdHoaDon" IdHoaDon='@ViewData["IdHoaDon"]'></span>
+
+        <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-table mr-1"></i>Chi tiết hóa đơn số: @ViewData["IdHoaDon"]</div>
+            <div class="card-body">
+                <div id="tableCTHDAlert"></div>
+                <div class="table-responsive" id="tableCTHDContainer">
+                    <table class="table table-bordered table-striped table-hover" id="tableCTHD" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Mã hóa đơn</th>
+                                <th>Mã Sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Tổng tiền</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                        </tfoot>
+                        <tbody>
+                            <!-- Nội dung bảng-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+}
+
+@section footer {
+    @await Html.PartialAsync("_Item_Footer")
+}
+
+@section javascripts {
+    <!-- Javascripts -->
+    <!-- Datatable Javascript-->
+    <script type="text/javascript" src="~/liblaries/datatables.min.js"></script>
+    <!-- Custom JavaScript-->
+    <script type="text/javascript" src="~/js/custom-toggle-button.js"></script>
+    <script type="text/javascript" src="~/js/chi-tiet-hoa-don.js"></script>
+    <script type="text/javascript" src="~/js/custom-alert.js"></script>
+}
+

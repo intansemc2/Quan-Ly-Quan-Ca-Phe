@@ -45,6 +45,8 @@ namespace AdminASP.Models
             return listModels;
         }
 
+
+
         public int Add(BaseModel newModel, MySqlConnection conn = null)
         {
             if (conn == null)

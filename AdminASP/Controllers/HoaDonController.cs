@@ -42,11 +42,7 @@ namespace AdminASP.Controllers
                     IdKhachHang = input.IdKhachHang,
                     IdBan = input.IdBan,
                     IdNhanVien = input.IdNhanVien,
-                    ThoiGianLap = input.ThoiGIanLap,
-                    ThoiGianThanhToan = input.ThoiGIanThanhToan,
-                    PhanTramTichLuy = input.PhanTramTichLuy,
-                    SoLuongDiemDoi = input.SoLuongDiemDoi,
-                    TyGiaDiemDoi = input.TyGiaDiemDoi
+
                 };
                 int addResult = modelStoreContext.Add(newHoaDon);
 
@@ -76,11 +72,7 @@ namespace AdminASP.Controllers
                     IdKhachHang = input.IdKhachHang,
                     IdBan = input.IdBan,
                     IdNhanVien = input.IdNhanVien,
-                    ThoiGianLap = input.ThoiGIanLap,
-                    ThoiGianThanhToan = input.ThoiGianThanhToan,
-                    PhanTramTichLuy = input.PhanTramTichLuy,
-                    SoLuongDiemDoi = input.SoLuongDiemDoi,
-                    TyGiaDiemDoi = input.TyGiaDiemDoi
+
                 };
                 int editResult = modelStoreContext.Edit(oldHoaDon, newHoaDon);
 

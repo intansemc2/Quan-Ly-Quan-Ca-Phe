@@ -17,72 +17,70 @@ $(document).ready(function () {
             {
                 "targets": 1,
                 "render": function (data, type, row, meta) {
-                    let khachhang = khachhangs.find(item => item.id_khach_hang == data);
-                    if (khachhang === undefined) { khachhang = {}; }
-                    let renderData = `${khachhang.ten}`;
+                    let renderData = data;
                     return `<span class="id_khach_hang" data="${data}">${renderData}</span>`;
                 }
             }, {
                 "targets": 2,
                 "render": function (data, type, row, meta) {
-                    let ban = bans.find(item => item.id_ban == data);
-                    if (ban === undefined) { ban = {}; }
-                    let renderData = `${ban.ten}`;
+                    let renderData = data;
                     return `<span class="id_ban" data="${data}">${renderData}</span>`;
                 }
             },
             {
                 "targets": 3,
                 "render": function (data, type, row, meta) {
-                    let nhanvien = nhanviens.find(item => item.id_nhan_vien == data);
-                    if (nhanvien === undefined) { nhanvien = {}; }
-                    let renderData = `${nhanvien.ten}`;
+                    let renderData = data;
                     return `<span class="id_nhan_vien" data="${data}">${renderData}</span>`;
                 }
             },
             {
                 "targets": 4,
                 "render": function (data, type, row, meta) {
-                    let renderData = convertDateTimeToString(data);
-                    return `<span class="thoi_gian_lap" data="${data}">${renderData}</span>`;
+                    let renderData = data;
+                    return `<span class="thoi_gian" data="${data}">${renderData}</span>`;
                 }
             },
+
             {
                 "targets": 5,
                 "render": function (data, type, row, meta) {
-                    let renderData = convertDateTimeToString(data);
-                    return `<span class="thoi_gian_thanh_toan" data="${data}">${renderData}</span>`;
+                    let renderData = data;
+                    return `<span class="tong_tien" data="${data}">${renderData}</span>`;
                 }
             },
+
             {
                 "targets": 6,
                 "render": function (data, type, row, meta) {
-                    let renderData = Math.floor(data * 100) / 100;
-                    return `<span class="phan_tram_tich_luy" data="${data}">${renderData}</span>`;
+                    let renderData = data;
+                    return `<span class="diem_doi" data="${data}">${renderData}</span>`;
                 }
             },
+
             {
                 "targets": 7,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="so_luong_diem_doi" data="${data}">${renderData}</span>`;
+                    return `<span class="thanh_toan" data="${data}">${renderData}</span>`;
                 }
             },
+
             {
                 "targets": 8,
                 "render": function (data, type, row, meta) {
-                    let renderData = Math.floor(data * 100) / 100;
-                    return `<span class="ty_gia_diem_doi" data="${data}">${renderData}</span>`;
+                    let renderData = data;
+                    return `<span class="diem_tich_luy" data="${data}">${renderData}</span>`;
                 }
             },
+
             {
                 "targets": 9,
                 "render": function (data, type, row, meta) {
                     let hoadon = data;
                     let renderData = `
 <button type="button" class="custom-toggle-button btn btn-outline-info opacity-25 m-1" checked="false" onclick="toggleButton(this)" onmouseenter="toggleButton(this)" onmouseleave="toggleButton(this)"><i class="fa fa-check-circle"></i></button>
-<button type="button" class="btn btn-outline-warning m-1" data-toggle="modal" data-target="#modelSuaHoaDon" modify="${hoadon.id_hoa_don}"><i class="fas fa-edit"></i></button>
-<button type="button" class="btn btn-outline-dark m-1 so_san_pham" data-toggle="modal" data-target="#modelChiTietHoaDon" modify="${hoadon.id_hoa_don}" data="${hoadon.so_san_pham}">${hoadon.so_san_pham}<i class="fas fa-cart-plus ml-2"></i></button>
+<a class="btn m-1 "  modify="${hoadon.id_hoa_don}" href="/Admin/Chitiethoadon/${hoadon.id_hoa_don}"><i class="fas fa-cart-plus ml-2"></i></a>
 <button type="button" class="btn btn-outline-danger m-1" onclick="deleteTableQLHDRow(this)"><i class="fas fa-trash"></i></button>`;
                     return `${renderData}`;
                 }
@@ -90,6 +88,8 @@ $(document).ready(function () {
     });
 
     refreshDataTableQLHD();
+
+    $("")
 
     $("#danhDauTatCa").click(function () {
         $(".custom-toggle-button").each((index, element) => setToggleStatus(element, "true"));
@@ -188,6 +188,8 @@ $(document).ready(function () {
     $("#lamMoi").click(function () {
         refreshDataTableQLHD();
     });
+
+    //THÊM HÓA ĐƠN
     $("#modelThemHoaDon").find("#themHoaDonConfirm").click(function () {
         //Xóa hết alert cũ
         $("#modelThemHoaDon").find("#themHoaDonAlerts").html("");
@@ -368,8 +370,9 @@ $(document).ready(function () {
     });
 });
 
+//CREATE TABLE QUẢN LÝ HÓA ĐƠN
 let createTableQLHDArrayDataRow = (hoadon) => {
-    return [hoadon.id_hoa_don, hoadon.id_khach_hang, hoadon.id_ban, hoadon.id_nhan_vien, hoadon.thoi_gian_lap, hoadon.thoi_gian_thanh_toan, hoadon.phan_tram_tich_luy, hoadon.so_luong_diem_doi, hoadon.ty_gia_diem_doi, hoadon];
+    return [hoadon.id_hoa_don, hoadon.id_khach_hang, hoadon.id_ban, hoadon.id_nhan_vien, hoadon.thoi_gian, hoadon.tong_tien, hoadon.diem_doi, hoadon.thanh_toan,hoadon.diem_tich_luy, hoadon];
 };
 
 let extractDataFromTableQLHDRow = (tableRow) => {
@@ -377,142 +380,42 @@ let extractDataFromTableQLHDRow = (tableRow) => {
     let id_khach_hang = $(tableRow).find(".id_khach_hang").attr("data");
     let id_ban = $(tableRow).find(".id_ban").attr("data");
     let id_nhan_vien = $(tableRow).find(".id_nhan_vien").attr("data");
-    let thoi_gian_lap = new Date($(tableRow).find(".thoi_gian_lap").attr("data"));
-    let thoi_gian_thanh_toan = new Date($(tableRow).find(".thoi_gian_thanh_toan").attr("data"));
-    let phan_tram_tich_luy = $(tableRow).find(".phan_tram_tich_luy").attr("data");
-    let so_luong_diem_doi = $(tableRow).find(".so_luong_diem_doi").attr("data");
-    let ty_gia_diem_doi = $(tableRow).find(".ty_gia_diem_doi").attr("data");
-    let so_san_pham = $(tableRow).find(".so_san_pham").attr("data");
+    let thoi_gian = new Date($(tableRow).find(".thoi_gian").attr("data"));
+    let tong_tien = new Date($(tableRow).find(".tong_tien").attr("data"));
+    let diem_doi = $(tableRow).find(".diem_doi").attr("data");
+    let thanh_tien = $(tableRow).find(".thanh_tien").attr("data");
+    let diem_tich_luy = $(tableRow).find(".ty_gia_diem_doi").attr("data");
 
-    return { id_hoa_don: id_hoa_don, id_khach_hang: id_khach_hang, id_ban: id_ban, id_nhan_vien: id_nhan_vien, thoi_gian_lap: thoi_gian_lap, thoi_gian_thanh_toan: thoi_gian_thanh_toan, phan_tram_tich_luy: phan_tram_tich_luy, so_luong_diem_doi: so_luong_diem_doi, ty_gia_diem_doi: ty_gia_diem_doi, so_san_pham: so_san_pham };
+    return { id_hoa_don: id_hoa_don, id_khach_hang: id_khach_hang, id_ban: id_ban, id_nhan_vien: id_nhan_vien, thoi_gian: thoi_gian, tong_tien: tong_tien, diem_doi:diem_doi, thanh_tien:thanh_tien, diem_tich_luy:diem_tich_luy };
 };
 
-let refreshDataTableQLHD = () => {
-    //Lấy thông tin khachhangs
-    khachhangs = [];
-    $.post("/KhachHang/GetAll", function (data) {
-        //Lấy thông tin khách hàng
+//GET ALL
+const refreshDataTableQLHD = () => {
+    tableQuanLyHoaDon.clear();
+    $("tableQuanLyHoaDonAlert").empty();
+
+    $.post("/HoaDon/GetAll", function (data) {
+        //Lấy thông tin hóa đơn
         let inputJson = data;
-        inputJson = inputJson.replace(/&quot;/g, `"`);
+        inputJson = inputJson.replace(/IdHoaDon/g, `id_hoa_don`);
         inputJson = inputJson.replace(/IdKhachHang/g, `id_khach_hang`);
-        inputJson = inputJson.replace(/Ten/g, `ten`);
-        inputJson = inputJson.replace(/Sdt/g, `sdt`);
-        inputJson = inputJson.replace(/IdTaiKhoan/g, `id_tai_khoan`);
+        inputJson = inputJson.replace(/IdBan/g, `id_ban`);
+        inputJson = inputJson.replace(/IdNhanVien/g, `id_nhan_vien`);
+        inputJson = inputJson.replace(/ThoiGian/g, `thoi_gian`);
+        inputJson = inputJson.replace(/TongTien/g, `tong_tien`);
+        inputJson = inputJson.replace(/DiemDoi/g, `diem_doi`);
+        inputJson = inputJson.replace(/ThanhToan/g, `thanh_toan`);
         inputJson = inputJson.replace(/DiemTichLuy/g, `diem_tich_luy`);
+
         let outputs = JSON.parse(inputJson);
 
-        //Thêm vào khachhangs
+        //Thêm vào bảng
         for (let output of outputs) {
-            khachhangs.push(output);
+            tableQuanLyHoaDon.row.add(createTableQLHDArrayDataRow(output));
         }
+        tableQuanLyHoaDon.draw();
 
-        //Thêm option khachhangs
-        $("#modelThemHoaDon").find("#themHoaDonKhachHang").html("");
-        $("#modelSuaHoaDon").find("#suaHoaDonKhachHang").html("");
-        for (let khachhang of khachhangs) {
-            let newOption = `<option value="${khachhang.id_khach_hang}">${khachhang.ten}</option>`;
-            $("#modelThemHoaDon").find("#themHoaDonKhachHang").append(newOption);
-            $("#modelSuaHoaDon").find("#suaHoaDonKhachHang").append(newOption);
-        }
-        $("#tableQuanLyHoaDonAlert").append(createAlerts("success", "Làm mới thông tin khách hàng thành công"));
-
-        //Lấy thông tin bans
-        bans = [];
-        $.post("/Ban/GetAll", function (data) {
-            //Lấy thông tin tài khoản
-            let inputJson = data;
-            inputJson = inputJson.replace(/"/g, `"`);
-            inputJson = inputJson.replace(/IdBan/g, `id_ban`);;
-            inputJson = inputJson.replace(/Ten/g, `ten`);;
-            inputJson = inputJson.replace(/TrangThai/g, `trang_thai`);
-            let outputs = JSON.parse(inputJson);
-
-            //Thêm vào bảng
-            for (let output of outputs) {
-                bans.push(output);
-            }
-            //Thêm option bans
-            $("#modelThemHoaDon").find("#themHoaDonBan").html("");
-            $("#modelSuaHoaDon").find("#suaHoaDonBan").html("");
-            for (let ban of bans) {
-                let newOption = `<option value="${ban.id_ban}">${ban.ten}</option>`;
-                $("#modelThemHoaDon").find("#themHoaDonBan").append(newOption);
-                $("#modelSuaHoaDon").find("#suaHoaDonBan").append(newOption);
-            }
-            $("#tableQuanLyHoaDonAlert").append(createAlerts("success", "Làm mới thông tin bàn thành công"));
-
-            //Lấy thông tin nhân viên
-            $.post("/NhanVien/GetAll", function (data) {
-                //Lấy thông tin nhân viên
-                let inputJson = data;
-                inputJson = inputJson.replace(/&quot;/g, `"`);
-                inputJson = inputJson.replace(/IdNhanVien/g, `id_nhan_vien`);
-                inputJson = inputJson.replace(/Ten/g, `ten`);
-                inputJson = inputJson.replace(/Sdt/g, `sdt`);
-                inputJson = inputJson.replace(/Loai/g, `type`);
-                inputJson = inputJson.replace(/IdTaiKhoan/g, `id_tai_khoan`);
-                let outputs = JSON.parse(inputJson);
-
-                //Thêm vào nhanviens
-                for (let output of outputs) {
-                    nhanviens.push(output);
-                }
-                $("#tableQuanLyHoaDonAlert").append(createAlerts("success", "Làm mới thông tin nhân viên thành công"));
-
-
-                //Lấy thông tin hóa đơn
-                tableQuanLyHoaDon.clear();
-
-                $.post("/HoaDon/GetAll", function (data) {
-                    //Lấy thông tin tài khoản
-                    let inputJson = data;
-                    inputJson = inputJson.replace(/"/g, `"`);
-                    inputJson = inputJson.replace(/IdHoaDon/g, `id_hoa_don`);
-                    inputJson = inputJson.replace(/IdKhachHang/g, `id_khach_hang`);
-                    inputJson = inputJson.replace(/IdBan/g, `id_ban`);
-                    inputJson = inputJson.replace(/IdNhanVien/g, `id_nhan_vien`);
-                    inputJson = inputJson.replace(/ThoiGianLap/g, `thoi_gian_lap`);
-                    inputJson = inputJson.replace(/ThoiGianThanhToan/g, `thoi_gian_thanh_toan`);
-                    inputJson = inputJson.replace(/PhanTramTichLuy/g, `phan_tram_tich_luy`);
-                    inputJson = inputJson.replace(/SoLuongDiemDoi/g, `so_luong_diem_doi`);
-                    inputJson = inputJson.replace(/TyGiaDiemDoi/g, `ty_gia_diem_doi`);
-                    let outputs = JSON.parse(inputJson);
-
-                    //Thêm vào bảng
-                    for (let output of outputs) {
-                        tableQuanLyHoaDon.row.add(createTableQLHDArrayDataRow(output));
-                    }
-                    tableQuanLyHoaDon.draw();
-
-                    $("#tableQuanLyHoaDonAlert").append(createAlerts("success", "Làm mới thành công"));
-                })
-                    .done(function () {
-                    })
-                    .fail(function () {
-                        $("#tableQuanLyHoaDonAlert").append(createAlerts("danger", "Không thể gửi dữ liệu đi"));
-                    })
-                    .always(function () {
-                    });
-
-
-            })
-                .done(function () {
-                })
-                .fail(function () {
-                    $("#tableQuanLyHoaDonAlert").append(createAlerts("danger", "Không thể gửi dữ liệu đi"));
-                })
-                .always(function () {
-                });
-        })
-            .done(function () {
-            })
-            .fail(function () {
-                $("#tableQuanLyHoaDonAlert").append(createAlerts("danger", "Không thể gửi dữ liệu đi"));
-            })
-            .always(function () {
-            });
-
-
+        $("#tableQuanLyHoaDonAlert").append(createAlerts("success", "Làm mới thành công"));
     })
         .done(function () {
         })
@@ -521,7 +424,9 @@ let refreshDataTableQLHD = () => {
         })
         .always(function () {
         });
-};
+
+  };
+
 
 const deleteTableQLHDRow = (buttonInside) => {
     let tableRow = $(buttonInside).parents("tr");
@@ -564,27 +469,18 @@ const extractFromModelHoaDon = (model) => {
     let id_ban = $(model).find(".id_ban").val();
     let id_nhan_vien = $(model).find(".id_nhan_vien").val();
 
-    let thoi_gian_lap_date = $(model).find(".thoi_gian_lap[type='date']").val();
-    let thoi_gian_lap_time = $(model).find(".thoi_gian_lap[type='time']").val();
-    let thoi_gian_lap = undefined;
-    if (thoi_gian_lap_date !== "" && thoi_gian_lap_time !== "") {
-        thoi_gian_lap = new Date(`${thoi_gian_lap_date} ${thoi_gian_lap_time}`);
+    let thoi_gian_date = $(model).find(".thoi_gian[type='date']").val();
+    let thoi_gian_time = $(model).find(".thoi_gian[type='time']").val();
+    let thoi_gian = undefined;
+    if (thoi_gian_date !== "" && thoi_gian_time !== "") {
+        thoi_gian = new Date(`${thoi_gian_date} ${thoi_gian_time}`);
     }
 
-    let thoi_gian_thanh_toan_date = $(model).find(".thoi_gian_lap[type='date']").val();
-    let thoi_gian_thanh_toan_time = $(model).find(".thoi_gian_lap[type='time']").val();
-    let thoi_gian_thanh_toan = undefined;
-    if (thoi_gian_thanh_toan_date !== "" && thoi_gian_thanh_toan_time !== "") {
-        thoi_gian_thanh_toan = new Date(`${thoi_gian_thanh_toan_date} ${thoi_gian_thanh_toan_time}`);
-    }
+    let tong_tien = $(model).find(".tong_tien").val();
+    let diem_doi = $(model).find(".diem_doi").val();
+    let thanh_tien = $(model).find(".thanh_tien").val();
 
-    let phan_tram_tich_luy = $(model).find(".phan_tram_tich_luy").val();
-    let so_luong_diem_doi = $(model).find(".so_luong_diem_doi").val();
-    let ty_gia_diem_doi = $(model).find(".ty_gia_diem_doi").val();
-
-    let so_san_pham = $(model).find(".so_san_pham").val();
-
-    return { id_hoa_don: id_hoa_don, id_khach_hang: id_khach_hang, id_ban: id_ban, id_nhan_vien: id_nhan_vien, thoi_gian_lap: thoi_gian_lap, thoi_gian_thanh_toan: thoi_gian_thanh_toan, phan_tram_tich_luy: phan_tram_tich_luy, so_luong_diem_doi: so_luong_diem_doi, ty_gia_diem_doi: ty_gia_diem_doi, so_san_pham: so_san_pham };
+    return { id_hoa_don: id_hoa_don, id_khach_hang: id_khach_hang, id_ban: id_ban, id_nhan_vien: id_nhan_vien, thoi_gian: thoi_gian, tong_tien: tong_tien, diem_doi:diem_doi, thanh_tien: thanh_tien, diem_tich_luy:diem_tich_luy};
 };
 
 const setModelThemHoaDon = (modifyHoaDon) => {
@@ -601,13 +497,8 @@ const setToModelHoaDon = (model, hoadon) => {
     $(model).find(".id_ban").val(hoadon.id_ban);
     $(model).find(".id_nhan_vien").val(hoadon.id_nhan_vien);
 
-    let datetimeStrings = convertDateTimeToString(hoadon.thoi_gian_lap).split(" ");
-    $(model).find(".thoi_gian_lap[type='date']").val(datetimeStrings[0]);
-    $(model).find(".thoi_gian_lap[type='time']").val(datetimeStrings[1]);
-
-    let datetimeTTStrings = convertDateTimeToString(hoadon.thoi_gian_thanh_toan).split(" ");
-    $(model).find(".thoi_gian_thanh_toan[type='date']").val(datetimeTTStrings[0]);
-    $(model).find(".thoi_gian_thanh_toan[type='time']").val(datetimeTTStrings[1]);
+    let datetimeStrings = convertDateTimeToString(hoadon.thoi_gian).split(" ");
+    $(model).find(".thoi_gian[type='date']").val(datetimeStrings[0]);
 
     $(model).find(".phan_tram_tich_luy").val(hoadon.phan_tram_tich_luy);
     $(model).find(".so_luong_diem_doi").val(hoadon.so_luong_diem_doi);

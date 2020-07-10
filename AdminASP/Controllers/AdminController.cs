@@ -46,6 +46,17 @@ namespace AdminASP.Controllers
             return View();
         }
 
+        [Route("/Admin/Chitiethoadon/{IdHoaDon}")]
+        public IActionResult Chitiethoadon(String IdHoaDon)
+        {
+            if (!(CheckPermission.CheckAdmin(this)))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            ViewData["IdHoaDon"] = IdHoaDon;
+            return View();
+        }
+
         public IActionResult Quanlykhachhang()
         {
             if (!(CheckPermission.CheckAdmin(this)))

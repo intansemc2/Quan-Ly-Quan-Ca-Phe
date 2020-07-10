@@ -16,10 +16,7 @@ namespace AdminASP.Models
         private int soLuong;
         public int SoLuong { get { return this.soLuong; } set { this.soLuong = value; } }
 
-        private int donGia;
-        public int DonGia { get { return this.donGia; } set { this.donGia = value; } }
-
-        private int diemTichLuy;
-        public int DiemTichLuy { get { return this.diemTichLuy; } set { this.diemTichLuy = value; } }
+        private int tongtien;
+        public int TongTien { get { return this.tongtien; } set { this.tongtien = value; } }
     }
 }

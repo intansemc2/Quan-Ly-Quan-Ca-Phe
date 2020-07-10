@@ -16,8 +16,7 @@ namespace AdminASP.Models
                 IdHoaDon = Convert.ToInt32(reader["ID_HOA_DON"].ToString()),
                 IdSanPham = Convert.ToInt32(reader["ID_SAN_PHAM"].ToString()),
                 SoLuong = Convert.ToInt32(reader["SO_LUONG"].ToString()),
-                DonGia = Convert.ToInt32(reader["DON_GIA"].ToString()),
-                DiemTichLuy = Convert.ToInt32(reader["DIEM_TICH_LUY"].ToString())
+                TongTien = Convert.ToInt32(reader["TONG_TIEN"].ToString()),
             };
 
             return model;
@@ -30,8 +29,7 @@ namespace AdminASP.Models
                 IdHoaDon = Convert.ToInt32(reader["ID_HOA_DON"].ToString()),
                 IdSanPham = Convert.ToInt32(reader["ID_SAN_PHAM"].ToString()),
                 SoLuong = Convert.ToInt32(reader["SO_LUONG"].ToString()),
-                DonGia = Convert.ToInt32(reader["DON_GIA"].ToString()),
-                DiemTichLuy = Convert.ToInt32(reader["DIEM_TICH_LUY"].ToString())
+                TongTien = Convert.ToInt32(reader["TONG_TIEN"].ToString()),
             };
 
             return model;
@@ -46,8 +44,7 @@ namespace AdminASP.Models
             mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", currentModel.IdHoaDon);
             mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", currentModel.IdSanPham);
             mySqlCommand.Parameters.AddWithValue("SO_LUONG", currentModel.SoLuong);
-            mySqlCommand.Parameters.AddWithValue("DON_GIA", currentModel.DonGia);
-            mySqlCommand.Parameters.AddWithValue("DIEM_TICH_LUY", currentModel.DiemTichLuy);
+
 
             return mySqlCommand;
         }
@@ -83,8 +80,7 @@ namespace AdminASP.Models
             mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", newcurrentModel.IdHoaDon);
             mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", newcurrentModel.IdSanPham);
             mySqlCommand.Parameters.AddWithValue("SO_LUONG", newcurrentModel.SoLuong);
-            mySqlCommand.Parameters.AddWithValue("DON_GIA", newcurrentModel.DonGia);
-            mySqlCommand.Parameters.AddWithValue("DIEM_TICH_LUY", newcurrentModel.DiemTichLuy);
+
             mySqlCommand.Parameters.AddWithValue("OLD_ID_HOA_DON", oldcurrentModel.IdHoaDon);
             mySqlCommand.Parameters.AddWithValue("OLD_ID_SAN_PHAM", oldcurrentModel.IdSanPham);
 
@@ -99,15 +95,13 @@ namespace AdminASP.Models
             if (currentModel.IdHoaDon >= 0) query += " AND cthd.ID_HOA_DON = @ID_HOA_DON ";
             if (currentModel.IdSanPham >= 0) query += " AND cthd.ID_SAN_PHAM = @ID_SAN_PHAM ";
             if (currentModel.SoLuong >= 0) query += " AND cthd.SO_LUONG = @SO_LUONG ";
-            if (currentModel.DonGia >= 0) query += " AND cthd.DON_GIA = @DON_GIA ";
-            if (currentModel.DiemTichLuy >= 0) query += " AND cthd.DIEM_TICH_LUY = @DIEM_TICH_LUY ";
+
 
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
             if (currentModel.IdHoaDon >= 0) mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", currentModel.IdHoaDon);
             if (currentModel.IdSanPham >= 0) mySqlCommand.Parameters.AddWithValue("ID_SAN_PHAM", currentModel.IdSanPham);
             if (currentModel.SoLuong >= 0) mySqlCommand.Parameters.AddWithValue("SO_LUONG", currentModel.SoLuong);
-            if (currentModel.DonGia >= 0) mySqlCommand.Parameters.AddWithValue("DON_GIA", currentModel.DonGia);
-            if (currentModel.DiemTichLuy >= 0) mySqlCommand.Parameters.AddWithValue("DIEM_TICH_LUY", currentModel.DiemTichLuy);
+
 
             return mySqlCommand;
         }
@@ -119,6 +113,39 @@ namespace AdminASP.Models
             MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
 
             return mySqlCommand;
+        }
+
+        public MySqlCommand CreateQueryGetAll(String IdHoaDon,MySqlConnection conn)
+        {
+            String query = "SELECT * FROM cthd WHERE ID_HOA_DON = @ID_HOA_DON";
+
+            MySqlCommand mySqlCommand = new MySqlCommand(query, conn);
+            mySqlCommand.Parameters.AddWithValue("ID_HOA_DON", IdHoaDon);
+            return mySqlCommand;
+        }
+
+        public List<BaseModel> GetAll(String IdHoaDon,MySqlConnection conn = null)
+        {
+            List<BaseModel> listModels = new List<BaseModel>();
+
+            if (conn == null)
+            {
+                conn = this.GenerateNewConnection().MySqlConnection;
+            }
+
+            conn.Open();
+            MySqlCommand cmd = this.CreateQueryGetAll(IdHoaDon,conn);
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    listModels.Add(this.ConvertReaderToModelGetAll(reader));
+                }
+                reader.Close();
+            }
+            conn.Close();
+
+            return listModels;
         }
 
     }

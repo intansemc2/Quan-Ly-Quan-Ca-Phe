@@ -29,18 +29,11 @@ $(document).ready(function () {
                 "targets": 3,
                 "render": function (data, type, row, meta) {
                     let renderData = data;
-                    return `<span class="diem_tich_luy" data="${data}">${renderData}</span>`;
-                }
-            },
-            {
-                "targets": 4,
-                "render": function (data, type, row, meta) {
-                    let renderData = data;
                     return `<span class="ghi_chu" data="${data}">${renderData}</span>`;
                 }
             },
             {
-                "targets": 5,
+                "targets": 4,
                 "render": function (data, type, row, meta) {
                     let sanpham = data;
                     let renderData = `
@@ -103,7 +96,6 @@ $(document).ready(function () {
             IdSanPham : newSp.id_san_pham,
             Ten : newSp.ten,
             Gia : newSp.gia,
-            DiemTichLuy : newSp.diem_tich_luy,
             GhiChu : newSp.ghi_chu
         },
             function (data) {
@@ -160,7 +152,6 @@ $(document).ready(function () {
             IdSanPham : newSp.id_san_pham,
             Ten : newSp.ten,
             Gia : newSp.gia,
-            DiemTichLuy : newSp.diem_tich_luy,
             GhiChu : newSp.ghi_chu
         },
             function (data) {
@@ -216,18 +207,20 @@ $(document).ready(function () {
 });
 
 const createTableQLSanPhamArrayDataRow = (sanpham) => {
-    return [sanpham.id_san_pham, sanpham.ten, sanpham.gia, sanpham.diem_tich_luy, sanpham.ghi_chu,sanpham];
+    return [sanpham.id_san_pham, sanpham.ten, sanpham.gia, sanpham.ghi_chu,sanpham];
 };
 
 const extractDataFromTableQLSanPhamRow = (tableRow) => {
     let id_san_pham = $(tableRow).find(".id_san_pham").attr("data");
     let ten = $(tableRow).find(".ten").attr("data");
     let gia = $(tableRow).find(".gia").attr("data");
-    let diem_tich_luy = $(tableRow).find(".diem_tich_luy").attr("data");
+
     let ghi_chu = $(tableRow).find(".ghi_chu").attr("data");
-    return  {id_san_pham:id_san_pham, ten:ten, gia:gia, diem_tich_luy: diem_tich_luy, ghi_chu:ghi_chu};
+    return  {id_san_pham:id_san_pham, ten:ten, gia:gia, ghi_chu:ghi_chu};
 };
 
+
+//GET ALL
 const refreshDataTableQLSanPham = () => {   
     tableQuanLySanPham.clear();
     $("#tableQuanLySanPhamAlert").empty();
@@ -238,7 +231,6 @@ const refreshDataTableQLSanPham = () => {
         inputJson = inputJson.replace(/IdSanPham/g, `id_san_pham`);
         inputJson = inputJson.replace(/Ten/g, `ten`);
         inputJson = inputJson.replace(/Gia/g, `gia`);
-        inputJson = inputJson.replace(/DiemTichLuy/g, `diem_tich_luy`);
         inputJson = inputJson.replace(/GhiChu/g, `ghi_chu`);
         let outputs = JSON.parse(inputJson);
         
@@ -303,9 +295,8 @@ const extractFromModelSP = (model) => {
     let id_san_pham = $(model).find(".id_san_pham").val();
     let ten = $(model).find(".ten").val();
     let gia = $(model).find(".gia").val();
-    let diem_tich_luy = $(model).find(".diem_tich_luy").val();
     let ghi_chu = $(model).find(".ghi_chu").val();
-    return {id_san_pham:id_san_pham, ten:ten, gia:gia, diem_tich_luy:diem_tich_luy, ghi_chu:ghi_chu};
+    return {id_san_pham:id_san_pham, ten:ten, gia:gia, ghi_chu:ghi_chu};
 };
 
 const setmodelThemSanPham = (modifyCTLSP) => {
@@ -320,7 +311,7 @@ const setToModelCTLSP = (model, sanpham) => {
     $(model).find(".id_san_pham").val(sanpham.id_san_pham);
     $(model).find(".ten").val(sanpham.ten);
     $(model).find(".gia").val(sanpham.gia);
-    $(model).find(".diem_tich_luy").val(sanpham.diem_tich_luy);
+
     $(model).find(".ghi_chu").val(sanpham.ghi_chu);
 };
 
@@ -328,7 +319,7 @@ const validateSanPhamInformation = (alertContainer, sanpham) => {
     //Validate
     let ten = sanpham.ten;
     let gia = sanpham.gia;
-    let diem_tich_luy = sanpham.diem_tich_luy;
+
     let ghi_chu = sanpham.ghi_chu;
 
     let numberValidateError = 0;
@@ -348,13 +339,6 @@ const validateSanPhamInformation = (alertContainer, sanpham) => {
         $(alertContainer).append(createAlerts("danger", "Giá phải lớn hơn 0"));
         numberValidateError += 1;
     }
-    if (!diem_tich_luy || diem_tich_luy === "")  {
-        $(alertContainer).append(createAlerts("danger", "Điểm tích lũy không được để trống"));
-        numberValidateError += 1;
-    }
-    else if (diem_tich_luy < 0) {
-        $(alertContainer).append(createAlerts("danger", "Điểm tích lũy phải lớn hơn 0"));
-        numberValidateError += 1;
-    }
+
     return numberValidateError;
 };
